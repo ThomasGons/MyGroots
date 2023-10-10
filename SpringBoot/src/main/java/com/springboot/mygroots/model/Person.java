@@ -1,16 +1,14 @@
-package com.springboot.mygroots.Model;
+package com.springboot.mygroots.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.processing.Generated;
 import java.time.LocalDate;
 
 @Document(collection = "Person")
 public class Person {
     @Id
-    @Generated("auto")
-    private int id;
+    private String id;
     private String name;
     private String lastName;
     private LocalDate birthDate=null;
@@ -20,14 +18,15 @@ public class Person {
     private Gender gender;
     private Status status;
 
-    public Person(String name,String lastName,Gender gender){
+    public Person(String name, String lastName, Gender gender){
         this.name = name;
         this.lastName = lastName;
         this.gender = gender;
-        this.birthPlace = null;
     }
 
-
+    public String getId() {
+        return id;
+    }
 
     public enum Gender {
         MALE,

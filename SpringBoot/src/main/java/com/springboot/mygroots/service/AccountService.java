@@ -1,7 +1,7 @@
-package com.springboot.mygroots.Services;
+package com.springboot.mygroots.service;
 
-import com.springboot.mygroots.Model.Account;
-import com.springboot.mygroots.Repository.AccountRepository;
+import com.springboot.mygroots.model.Account;
+import com.springboot.mygroots.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,28 +14,21 @@ public class AccountService {
     private AccountRepository accountRepository;
 
 
-    public void createAccount(Account account){
+    public void addAccount(Account account){
         accountRepository.save(account);
-    }
-
-
-    public Account getAccount(int id){
-        return accountRepository.findById(id).get();
     }
 
     public void updateAccount(Account account){
         accountRepository.save(account);
     }
 
-    public void deleteAccount(int id){
-        accountRepository.deleteById(id);
-    }
-
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
 
-
+    public Account getAccountByEmail(String email){
+        return accountRepository.getAccountByEmail(email);
+    }
 
 
 }
