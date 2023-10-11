@@ -1,6 +1,7 @@
 package com.springboot.mygroots.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,30 +13,71 @@ public class FamilyGraph {
 
     @Id
     private String id;
+
+    private String familyName;
+
+    @DBRef
+    @Indexed(unique = true)
+    private List<Person> members;
     private List<FamilyRelationEdge> relationShips;
 
-    public FamilyGraph() {
+    public FamilyGraph(String familyName) {
+        this.familyName = familyName;
         this.relationShips = new ArrayList<>();
+        this.members = new ArrayList<>();
     }
 
     public void addRelation(Person source, Person target, FamilyRelation relation) {
-        this.relationShips.add(new FamilyRelationEdge(source, target, relation));
+        int sourceID = this.members.indexOf(source);
+        int targetID = this.members.indexOf(target);
+
+        if (sourceID == -1) {
+            this.members.add(source);
+            sourceID = this.members.size() - 1;
+        }
+        if (targetID == -1) {
+            this.members.add(target);
+            targetID = this.members.size() - 1;
+        }
+        this.relationShips.add(new FamilyRelationEdge(sourceID, targetID, relation));
+    }
+
+    public List<FamilyRelationEdge> getRelationShips() {
+        return relationShips;
     }
 
     public static class FamilyRelationEdge {
 
-        @DBRef
-        private Person source;
-        @DBRef
-        private Person target;
+        private int sourceID;
+        private int targetID;
         private FamilyRelation relation;
 
-        public FamilyRelationEdge(Person source, Person target, FamilyRelation relation) {
-            this.source = source;
-            this.target = target;
+        public FamilyRelationEdge(int sourceID, int targetID, FamilyRelation relation) {
+
+            this.sourceID = sourceID;
+            this.targetID = targetID;
             this.relation = relation;
         }
 
+        public int getSourceID() {
+            return sourceID;
+        }
+
+        public int getTargetID() {
+            return targetID;
+        }
+
+        public FamilyRelation getRelation() {
+            return relation;
+        }
+    }
+
+    public List<Person> getMembers() {
+        return members;
+    }
+
+    public String getFamilyName() {
+        return familyName;
     }
 
     public enum FamilyRelation {

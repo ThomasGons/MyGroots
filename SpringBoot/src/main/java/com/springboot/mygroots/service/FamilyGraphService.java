@@ -19,4 +19,8 @@ public class FamilyGraphService {
     public List<FamilyGraph> getAllFamilyGraphs(){
         return familyGraphRepository.findAll();
     }
+
+    public FamilyGraph getByFamilyName(String familyName){
+        return familyGraphRepository.getFamilyGraphByFamilyName(familyName);
+    }
 }

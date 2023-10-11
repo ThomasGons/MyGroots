@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FamilyGraphRepository extends MongoRepository<FamilyGraph, String> {
 
+        FamilyGraph getFamilyGraphByFamilyName(String familyName);
 }

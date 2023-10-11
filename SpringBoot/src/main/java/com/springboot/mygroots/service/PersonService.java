@@ -26,8 +26,8 @@ public class PersonService {
         return personRepository.findAll();
     }
     
-    public Person getPersonByName(String name){
-        return personRepository.getPersonByName(name);
+    public Person getPersonByNameAndLastName(String name, String lastName){
+        return personRepository.getPersonByNameAndLastName(name, lastName);
     }
     
     
