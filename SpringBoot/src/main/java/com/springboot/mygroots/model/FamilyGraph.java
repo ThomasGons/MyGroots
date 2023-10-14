@@ -18,13 +18,23 @@ public class FamilyGraph {
 
     @DBRef
     @Indexed(unique = true)
+    private List<Person> owners;
+
+    @DBRef
+    @Indexed(unique = true)
     private List<Person> members;
     private List<FamilyRelationEdge> relationShips;
 
     public FamilyGraph(String familyName) {
         this.familyName = familyName;
-        this.relationShips = new ArrayList<>();
+        this.owners = new ArrayList<>();
         this.members = new ArrayList<>();
+        this.relationShips = new ArrayList<>();
+    }
+    public void addOwner(Person owner) {
+        if (!this.owners.contains(owner)) {
+            this.owners.add(owner);
+        }
     }
 
     public void addRelation(Person source, Person target, FamilyRelation relation) {
@@ -41,6 +51,7 @@ public class FamilyGraph {
         }
         this.relationShips.add(new FamilyRelationEdge(sourceID, targetID, relation));
     }
+
 
     public List<FamilyRelationEdge> getRelationShips() {
         return relationShips;
@@ -72,12 +83,16 @@ public class FamilyGraph {
         }
     }
 
-    public List<Person> getMembers() {
-        return members;
-    }
-
     public String getFamilyName() {
         return familyName;
+    }
+
+    public List<Person> getOwners() {
+        return owners;
+    }
+
+    public List<Person> getMembers() {
+        return members;
     }
 
     public enum FamilyRelation {

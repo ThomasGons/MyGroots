@@ -11,7 +11,7 @@ public class Person {
     private String id;
     private String name;
     private String lastName;
-    private LocalDate birthDate=null;
+    private LocalDate birthDate;
     private LocalDate deathDate;
     private String birthPlace;
     private String deathPlace;
