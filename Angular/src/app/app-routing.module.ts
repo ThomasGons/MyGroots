@@ -1,52 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { HomeComponent } from '@features/home/home.component';
-import { LoginComponent } from '@features/auth/login/login.component';
-import { RegisterComponent } from '@features/auth/register/register.component';
-import { ContactComponent } from '@features/contact/contact.component';
+import { ContentLayoutComponent } from './shared/layout/content-layout/content-layout.component';
+import { AuthLayoutComponent } from './shared/layout/auth-layout/auth-layout.component';
 
 const routes: Routes = [
-  // Routes to home page
   {
-    path: "",
-    pathMatch: "full",
-    redirectTo: "/home"
+    path: '',
+    component: ContentLayoutComponent,
+    loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule)
   },
   {
-    path: "home",
-    component: HomeComponent,
+    path: 'auth',
+    component: AuthLayoutComponent,
+    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
   },
-  // Routes for authentification, login and register
-  {
-    path: "auth",
-    pathMatch: "full",
-    redirectTo: "/auth/login"
-  },
-  {
-    path: "auth",
-    children: [
-      {
-        path: "login",
-        component: LoginComponent
-      },
-      {
-        path: "register",
-        component: RegisterComponent
-      }
-    ]
-  },
-  // Route to contact
-  {
-    path: "contact",
-    component: ContactComponent
-  },
-  // Any other routes that are not matched
-  {
-    path: "**",
-    pathMatch: "full",
-    redirectTo: "",
-  }
 ];
 
 @NgModule({

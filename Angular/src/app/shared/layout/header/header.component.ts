@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -6,15 +6,11 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  @Input()
-  title!: string;
-
-  logoPath: string = "/assets/images/mygroots-logo.png";
-
-  // TMP navItems -> to change
+  link: string = "/";
+  logo: string = "/assets/images/mygroots-logo-gradient.png";
   navItems = [
+    // TMP: to change
     { title: "Test login", link: "/auth/login" },
     { title: "Test register", link: "/auth/register" },
-    { title: "Test contact", link: "/contact" },
   ]
 }

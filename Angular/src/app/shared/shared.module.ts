@@ -1,24 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterModule} from '@angular/router';
 
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { MaterialModule } from './material.module';
+
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { ContentLayoutComponent } from './layout/content-layout/content-layout.component';
 
 
 @NgModule({
   declarations: [
+    AuthLayoutComponent,
+    ContentLayoutComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     CommonModule,
-    RouterLink,
-    RouterLinkActive
+    RouterModule,
+    MaterialModule
   ],
   exports: [
+    MaterialModule,
+    AuthLayoutComponent,
+    ContentLayoutComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
   ]
 })
 export class SharedModule { }
