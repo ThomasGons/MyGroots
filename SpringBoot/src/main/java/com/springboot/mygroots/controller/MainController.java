@@ -10,7 +10,6 @@ import com.springboot.mygroots.service.FamilyGraphService;
 import com.springboot.mygroots.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,14 +36,12 @@ public class MainController {
 
 
     @RequestMapping(value= "/")
-    public FamilyGraph root() {
-        return familyGraphService.getByFamilyName("Doe");
-    }
+    public void root() {
+        Person p = new Person("Thomas", "Gons", Person.Gender.MALE);
+        personService.addPerson(p);
 
-    @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
-    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName){
-        Person p = personService.getPersonByNameAndLastName(name, lastName);
-        return emailService.getInbox(p);
+        Account a = new Account("gons.thomas@gmail.com", p);
+        accountService.addAccount(a);
     }
 
     // create a init method to create a sample family graph
@@ -88,4 +85,10 @@ public class MainController {
 
         familyGraphService.updateFamiyGraph(r_fg);
     }
+
+    @RequestMapping("/auth/activateAccount")
+    public void activateAccount(@RequestParam String id) {
+        accountService.activateAccount(id);
+    }
+
 }

@@ -24,5 +24,4 @@ public class EmailService {
     public List<Email> getInbox(Person person) {
         return emailRepository.getMailByTarget( person);
     }
-
 }

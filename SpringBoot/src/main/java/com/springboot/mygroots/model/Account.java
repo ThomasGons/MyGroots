@@ -18,9 +18,12 @@ public class Account  {
     @DBRef
     private Person person;
 
+    private boolean isActive;
+
     public Account(String email, @Nullable Person person) {
         this.email = email;
         this.person = person;
+        this.isActive = false;
     }
 
 
@@ -41,4 +44,15 @@ public class Account  {
         this.person = person;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void activate() {
+        this.isActive = true;
+    }
+
+    public String getId() {
+        return id;
+    }
 }
