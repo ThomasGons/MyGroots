@@ -9,8 +9,9 @@ import java.time.LocalDate;
 public class Person {
     @Id
     private String id;
+    
     private String name;
-    private String lastName;
+    private String lastName; 
     private LocalDate birthDate;
     private LocalDate deathDate;
     private String birthPlace;

@@ -47,7 +47,7 @@ public class FamilyGraphService {
         return familyGraphRepository.getFamilyGraphByOwnersContaining(owner);
     }
 
-    public void updateFamiyGraph(FamilyGraph familyGraph) {
+    public void updateFamilyGraph(FamilyGraph familyGraph) {
         familyGraphRepository.save(familyGraph);
     }
 }

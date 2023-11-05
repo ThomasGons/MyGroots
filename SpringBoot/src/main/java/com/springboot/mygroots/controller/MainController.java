@@ -38,7 +38,7 @@ public class MainController {
 
     @RequestMapping(value= "/")
     public FamilyGraph root() {
-        return familyGraphService.getByFamilyName("Doe");
+        return familyGraphService.getByFamilyName("Lourd");
     }
 
     @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
@@ -86,6 +86,6 @@ public class MainController {
         familyGraphService.addRelation(r_fg, p4, p2, MOTHER);
         familyGraphService.addRelation(r_fg, p4, p3, WIFE);
 
-        familyGraphService.updateFamiyGraph(r_fg);
+        familyGraphService.updateFamilyGraph(r_fg);
     }
 }
