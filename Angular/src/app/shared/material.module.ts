@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatListModule,
     MatButtonModule,
     MatIconModule,
+    MatGridListModule,
   ],
   exports: [
     MatSidenavModule,
@@ -42,6 +44,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatListModule,
     MatButtonModule,
     MatIconModule,
+    MatGridListModule,
   ]
 })
 export class MaterialModule { }

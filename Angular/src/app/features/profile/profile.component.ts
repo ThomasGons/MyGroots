@@ -1,11 +1,21 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
 
+export interface Tile {
+  color: string;
+  cols: number;
+  rows: number;
+  text: string;
+}
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-
+  tiles: Tile[] = [
+    {text: 'One', cols: 2, rows: 1, color: 'lightblue'},
+    {text: 'Two', cols: 2, rows: 1, color: 'lightgreen'},
+    {text: 'Three', cols: 2, rows: 1, color: 'lightpink'},
+    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
+  ];
 }
