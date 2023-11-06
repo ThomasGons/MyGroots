@@ -7,4 +7,14 @@ html, body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    overflow: auto;
+    scrollbar-gutter: stable;
+}
+
+header {
+    min-width: 320px;
+}
+
+footer {
+    min-width: 320px;
 }

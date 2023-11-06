@@ -1,0 +1,95 @@
+<div class="container-fluid h-100 py-5 d-flex justify-content-center">
+  <mat-card class="auth-card p-2 shadow">
+    <mat-card-header>
+      <mat-card-title class="pb-4">
+        <p class="h3 m-0 text-center">Inscription</p>
+      </mat-card-title>
+      <mat-card-subtitle class="pb-4">
+        <p class="text-justify">Rejoignez MyGroots et découvrez vos racines généalogiques. Construisez votre arbre généalogique et retrouvez votre famille !</p>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Form -->
+      <form [formGroup]="this.form" (ngSubmit)="this.onSubmit()" class="d-flex flex-column">
+        <!-- email -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="text" required>
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="this.form.controls.email.touched && this.form.controls.email.invalid">
+            <span *ngIf="this.form.controls.email.errors?.['required']">Veuillez saisir un email.</span>
+            <span *ngIf="this.form.controls.email.errors?.['email']">Veuillez saisir un email valide.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- firstName -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="firstName" type="text" required>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="this.form.controls.firstName.touched && this.form.controls.firstName.invalid">
+            <span *ngIf="this.form.controls.firstName.errors?.['required']">Veuillez saisir un prénom.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- lastName -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Nom de famille</mat-label>
+          <input matInput formControlName="lastName" type="text" required>
+          <mat-icon matPrefix>people</mat-icon>
+          <mat-error *ngIf="this.form.controls.lastName.touched && this.form.controls.lastName.invalid">
+            <span *ngIf="this.form.controls.lastName.errors?.['required']">Veuillez saisir un nom de famille.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- birthDate -->
+        <mat-form-field appearance="outline" class="flex-grow-1 py-2">
+          <mat-label>Date de naissance</mat-label>
+          <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="DD/MM/YYYY">
+          <mat-icon matPrefix>cake</mat-icon>
+          <mat-datepicker-toggle matIconSuffix [for]="birthDate"></mat-datepicker-toggle>
+          <mat-datepicker #birthDate></mat-datepicker>
+          <mat-error *ngIf="this.form.controls.birthDate.touched && this.form.controls.birthDate.invalid">
+            <span *ngIf="this.form.controls.birthDate.errors?.['required']">Veuillez saisir une date de naissance.</span>
+          </mat-error>
+        </mat-form-field>
+        <div class="d-flex">
+          <!-- gender -->
+          <mat-form-field appearance="outline" class="gender-select py-2 pe-1">
+            <mat-label>Genre</mat-label>
+            <mat-select matNativeControl formControlName="gender" required>
+              <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.form.controls.gender.touched && this.form.controls.gender.invalid">
+              <span *ngIf="this.form.controls.gender.errors?.['required']">Veuillez saisir un genre.</span>
+            </mat-error>
+          </mat-form-field>
+          <!-- nationality -->
+          <mat-form-field appearance="outline" class="py-2 ps-1 flex-grow-1">
+            <mat-label>Nationalité</mat-label>
+            <input matInput formControlName="nationality" type="text" required>
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
+              <span *ngIf="this.form.controls.nationality.errors?.['required']">Veuillez saisir une nationalité.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- socialSecurity -->
+        <!-- <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Numéro sécurité sociale</mat-label>
+          <input matInput formControlName="socialSecurity" type="text" required>
+          <mat-icon matPrefix>account_balance</mat-icon>
+          <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
+            <span *ngIf="this.form.controls.nationality.errors?.['required']">Veuillez saisir une nationalité.</span>
+          </mat-error>
+        </mat-form-field> -->
+        <!-- submit and redirections -->
+        <button mat-raised-button class="my-2 py-4" color="primary" type="submit">
+          <mat-icon>done</mat-icon>
+          <span>Inscription</span>
+        </button>
+        <div>
+          <span class="mat-typography">Déjà inscrit ?</span>
+          <button mat-button routerLink="/auth/login" color="primary" type="button">Connectez-vous !</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

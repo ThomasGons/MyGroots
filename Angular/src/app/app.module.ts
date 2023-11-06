@@ -1,26 +1,42 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from './shared/material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { CoreModule } from './core/core.module';
-import { SharedModule } from './shared/shared.module';
+import { AppComponent } from './app.component';
+import { HeaderComponent, FooterComponent } from './shared/layout';
+import { HomeComponent } from './features/home/home.component';
+import { LoginComponent, RegisterComponent, ForgotPasswordComponent } from './features/auth';
+import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    ForgotPasswordComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    CoreModule,
-    SharedModule,
+    HttpClientModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-Fr' },
+  ], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }
