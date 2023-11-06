@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
-import { LoginComponent, RegisterComponent, ForgotPasswordComponent } from './features/auth';
+import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import {ProfileComponent} from "@app/features/profile/profile.component";
 
@@ -36,6 +36,11 @@ const routes: Routes = [
         path: "forgot-password",
         component: ForgotPasswordComponent,
         title: environment.title + " - Mot de passe oublié",
+      },
+      {
+        path: "change-password/:token",
+        component: ChangePasswordComponent,
+        title: environment.title + " - Modifier mot de passe",
       },
     ]
   },

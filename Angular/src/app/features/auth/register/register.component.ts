@@ -20,6 +20,7 @@ export class RegisterComponent {
     birthDate: new FormControl("", { nonNullable: true, validators: [Validators.required, DateValidator] }),
     gender: new FormControl("", { nonNullable: true, validators: [Validators.required, GenderValidator] }),
     nationality: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
+    socialSecurity: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
   });
   responseMessage: string = "";
   genders = [
@@ -49,6 +50,7 @@ export class RegisterComponent {
       birthDate: this.form.value.birthDate, // ou dateString
       gender: this.form.value.gender,
       nationality: this.form.value.nationality,
+      socialSecurity: this.form.value.socialSecurity,
     };
     /* Submit form */
     this._authService.register(registerData).subscribe({

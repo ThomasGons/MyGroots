@@ -7,13 +7,12 @@ export function GenderValidator(): ValidatorFn {
       return null;
     }
 
-    let isValid: boolean = false;
     const genders: string[] = ["MALE", "FEMALE"];
     const userInput = control.value.toUpperCase();
     
     if (genders.includes(userInput)) {
-      isValid = true;
+      return null;
     }
-    return (isValid ? null : { invalidGender: true }); 
+    return { invalidGender: true }; 
   });
 }
