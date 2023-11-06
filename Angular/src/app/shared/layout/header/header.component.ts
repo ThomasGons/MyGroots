@@ -5,6 +5,7 @@ import { environment } from '@environments/environment.development';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
 
@@ -12,5 +13,5 @@ export class HeaderComponent {
   isLoggedIn: boolean = false;
 
   constructor() {}
-  
+
 }

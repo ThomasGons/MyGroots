@@ -5,6 +5,7 @@ import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, ForgotPasswordComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
+import {ProfileComponent} from "@app/features/profile/profile.component";
 
 
 const routes: Routes = [
@@ -37,6 +38,11 @@ const routes: Routes = [
         title: environment.title + " - Mot de passe oublié",
       },
     ]
+  },
+  {
+    path: "profile",
+    component: ProfileComponent,
+    title: environment.title + " - Mon profil",
   },
   {
     path: "**",

@@ -12,6 +12,7 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, ForgotPasswordComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ProfileComponent } from './features/profile/profile.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     RegisterComponent,
     ForgotPasswordComponent,
     PageNotFoundComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
