@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, SnackbarService } from '@app/core/services';
-import { DateValidator, GenderValidator } from '@app/core/validators';
+import { GenderValidator } from '@app/core/validators';
 import { Gender } from '@app/core/models';
 
 
@@ -17,7 +17,7 @@ export class RegisterComponent {
     email: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.email] }),
     firstName: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     lastName: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-    birthDate: new FormControl("", { nonNullable: true, validators: [Validators.required, DateValidator] }),
+    birthDate: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     gender: new FormControl("", { nonNullable: true, validators: [Validators.required, GenderValidator] }),
     nationality: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     socialSecurity: new FormControl("", { nonNullable: true, validators: [Validators.required] }),

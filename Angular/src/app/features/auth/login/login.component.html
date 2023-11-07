@@ -5,7 +5,7 @@
         <p class="h3 m-0 text-center">Connexion</p>
       </mat-card-title>
       <mat-card-subtitle class="pb-4">
-        <p class="text-justify">Créez votre arbre généalogique, retrouvez des personnes de votre famille, et bien plus encore !</p>
+         <p>Créez votre arbre généalogique, retrouvez des personnes de votre famille, et bien plus encore !</p>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -17,8 +17,8 @@
           <input matInput formControlName="email" type="text" required>
           <mat-icon matPrefix>email</mat-icon>
           <mat-error *ngIf="this.form.controls.email.touched && this.form.controls.email.invalid">
-            <span *ngIf="this.form.controls.email.errors?.['required']">Veuillez saisir un email.</span>
-            <span *ngIf="this.form.controls.email.errors?.['email']">Veuillez saisir un email valide.</span>
+            <span *ngIf="this.form.controls.email.hasError('required')">Veuillez saisir un email.</span>
+            <span *ngIf="this.form.controls.email.hasError('email')">Veuillez saisir un email valide.</span>
           </mat-error>
         </mat-form-field>
         <!-- password -->
@@ -30,7 +30,7 @@
             <mat-icon>{{ this.hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
           <mat-error *ngIf="this.form.controls.password.touched && this.form.controls.password.invalid">
-            <span *ngIf="this.form.controls.password.errors?.['required']">Veuillez saisir un mot de passe.</span>
+            <span *ngIf="this.form.controls.password.hasError('required')">Veuillez saisir un mot de passe.</span>
           </mat-error>
         </mat-form-field>
         <!-- submit and redirections -->

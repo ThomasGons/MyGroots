@@ -13,7 +13,6 @@ export class ChangePasswordComponent implements OnInit {
 
   form = new FormGroup({
     password: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-    passwordConfirm: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
   });
   hidePassword: boolean = true;
   hidePasswordConfirm: boolean = true;
@@ -35,9 +34,6 @@ export class ChangePasswordComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    if (this.form.value.password !== this.form.value.passwordConfirm) {
-      return;
-    }
     /* Get form data */
     const changePasswordData = {
       token: this._activatedRoute.snapshot.paramMap.get("token"),
@@ -46,7 +42,7 @@ export class ChangePasswordComponent implements OnInit {
     /* Submit form */
     this._authService.changePassword(changePasswordData).subscribe({
       next: (response) => {
-
+        
       },
       error: (err) => {
 
