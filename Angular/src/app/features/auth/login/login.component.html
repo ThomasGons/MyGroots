@@ -18,7 +18,7 @@
           <mat-icon matPrefix>email</mat-icon>
           <mat-error *ngIf="this.form.controls.email.touched && this.form.controls.email.invalid">
             <span *ngIf="this.form.controls.email.hasError('required')">Veuillez saisir un email.</span>
-            <span *ngIf="this.form.controls.email.hasError('email')">Veuillez saisir un email valide.</span>
+            <span *ngIf="this.form.controls.email.hasError('email')">Veuillez saisir un email au format valide.</span>
           </mat-error>
         </mat-form-field>
         <!-- password -->
@@ -26,7 +26,7 @@
           <mat-label>Mot de passe</mat-label>
           <input matInput formControlName="password" [type]="this.hidePassword ? 'password' : 'text'" required>
           <mat-icon matPrefix>lock</mat-icon>
-          <button mat-icon-button matSuffix (click)="this.hidePassword = !this.hidePassword" type="button">
+          <button mat-icon-button matSuffix (click)="this.hidePassword = !this.hidePassword" [matTooltip]="this.hidePassword ? 'Afficher le mot de passe' : 'Cacher le mot de passe'" type="button">
             <mat-icon>{{ this.hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
           <mat-error *ngIf="this.form.controls.password.touched && this.form.controls.password.invalid">

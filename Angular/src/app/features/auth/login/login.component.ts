@@ -13,7 +13,7 @@ export class LoginComponent {
 
   form = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(6)] }),
+    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
   responseMessage: string = "";
   hidePassword: boolean = true;
