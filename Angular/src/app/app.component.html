@@ -1,9 +1,11 @@
 <div class="d-flex flex-column h-100">
-  <app-header></app-header>
-
+  <!-- Header -->
+  <app-header [navItems]="this.navItems" (signalToggleSidenav)="sidenav.toggle()"></app-header>
+  <!-- Main -->
   <main class="flex-fill">
-    <router-outlet></router-outlet>
+    <app-sidenav [navItems]="this.navItems" #sidenav></app-sidenav>
   </main>
-
+  <!-- Footer -->
   <app-footer></app-footer>
 </div>
+

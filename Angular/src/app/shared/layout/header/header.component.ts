@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from '@environments/environment.development';
 
 
@@ -7,11 +7,19 @@ import { environment } from '@environments/environment.development';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   title: string = environment.title;
   isLoggedIn: boolean = false;
 
-  constructor() {}
+  @Input() navItems: any;
+  @Output() signalToggleSidenav = new EventEmitter<void>();
+
+  public onToggleSidenav(): void {
+    this.signalToggleSidenav.emit();
+  }
+  
+  ngOnInit(): void {
+  }
 
 }

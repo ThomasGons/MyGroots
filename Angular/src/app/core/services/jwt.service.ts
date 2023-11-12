@@ -8,16 +8,20 @@ export class JwtService {
 
   private readonly keyName: string = "jwtToken";
 
-  public getToken(): string {
-    return window.localStorage[this.keyName];
+  public getToken(): string | null {
+    return window.localStorage.getItem(this.keyName);
   }
 
   public saveToken(token: string): void {
-    window.localStorage[this.keyName] = token;
+    window.localStorage.setItem(this.keyName, token);
   }
 
   public destroyToken(): void {
     window.localStorage.removeItem(this.keyName);
   }
   
+  public isAuthenticated(): boolean {
+    const jwtToken = this.getToken();
+    return (jwtToken ? true : false);
+  }
 }

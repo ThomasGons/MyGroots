@@ -1,0 +1,22 @@
+<mat-sidenav-container class="h-100 bg-white" [hasBackdrop]="true">
+  <!-- Side navbar -->
+  <mat-sidenav #sidenav mode="over" position="end">
+    <mat-nav-list>
+      <mat-list-item class="nav-item">
+        <a [routerLink]="['/auth/login']" class="nav-link">Connexion</a>
+      </mat-list-item>
+      <mat-list-item class="nav-item">
+        <a [routerLink]="['/auth/register']" class="nav-link">Inscription</a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item *ngFor="let item of this.navItems" class="nav-item mt-1">
+        <a [routerLink]="item.link" routerLinkActive="active" class="nav-link">{{ item.name }}</a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- Main content -->
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

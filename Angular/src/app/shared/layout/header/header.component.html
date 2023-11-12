@@ -1,37 +1,35 @@
-<header>
-  <nav class="navbar navbar-expand-lg text-white" style="background-color: #8EA37A">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white" href="#"><strong>MyGroots</strong></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+<header class="header border-bottom">
+  <mat-toolbar class="justify-content-between flex-nowrap bg-white">
+    <!-- Left side of header -->
+    <div class="header-content-left d-flex flex-row align-items-center">
+      <button mat-button [routerLink]="['/home']" class="me-2">
+        <h1>{{ this.title }}</h1>
       </button>
-      <div class="collapse navbar-collapse" id="navbarScroll">
-        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-          <li class="nav-item">
-            <a class="nav-link active text-white" aria-current="page" href="#">Arbre</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink="/profile">Mon profil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">Link</a>
-          </li>
-        </ul>
-        <div class="d-flex">
-          <div *ngIf="!this.isLoggedIn">
-            <button class="button button1" routerLink="/auth/login">Connexion</button>
-            <button class="button button1" routerLink="/auth/register">Inscription</button>
-          </div>
-          <div *ngIf="this.isLoggedIn">
-            <a routerLink="/auth/register"><i class="bi bi-person-circle user-icon h3"></i></a>
-            <button class="button button1" routerLink="/auth/register">Deconnexion</button>
-            <!--Profile icon, link to profile page-->
-          </div>
-        </div>
+      <div class="d-sm-block d-none">
+        <!-- Navbar -->
+        <nav class="nav d-flex flex-row">
+          <button mat-button *ngFor="let item of this.navItems" class="mt-1" type="button">
+            <span [routerLink]="item.link" routerLinkActive="active">{{ item.name }}</span>
+          </button>
+        </nav>
       </div>
     </div>
-  </nav>
+    <!-- Right side of header -->
+    <div class="header-content-right">
+      <div *ngIf="!this.isLoggedIn">
+        <div class="d-sm-none">
+          <button mat-icon-button (click)="this.onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <div class="d-sm-block d-none">
+          <button mat-raised-button routerLink="/auth/login">Connexion</button>
+          <button mat-raised-button class="bg-green-light ms-2" [routerLink]="['/auth/register']">Inscription</button>
+        </div>
+      </div> 
+      <div *ngIf="this.isLoggedIn">
+        <button mat-raised-button class="bg-green-light" [routerLink]="['/auth/register']">Deconnexion</button>
+      </div>
+    </div>
+  </mat-toolbar>
 </header>

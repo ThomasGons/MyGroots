@@ -8,6 +8,10 @@ import { environment } from '@environments/environment.development';
 })
 export class AppComponent{
 
-  title: string = environment.title;
+  readonly title: string = environment.title;
+  readonly navItems = [
+    { name: "Arbre Familial", link: "/auth/login" },
+    { name: "Recherche", link: "/auth/register" },
+  ]
 
 }
