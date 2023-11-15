@@ -10,8 +10,8 @@ export class AppComponent{
 
   readonly title: string = environment.title;
   readonly navItems = [
-    { name: "Arbre Familial", link: "/auth/login" },
-    { name: "Recherche", link: "/auth/register" },
+    { name: "Arbre Familial", link: "/family-tree" },
+    { name: "Recherche", link: "/search" },
   ]
 
 }

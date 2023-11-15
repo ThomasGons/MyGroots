@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment.development';
+import { JwtService } from './jwt.service';
 
 
 @Injectable({
@@ -14,7 +15,13 @@ export class AuthService {
 
   constructor(
     private _httpClient: HttpClient,
+    private _jwtService: JwtService,
   ) {}
+
+  public isAuthenticated(): boolean {
+    const jwtToken = this._jwtService.getToken();
+    return (jwtToken ? true : false);
+  }
 
   public login(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/login", data, this.httpOptions);

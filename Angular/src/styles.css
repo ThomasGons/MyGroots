@@ -1,6 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 
+/** Color palette **/
+:root {
+    --color-gray: #DDDFDF;
+    --color-gray-light: #EBECEC;
+    --color-green-light: #E1EDC1;
+}
+
+/** Background colors **/
+.bg-gray {
+    color: var(--color-gray) !important;
+}
+.bg-gray-light {
+    background-color: var(--color-gray-light) !important;
+}
+.bg-green-light {
+    background-color: var(--color-green-light) !important;
+}
+
+/** Foreground colors **/
+.fg-gray {
+    color: var(--color-gray) !important;
+}
+.fg-gray-light {
+    color: var(--color-gray-light) !important;
+}
+.fg-green-light {
+    color: var(--color-green-light) !important;
+}
+
+
 html, body {
     height: 100%;
 }
@@ -17,31 +47,7 @@ footer {
     min-width: 320px;
 }
 
-/* Color palette */
-:root {
-    --color-gray: #DDDFDF;
-    --color-gray-light: #EBECEC;
-    --color-green-light: #E1EDC1;
-}
-
-/* Background colors */
-.bg-gray {
-    color: var(--color-gray) !important;
-}
-.bg-gray-light {
-    background-color: var(--color-gray-light) !important;
-}
-.bg-green-light {
-    background-color: var(--color-green-light) !important;
-}
-
-/* Foreground colors */
-.fg-gray {
-    color: var(--color-gray) !important;
-}
-.fg-gray-light {
-    color: var(--color-gray-light) !important;
-}
-.fg-green-light {
-    color: var(--color-green-light) !important;
+/** Angular material customizations **/
+.mat-expansion-panel-body {
+    padding: 0 8px 0 16px !important;
 }

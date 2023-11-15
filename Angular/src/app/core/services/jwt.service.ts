@@ -20,8 +20,4 @@ export class JwtService {
     window.localStorage.removeItem(this.keyName);
   }
   
-  public isAuthenticated(): boolean {
-    const jwtToken = this.getToken();
-    return (jwtToken ? true : false);
-  }
 }

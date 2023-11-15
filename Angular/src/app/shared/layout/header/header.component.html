@@ -5,7 +5,7 @@
       <button mat-button [routerLink]="['/home']" class="me-2">
         <h1>{{ this.title }}</h1>
       </button>
-      <div class="d-sm-block d-none">
+      <div class="d-md-block d-none">
         <!-- Navbar -->
         <nav class="nav d-flex flex-row">
           <button mat-button *ngFor="let item of this.navItems" class="mt-1" type="button">
@@ -16,19 +16,28 @@
     </div>
     <!-- Right side of header -->
     <div class="header-content-right">
+      <!-- If not logged in -->
       <div *ngIf="!this.isLoggedIn">
-        <div class="d-sm-none">
+        <div class="d-md-none">
           <button mat-icon-button (click)="this.onToggleSidenav()">
             <mat-icon>menu</mat-icon>
           </button>
         </div>
-        <div class="d-sm-block d-none">
-          <button mat-raised-button routerLink="/auth/login">Connexion</button>
+        <div class="d-md-block d-none">
+          <button mat-raised-button [routerLink]="['/auth/login']">Connexion</button>
           <button mat-raised-button class="bg-green-light ms-2" [routerLink]="['/auth/register']">Inscription</button>
         </div>
       </div> 
+      <!-- If logged in -->
       <div *ngIf="this.isLoggedIn">
-        <button mat-raised-button class="bg-green-light" [routerLink]="['/auth/register']">Deconnexion</button>
+        <div class="d-md-none">
+          <button mat-icon-button (click)="this.onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <div class="d-md-block d-none">
+          <button mat-raised-button class="bg-green-light" (click)="this.logout()">Deconnexion</button>
+        </div>
       </div>
     </div>
   </mat-toolbar>

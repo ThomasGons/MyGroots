@@ -9,6 +9,6 @@ import { environment } from '@environments/environment.development';
 })
 export class FooterComponent {
 
-  title: string = environment.title;
+  readonly title: string = environment.title;
 
 }
