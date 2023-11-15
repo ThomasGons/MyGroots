@@ -1,10 +1,8 @@
 package com.springboot.mygroots.service;
 
 import com.springboot.mygroots.model.Account;
-import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.AccountRepository;
-import com.springboot.mygroots.repository.FamilyTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,7 +18,6 @@ public class AccountService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-
 
     public void addAccount(Account account) {
         accountRepository.save(account);
@@ -56,9 +53,5 @@ public class AccountService {
         Account account = accountRepository.getAccountById(id);
         account.activate();
         accountRepository.save(account);
-    }
-
-    public FamilyTree getFamilyTree(String email){
-        return accountRepository.getAccountByEmail(email).getFamilyTree();
     }
 }

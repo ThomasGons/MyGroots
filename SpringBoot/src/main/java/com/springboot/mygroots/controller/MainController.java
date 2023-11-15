@@ -1,20 +1,22 @@
 package com.springboot.mygroots.controller;
 
-import com.springboot.mygroots.dto.FamilyTreeDTO;
 import com.springboot.mygroots.model.Account;
-import com.springboot.mygroots.model.FamilyTree;
+import com.springboot.mygroots.model.Email;
+import com.springboot.mygroots.model.FamilyGraph;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.EmailService;
-import com.springboot.mygroots.service.FamilyTreeService;
+import com.springboot.mygroots.service.FamilyGraphService;
 import com.springboot.mygroots.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
 
+import static com.springboot.mygroots.model.FamilyGraph.FamilyRelation.*;
 
 @RestController
 public class MainController {
@@ -26,13 +28,20 @@ public class MainController {
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private FamilyGraphService familyGraphService;
 
     @Autowired
-    private FamilyTreeService familyTreeService;
+    private EmailService emailService;
+
 
     @RequestMapping(value= "/")
-    public FamilyTreeDTO root() {
-        return new FamilyTreeDTO(accountService.getFamilyTree("john@doe.com"));
+    public void root() {
+        Person p = new Person("Thomas", "Gons", Person.Gender.MALE);
+        personService.addPerson(p);
+
+        Account a = new Account("gons.thomas@gmail.com", p);
+        accountService.addAccount(a);
     }
 
     // create a init method to create a sample family graph
@@ -52,16 +61,29 @@ public class MainController {
         accountService.addAccount(new Account("jo@doe.com", p3));
         accountService.addAccount(new Account("joe@doe.com", p4));
 
-        FamilyTree familyTree = new FamilyTree(p1.getLastName(), List.of(p1, p2, p3, p4));
-        familyTree.addNode(p1, null, p4, p3);
-        familyTree.addNode(p2, null, p4, p3);
-        familyTree.addNode(p3, p4, null, null);
-        familyTree.addNode(p4, p3, null, null);
-        familyTreeService.saveFamilyTree(familyTree);
+        FamilyGraph fg = new FamilyGraph("Doe");
 
-        Account a1 = accountService.getAccountByEmail("john@doe.com");
-        a1.setFamilyTree(familyTree);
-        accountService.updateAccount(a1);
+        fg.addOwner(p1);
+        fg.addOwner(p2);
+
+        familyGraphService.addFamilyGraph(fg);
+        
+        FamilyGraph r_fg = familyGraphService.getFamilyGraphByOwner(p1);
+        
+        familyGraphService.addRelation(r_fg, p1, p2, BROTHER);
+        familyGraphService.addRelation(r_fg, p1, p3, SON);
+        familyGraphService.addRelation(r_fg, p1, p4, SON);
+        familyGraphService.addRelation(r_fg, p2, p1, SISTER);
+        familyGraphService.addRelation(r_fg, p2, p3, DAUGHTER);
+        familyGraphService.addRelation(r_fg, p2, p4, DAUGHTER);
+        familyGraphService.addRelation(r_fg, p3, p1, FATHER);
+        familyGraphService.addRelation(r_fg, p3, p2, FATHER);
+        familyGraphService.addRelation(r_fg, p3, p4, HUSBAND);
+        familyGraphService.addRelation(r_fg, p4, p1, MOTHER);
+        familyGraphService.addRelation(r_fg, p4, p2, MOTHER);
+        familyGraphService.addRelation(r_fg, p4, p3, WIFE);
+
+        familyGraphService.updateFamiyGraph(r_fg);
     }
 
     @RequestMapping("/auth/activateAccount")

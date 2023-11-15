@@ -12,13 +12,15 @@ public class Email {
     private Person source;
     @DBRef
     private Person target;
+    private FamilyGraph.FamilyRelation relation;
     private String body;
 
 
 
-    public Email(Person source, Person target, String body) {
+    public Email(Person source, Person target, FamilyGraph.FamilyRelation relation, String body) {
         this.source = source;
         this.target = target;
+        this.relation = relation;
         this.body = body;
     }
 
@@ -44,6 +46,13 @@ public class Email {
 
     public void setTarget(Person target) {
         this.target = target;
+    }
+    public FamilyGraph.FamilyRelation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(FamilyGraph.FamilyRelation relation) {
+        this.relation = relation;
     }
 
     public String getBody() {

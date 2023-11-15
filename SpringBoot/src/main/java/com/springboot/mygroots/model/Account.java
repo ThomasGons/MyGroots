@@ -18,20 +18,12 @@ public class Account  {
     @DBRef
     private Person person;
 
-    @DBRef
-    private FamilyTree familyTree;
-
     private boolean isActive;
 
     public Account(String email, @Nullable Person person) {
         this.email = email;
         this.person = person;
         this.isActive = false;
-    }
-
-
-    public void activate() {
-        this.isActive = true;
     }
 
 
@@ -43,13 +35,6 @@ public class Account  {
         this.email = email;
     }
 
-    public FamilyTree getFamilyTree() {
-        return familyTree;
-    }
-
-    public void setFamilyTree(FamilyTree familyTree) {
-        this.familyTree = familyTree;
-    }
 
     public Person getPerson() {
         return person;
@@ -61,6 +46,10 @@ public class Account  {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public void activate() {
+        this.isActive = true;
     }
 
     public String getId() {
