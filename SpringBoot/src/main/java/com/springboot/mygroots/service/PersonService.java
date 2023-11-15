@@ -1,5 +1,6 @@
 package com.springboot.mygroots.service;
 
+import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
-
 
     public void addPerson(Person person){
         personRepository.save(person);
@@ -29,8 +29,5 @@ public class PersonService {
     public Person getPersonByNameAndLastName(String name, String lastName){
         return personRepository.getPersonByNameAndLastName(name, lastName);
     }
-    
-    
-
 
 }
