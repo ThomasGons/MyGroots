@@ -80,11 +80,12 @@
           <mat-hint *ngIf="!this.isForeigner">Saisir les 13 premiers caractères présents sur la carte vitale.</mat-hint>
           <mat-error *ngIf="this.form.controls.socialSecurity.touched && this.form.controls.socialSecurity.invalid">
             <span *ngIf="this.form.controls.socialSecurity.hasError('required')">Veuillez saisir un numéro de sécurité social.</span>
-            <span *ngIf="this.form.controls.socialSecurity.hasError('pattern')">Numéro de sécurité social invalide.</span>
+            <span *ngIf="this.form.controls.socialSecurity.hasError('minlength') || this.form.controls.socialSecurity.hasError('maxlength')">Numéro de sécurité social invalide, veuillez saisir les 13 premiers caractères présents sur la carte vitale.</span>
+            <!-- <span *ngIf="this.form.controls.socialSecurity.hasError('pattern')">Numéro de sécurité social invalide.</span> -->
           </mat-error>
         </mat-form-field>
         <!-- submit and redirections -->
-        <button mat-raised-button class="bg-green-light my-4 py-4" type="submit">
+        <button mat-raised-button class="bg-green-light my-4 py-4" [disabled]="!this.form.valid" type="submit">
           <mat-icon>done</mat-icon>
           <span>Inscription</span>
         </button>

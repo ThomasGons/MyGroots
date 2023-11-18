@@ -1,22 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 
-/** Color palette **/
+/****************** Color palette ******************/
 :root {
-    --color-gray: #DDDFDF;
+    --color-gray: #BBBBBB;
     --color-gray-light: #EBECEC;
-    --color-green-light: #E1EDC1;
+    --color-green: #6DB344;
+    --color-green-light: #DAEAB5;
+    --color-green-dark: #3C8632;
+    --color-blue-sky: #ECF9FB;
 }
 
 /** Background colors **/
 .bg-gray {
-    color: var(--color-gray) !important;
+    background-color: var(--color-gray) !important;
 }
 .bg-gray-light {
     background-color: var(--color-gray-light) !important;
 }
+.bg-green {
+    background-color: var(--color-green) !important;
+}
 .bg-green-light {
     background-color: var(--color-green-light) !important;
+}
+.bg-green-dark {
+    background-color: var(--color-green-dark) !important;
+}
+.bg-blue-sky {
+    background-color: var(--color-blue-sky) !important;
 }
 
 /** Foreground colors **/
@@ -26,13 +38,25 @@
 .fg-gray-light {
     color: var(--color-gray-light) !important;
 }
+.fg-green {
+    color: var(--color-green) !important;
+}
 .fg-green-light {
     color: var(--color-green-light) !important;
 }
+.fg-green-dark {
+    color: var(--color-green-dark) !important;
+}
+.fg-blue-sky {
+    color: var(--color-blue-sky) !important;
+}
+
+/***************************************************/
 
 
 html, body {
     height: 100%;
+    min-width: 320px;
 }
 body {
     margin: 0;

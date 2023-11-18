@@ -1,4 +1,4 @@
-<div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(&quot;https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg&quot;); background-size: cover;">
+<div class="container-fluid vh-100 py-5 d-flex justify-content-center" style="background-image: url(&quot;https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg&quot;); background-size: cover;">
   <mat-card class="auth-card p-2 shadow">
     <mat-card-header>
       <mat-card-title class="pb-4">
@@ -37,7 +37,7 @@
         <div class="d-flex justify-content-end">
           <button mat-button routerLink="/auth/forgot-password" type="button">Mot de passe oublié ?</button>
         </div>
-        <button mat-raised-button class="bg-green-light my-2 py-4" type="submit">
+        <button mat-raised-button class="bg-green-light my-2 py-4" [disabled]="!this.form.valid" type="submit">
           <mat-icon>login</mat-icon>
           <span>Connexion</span>
         </button>

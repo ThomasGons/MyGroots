@@ -45,6 +45,14 @@ const routes: Routes = [
     ]
   },
   {
+    path: "family-tree",
+    redirectTo: "/TODO-not-implemented",
+  },
+  {
+    path: "search",
+    redirectTo: "/TODO-not-implemented",
+  },
+  {
     path: "profile",
     component: ProfileComponent,
     title: environment.title + " - Mon profil",

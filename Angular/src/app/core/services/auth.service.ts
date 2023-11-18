@@ -19,8 +19,9 @@ export class AuthService {
   ) {}
 
   public isAuthenticated(): boolean {
-    const jwtToken = this._jwtService.getToken();
-    return (jwtToken ? true : false);
+    // const jwtToken = this._jwtService.getToken();
+    // return (jwtToken ? true : false);
+    return false;
   }
 
   public login(data: any): Observable<any> {

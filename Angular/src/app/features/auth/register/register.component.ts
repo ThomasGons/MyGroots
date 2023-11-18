@@ -19,7 +19,7 @@ export class RegisterComponent {
     birthDate: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     gender: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     nationality: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-    socialSecurity: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.pattern("/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/")] }),
+    socialSecurity: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
   });
   responseMessage: string = "";
   isForeigner: boolean = false;
