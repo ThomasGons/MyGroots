@@ -30,4 +30,12 @@ public class PersonService {
         return personRepository.getPersonByNameAndLastName(name, lastName);
     }
 
+    public Person getPersonById(String id){
+        return personRepository.findById(id).get();
+    }
+
+    public void removePerson(Person person){
+        personRepository.delete(person);
+    }
+
 }

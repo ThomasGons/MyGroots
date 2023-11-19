@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "Account")
 public class Account  {
     @Id
@@ -21,6 +24,9 @@ public class Account  {
     @DBRef
     private FamilyTree familyTree;
 
+    @DBRef
+    private List<Notif> notifs = new ArrayList<>();
+
     private boolean isActive;
 
     public Account(String email, @Nullable Person person) {
@@ -30,10 +36,15 @@ public class Account  {
     }
 
 
+
     public void activate() {
         this.isActive = true;
     }
 
+
+    public List<Notif> getNotifs() {
+        return notifs;
+    }
 
     public String getEmail() {
         return email;
