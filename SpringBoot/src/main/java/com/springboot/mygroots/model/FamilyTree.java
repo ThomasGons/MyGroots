@@ -4,7 +4,9 @@ import com.sun.source.tree.Tree;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.springboot.mygroots.utils.Enumerations.*;
 
+import java.beans.Visibility;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,9 @@ public class FamilyTree {
     @DBRef
     private List<Person> members;
     private List<TreeNode> nodes;
-    private Person owner;
+    @DBRef
+    private final Person owner;
+    private Visibility visibility;
 
     public FamilyTree(String familyName, Person owner) {
         this.owner = owner;
@@ -81,10 +85,18 @@ public class FamilyTree {
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && nodes.get(memberID).getFatherID() == -1) // the member does not have a father
+                && getNode(member).getFatherID() == -1) // the member does not have a father
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
+                List<TreeNode> childrenNodes = this.getChildrenNodes(getPartner(addedMember));
+                if(childrenNodes != null && !childrenNodes.isEmpty()) {
+                    childrenNodes.forEach(node -> {
+                        if(node.getFatherID() == memberID) {
+                            node.setFatherID(getPersonID(addedMember));
+                        }
+                    });
+                }
             }
             else{
                 this.addMember(addedMember);
@@ -92,44 +104,36 @@ public class FamilyTree {
                 this.getNode(member).setFatherID(fatherID);
                 this.addNode(addedMember, null, null, null);
                 // update children
-                List<TreeNode> childrenNodes = this.getChildrenNodes(member);
-                if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                    childrenNodes.forEach(node -> {
-                        if(node.getFatherID() == memberID) {
-                            node.setFatherID(fatherID);
-                        }
-                    });
-                }
+
             }
         }
     }
 
     public void addMother(Person member, Person addedMember){
-        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isBefore(member.getBirthDate())){ // if the mother is born after the member
+        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isAfter(member.getBirthDate())){ // if the mother is born after the member
             return;
         }
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && nodes.get(memberID).getMotherID() == -1) // the member does not have a mother
+                && getNode(member).getMotherID() == -1) // the member does not have a mother
         {
             if(this.getNode(member).getFatherID()!= -1){ // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father
+                List<TreeNode> childrenNodes = this.getChildrenNodes(getPartner(addedMember)); // update children
+                if(childrenNodes != null && !childrenNodes.isEmpty()) {
+                    childrenNodes.forEach(node -> {
+                        if(node.getMotherID() == memberID) {
+                            node.setMotherID(getPersonID(addedMember));
+                        }
+                    });
+                }
             }
             else{
                 this.addMember(addedMember);
                 int motherID = getPersonID(addedMember);
                 this.getNode(member).setMotherID(motherID);
                 this.addNode(addedMember, null, null, null);
-                // update children
-                List<TreeNode> childrenNodes = this.getChildrenNodes(member);
-                if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                    childrenNodes.forEach(node -> {
-                        if(node.getMotherID() == memberID) {
-                            node.setMotherID(motherID);
-                        }
-                    });
-                }
             }
         }
     }
@@ -144,7 +148,7 @@ public class FamilyTree {
         {
             this.addMember(addedMember);
             int childID = getPersonID(addedMember);
-            if(member.getGender()== Person.Gender.MALE){
+            if(member.getGender()== Gender.MALE){
                 if(this.getNode(member).getPartnerID() == -1){
                     this.addNode(addedMember, null, null, member);
                 }
@@ -163,6 +167,138 @@ public class FamilyTree {
             }
         }
     }
+
+    public Person getFather(Person member){
+        if(this.getMembers().contains(member)){
+            if(this.getNode(member).getFatherID() != -1){
+                return this.getMembers().get(this.getNode(member).getFatherID());
+            }
+        }
+        return null;
+    }
+
+    public Person getMother(Person member){
+        if(this.getMembers().contains(member)){
+            if(this.getNode(member).getMotherID() != -1){
+                return this.getMembers().get(this.getNode(member).getMotherID());
+            }
+        }
+        return null;
+    }
+
+    public Person getPartner(Person member){
+        if(this.getMembers().contains(member)){
+            if(this.getNode(member).getPartnerID() != -1){
+                return this.getMembers().get(this.getNode(member).getPartnerID());
+            }
+        }
+        return null;
+    }
+
+    public List<Person> getParents(Person member){
+        List<Person> parents = new ArrayList<>();
+        if(this.getMembers().contains(member)){
+            if(this.getNode(member).getFatherID() != -1){
+                parents.add(this.getMembers().get(this.getNode(member).getFatherID()));
+            }
+            if(this.getNode(member).getMotherID() != -1){
+                parents.add(this.getMembers().get(this.getNode(member).getMotherID()));
+            }
+        }
+        return parents;
+    }
+
+    public List<Person> getChildren(Person member){
+        List<Person> children = new ArrayList<>();
+        if(this.getMembers().contains(member)){
+            List<TreeNode> childrenNodes = this.getChildrenNodes(member);
+            if(childrenNodes != null && !childrenNodes.isEmpty()) {
+                childrenNodes.forEach(node -> {
+                    children.add(this.getMembers().get(node.getID()));
+                });
+            }
+        }
+        return children;
+    }
+
+
+    public List<Person> getGrandParents(Person member){
+        List<Person> grandParents = new ArrayList<>();
+        if(this.getMembers().contains(member)){
+            if(this.getNode(member).getFatherID() != -1){
+                if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID() != -1){
+                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID()));
+                }
+                if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID() != -1){
+                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID()));
+                }
+            }
+            if(this.getNode(member).getMotherID() != -1){
+                if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID() != -1){
+                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID()));
+                }
+                if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID() != -1){
+                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID()));
+                }
+            }
+        }
+        return grandParents;
+    }
+
+    public List<Person> getGrandChildren(Person member){
+        List<Person> grandChildren = new ArrayList<>();
+        if(this.getMembers().contains(member)){
+            List<TreeNode> childrenNodes = this.getChildrenNodes(member);
+            if(childrenNodes != null && !childrenNodes.isEmpty()) {
+                childrenNodes.forEach(node -> {
+                    List<TreeNode> grandChildrenNodes = this.getChildrenNodes(this.getMembers().get(node.getID()));
+                    if(grandChildrenNodes != null && !grandChildrenNodes.isEmpty()) {
+                        grandChildrenNodes.forEach(grandChildNode -> {
+                            grandChildren.add(this.getMembers().get(grandChildNode.getID()));
+                        });
+                    }
+                });
+            }
+        }
+        return grandChildren;
+    }
+
+    public List<Person> getSiblings(Person member){
+        List<Person> siblings = new ArrayList<>();
+        for(Person person : this.getParents(member)){
+            siblings.addAll(this.getChildren(person));
+            siblings.remove(member);
+            break;
+        }
+        return siblings;
+    }
+
+    public List<Person> getUnclesAndAunts(Person member){
+        List<Person> unclesAndAunts = new ArrayList<>();
+        for(Person person : this.getParents(member)){
+            unclesAndAunts.addAll(this.getSiblings(person));
+        }
+        return unclesAndAunts;
+    }
+
+    public List<Person> getNephewsAndNieces(Person member){
+        List<Person> nephewsAndNieces = new ArrayList<>();
+        for(Person person : this.getSiblings(member)){
+            nephewsAndNieces.addAll(this.getChildren(person));
+        }
+        return nephewsAndNieces;
+    }
+
+    public List<Person> getCousins(Person member){
+        List<Person> cousins = new ArrayList<>();
+        for(Person person : this.getUnclesAndAunts(member)){
+            cousins.addAll(this.getChildren(person));
+        }
+        return cousins;
+    }
+
+
+
 
 
     public Boolean isEquivalant(FamilyTree tree) { // Compare two family trees
@@ -199,6 +335,7 @@ public class FamilyTree {
             }
         });
     }
+
 
 
     private void removeNode(Person person) {
@@ -243,10 +380,24 @@ public class FamilyTree {
         return childrenNodes;
     }
 
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+
+
+
 
 
     public static class TreeNode {
-        private visibility visibility = FamilyTree.visibility.PUBLIC;
         private int ID;
         private int partnerID;
         private int motherID;
@@ -292,13 +443,6 @@ public class FamilyTree {
             this.fatherID = fatherID;
         }
 
-        public visibility getVisibility() {
-            return visibility;
-        }
-
-        public void setVisibility(visibility visibility) {
-            this.visibility = visibility;
-        }
 
 
     }
@@ -313,10 +457,6 @@ public class FamilyTree {
 
     public List<TreeNode> getNodes() { return nodes; }
 
-    public enum visibility{
-        PUBLIC,
-        PROTECTED,
-        PRIVATE
-    }
+
 
 }

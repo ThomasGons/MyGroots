@@ -2,7 +2,7 @@ package com.springboot.mygroots.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import com.springboot.mygroots.utils.Enumerations.*;
 import java.time.LocalDate;
 
 @Document(collection = "Person")
@@ -18,15 +18,7 @@ public class Person {
     private Gender gender;
     private Status status;
 
-    public enum Gender {
-        MALE,
-        FEMALE
-    }
 
-    public enum Status {
-        ALIVE,
-        DEAD
-    }
 
     public Person(String name, String lastName, Gender gender){
         this.name = name;

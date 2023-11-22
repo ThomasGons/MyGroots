@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.springboot.mygroots.utils.Enumerations.*;
 
 import javax.management.Notification;
 
@@ -64,9 +65,5 @@ public class Notif {
     }
 
 
-    public enum NotifType {
-        DEMAND_ADDTOFAMILY,
-        ALERT_DEMANDDECLINED,
-        ALERT_DEMANDACCEPTED,
-    }
+
 }

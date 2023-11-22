@@ -6,6 +6,7 @@ import com.springboot.mygroots.repository.AccountRepository;
 import com.springboot.mygroots.repository.NotifRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.springboot.mygroots.utils.Enumerations.*;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class NotifService {
 
 
     public void requestAnswer(Notif request){
-        Notif requestAnswer = new Notif(request.getTarget(),request.getSource(),Notif.NotifType.ALERT_DEMANDDECLINED);
+        Notif requestAnswer = new Notif(request.getTarget(),request.getSource(),NotifType.ALERT_DEMANDDECLINED);
         request.getSource().getNotifs().add(requestAnswer);
         request.getTarget().getNotifs().remove(request);
     }
