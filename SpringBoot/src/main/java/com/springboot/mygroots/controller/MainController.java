@@ -40,23 +40,35 @@ public class MainController {
     // create a init method to create a sample family graph
     @RequestMapping(value= "/init")
     public void init() {
+        notifService.getAllNotifs().forEach(notif -> notifService.removeNotif(notif));
         accountService.getAllAccounts().forEach(account -> accountService.removeAccount(account));
         personService.getAllPersons().forEach(person -> personService.removePerson(person));
         familyTreeService.getAllFamilyTrees().forEach(familyTree -> familyTreeService.removeFamilyTree(familyTree));
-        notifService.getAllNotifs().forEach(notif -> notifService.deleteNotif(notif));
-        Person p1 = new Person("jon","doe", Person.Gender.MALE);
-        Person p2 = new Person("dana", "doe", Person.Gender.FEMALE);
-        personService.addPerson(p1);
-        personService.addPerson(p2);
-        Account a1 = new Account("lucas.cotot@gmail.com",p1);
-        Account a2 = new Account("lazerf@gmail.com",p2);
-        accountService.addAccount(a1);
-        accountService.addAccount(a2);
+        Person john = new Person("john", "doe", Person.Gender.MALE);
+        Person dane  = new Person("dane", "doe", Person.Gender.FEMALE);
+        Person joe = new Person("joe", "doe", Person.Gender.MALE);
+        personService.addPerson(john);
+        personService.addPerson(dane);
+        personService.addPerson(joe);
 
-        Notif n1 = new Notif(a1,a2, Notif.NotifType.DEMAND_ADDTOFAMILY);
-        notifService.saveNotif(n1);
-        a1.getNotifs().add(n1);
-        accountService.updateAccount(a1);
+        Account johnAcc = new Account("john@doe.com", john);
+        Account daneAcc = new Account("dane@doe.com", dane);
+        Account joeAcc = new Account("joe@doe.com", joe);
+        accountService.addAccount(johnAcc);
+        accountService.addAccount(daneAcc);
+        accountService.addAccount(joeAcc);
+
+        FamilyTree familyTree = new FamilyTree("Doe", johnAcc.getPerson());
+        familyTreeService.saveFamilyTree(familyTree);
+        johnAcc.setFamilyTree(familyTree);
+
+
+        johnAcc.getFamilyTree().addFather(johnAcc.getPerson(), joeAcc.getPerson());
+        johnAcc.getFamilyTree().addChild(joeAcc.getPerson(), daneAcc.getPerson());
+
+        familyTreeService.updateFamilyTree(johnAcc.getFamilyTree());
+        accountService.updateAccount(johnAcc);
+
 
 
     }
@@ -65,6 +77,8 @@ public class MainController {
     public void activateAccount(@RequestParam String id) {
         accountService.activateAccount(id);
     }
+
+
 
 
 }

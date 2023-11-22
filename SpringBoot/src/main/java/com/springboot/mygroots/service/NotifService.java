@@ -22,7 +22,7 @@ public class NotifService {
         notifRepository.save(notif);
     }
 
-    public void deleteNotif(Notif notif) {
+    public void removeNotif(Notif notif) {
         notifRepository.delete(notif);
     }
 

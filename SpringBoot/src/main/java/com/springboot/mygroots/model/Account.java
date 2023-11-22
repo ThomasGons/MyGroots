@@ -27,6 +27,9 @@ public class Account  {
     @DBRef
     private List<Notif> notifs = new ArrayList<>();
 
+    @DBRef
+    private FamilyTree myFamilyTree;
+
     private boolean isActive;
 
     public Account(String email, @Nullable Person person) {
