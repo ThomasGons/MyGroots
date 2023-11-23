@@ -37,6 +37,8 @@ public class MainController {
     @RequestMapping(value= "/")
     public FamilyTreeDTO root() {
         return new FamilyTreeDTO(accountService.getFamilyTree("john@doe.com"));
+
+    
     }
 
     // create a init method to create a sample family graph
@@ -138,18 +140,6 @@ public class MainController {
         for (Person p : joeNephewsAndNieces) {
             System.out.println(p.getName() + " " + p.getLastName());
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @RequestMapping("/auth/activateAccount")

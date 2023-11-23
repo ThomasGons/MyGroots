@@ -1,6 +1,6 @@
 package com.springboot.mygroots.model;
 
-import com.mongodb.lang.Nullable;
+import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,13 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Account")
-public class Account  {
-    @Id
+public class Account implements Serializable {
+    
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private String id;
 
     @Indexed(unique = true)
     private String email;
-
+    
+    private String password;
+    
+    private boolean verified;
+    
     @DBRef
     private Person person;
 
@@ -32,8 +39,9 @@ public class Account  {
 
     private boolean isActive;
 
-    public Account(String email, @Nullable Person person) {
+    public Account(String email, String password, @Nullable Person person) {
         this.email = email;
+        this.password = password;
         this.person = person;
         this.isActive = false;
     }
@@ -79,5 +87,13 @@ public class Account  {
 
     public String getId() {
         return id;
+    }
+
+    public String getPassword() {
+    	return password;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
     }
 }

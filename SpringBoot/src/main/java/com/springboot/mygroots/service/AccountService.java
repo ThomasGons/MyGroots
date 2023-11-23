@@ -66,9 +66,12 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-
-
     public FamilyTree getFamilyTree(String email){
         return accountRepository.getAccountByEmail(email).getFamilyTree();
+    }
+
+    public Account setAccount(String email, String password, Person person) {
+    	Account a = new Account(email, password,  person);
+    	return a;
     }
 }
