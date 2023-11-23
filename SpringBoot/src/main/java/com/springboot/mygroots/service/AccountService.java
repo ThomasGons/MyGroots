@@ -1,6 +1,7 @@
 package com.springboot.mygroots.service;
 
 import com.springboot.mygroots.model.Account;
+import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,8 @@ public class AccountService {
         return accountRepository.getAccountByEmail(email);
     }
 
-
+    public Account setAccount(String email, String password, boolean verified, Person person) {
+    	Account a = new Account(email, password, verified,  person);
+    	return a;
+    }
 }

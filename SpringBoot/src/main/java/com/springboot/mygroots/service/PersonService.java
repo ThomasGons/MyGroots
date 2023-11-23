@@ -1,29 +1,34 @@
 package com.springboot.mygroots.service;
 
+import com.springboot.mygroots.Utils;
+import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyGraph;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.model.Person.Gender;
+import com.springboot.mygroots.repository.AccountRepository;
 import com.springboot.mygroots.repository.FamilyGraphRepository;
 import com.springboot.mygroots.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class PersonService {
-
+	
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
     
     @Autowired
-    private FamilyGraphRepository familyGraphRepository;
+    private AccountService accountService;
 
     public void addPerson(Person person){
         personRepository.save(person);
@@ -41,14 +46,18 @@ public class PersonService {
         return personRepository.getPersonByNameAndLastName(name, lastName);
     }
     
-    public ResponseEntity<String> signUp(String name, String lastName, LocalDate birthDate, LocalDate deathDate, String birthPlace, String deathPlace, Gender gender){
+    public ResponseEntity<String> signUp(String email, String name, String lastName, LocalDate birthDate, String birthPlace, Gender gender, String nationality, String socialSecurityNumber){
     	try{
     		if (this.validedSignUpPerson(name, lastName)) {
 	    		Person p = personRepository.getPersonByNameAndLastName(name, lastName);
 	    		if (Objects.isNull(p)) {
-	    			//Person pers = this.setInfoPerson(name, lastName, birthDate, deathDate, birthPlace, deathPlace, gender);
-	    			//this.addPerson(pers);
-	    			
+	    			Person pers = this.setPerson(name, lastName, birthDate, birthPlace, gender, nationality, socialSecurityNumber);
+	    			this.addPerson(pers);
+	    			// creer un password temporaire avec son prenom
+	    			StringBuilder passwordtmp = Utils.encode(name); 
+	    			System.out.println(passwordtmp);
+	    			Account acc = accountService.setAccount(email, passwordtmp.toString(), false, pers);
+	    			accountService.addAccount(acc);
 	        		return new ResponseEntity<String>("{\"message\":\"Succesfully registered\"}", HttpStatus.OK);
 	    		}else {
 	        		return new ResponseEntity<String>("{\"message\":\"Already exist\"}", HttpStatus.BAD_REQUEST);
@@ -68,12 +77,32 @@ public class PersonService {
     	return false;
     }
     
-    private Person setInfoPerson(String name, String lastName, LocalDate birthDate, LocalDate deathDate, String birthPlace, String deathPlace, Gender gender) {
+    private Person setPerson(String name, String lastName, LocalDate birthDate, String birthPlace, Gender gender, String nationality, String socialSecurityNumber) {
     	Person p = new Person(name, lastName, gender);
     	p.setBirthDate(birthDate);
     	p.setBirthPlace(birthPlace);
-    	p.setDeathDate(deathDate);
-    	p.setDeathPlace(deathPlace);
+    	p.setNationality(nationality);
+    	p.setSocialSecurityNumber(socialSecurityNumber);
     	return p;
+    }
+    
+    public ResponseEntity<String> login(String email, String password){
+    	try {
+    		StringBuilder password_input = Utils.encode(password);
+    		Account account = accountRepository.getAccountByEmail(email);
+    		if(account.getPassword().equals(password_input.toString())){
+    			if(account.getVerified() == true){ 
+    				LocalDateTime currentDateTime = LocalDateTime.now();
+    				String token = Utils.encode(currentDateTime.toString()).toString();
+    				return new ResponseEntity<String>("{\"message\":\""+token+"\"}", HttpStatus.OK);
+    			}else {
+    				return new ResponseEntity<String>("{\"message\":\"Wait for verification by email\"}", HttpStatus.BAD_REQUEST);
+    			}
+    		}
+    	}catch(Exception e){
+    		System.out.println(e);
+    	}
+		return new ResponseEntity<String>("{\"message\":\"Login failed : bad credentials\"}", HttpStatus.BAD_REQUEST);
+
     }
 }

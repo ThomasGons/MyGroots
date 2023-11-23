@@ -13,20 +13,16 @@ public class Person {
     private String name;
     private String lastName; 
     private LocalDate birthDate;
-    private LocalDate deathDate;
     private String birthPlace;
-    private String deathPlace;
     private Gender gender;
-    private Status status;
+    private boolean isAlive;
+    private String nationality;
+    private String socialSecurityNumber;
 
     public enum Gender {
         MALE,
-        FEMALE
-    }
-
-    public enum Status {
-        ALIVE,
-        DEAD
+        FEMALE,
+        NEUTRAL
     }
 
     public Person(String name, String lastName, Gender gender){
@@ -63,28 +59,12 @@ public class Person {
         this.birthDate = birthDate;
     }
 
-    public LocalDate getDeathDate() {
-        return deathDate;
-    }
-
-    public void setDeathDate(LocalDate deathDate) {
-        this.deathDate = deathDate;
-    }
-
     public String getBirthPlace() {
         return birthPlace;
     }
 
     public void setBirthPlace(String birthPlace) {
         this.birthPlace = birthPlace;
-    }
-
-    public String getDeathPlace() {
-        return deathPlace;
-    }
-
-    public void setDeathPlace(String deathPlace) {
-        this.deathPlace = deathPlace;
     }
 
     public Gender getGender() {
@@ -95,13 +75,29 @@ public class Person {
         this.gender = gender;
     }
 
-    public Status getStatus() {
-        return status;
+    public boolean getIsAlive() {
+        return isAlive;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setIsAlive(boolean isAlive) {
+        this.isAlive = isAlive;
     }
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+	public String getSocialSecurityNumber() {
+		return socialSecurityNumber;
+	}
+
+	public void setSocialSecurityNumber(String socialSecurityNumber) {
+		this.socialSecurityNumber = socialSecurityNumber;
+	}
 }
 
 

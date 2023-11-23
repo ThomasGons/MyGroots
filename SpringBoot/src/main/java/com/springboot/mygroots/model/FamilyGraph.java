@@ -1,9 +1,10 @@
 package com.springboot.mygroots.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.mongodb.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +16,15 @@ public class FamilyGraph {
     private String id;
 
     private String familyName;
-
-    @DBRef
-    @Indexed(unique = true)
-    private List<Person> owners;
-
-    @DBRef
-    @Indexed(unique = true)
-    private List<Person> members;
+    
     private List<FamilyRelationEdge> relationShips;
+
+    @DBRef
+    private List<Person> owners;
+    
+    @DBRef
+    @Nullable
+    private List<Person> members;
 
     public FamilyGraph(String familyName) {
         this.familyName = familyName;
@@ -31,6 +32,7 @@ public class FamilyGraph {
         this.members = new ArrayList<>();
         this.relationShips = new ArrayList<>();
     }
+    
     public void addOwner(Person owner) {
         if (!this.owners.contains(owner)) {
             this.owners.add(owner);

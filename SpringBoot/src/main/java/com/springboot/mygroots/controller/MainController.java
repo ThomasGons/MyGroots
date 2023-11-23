@@ -38,7 +38,7 @@ public class MainController {
 
     @RequestMapping(value= "/")
     public FamilyGraph root() {
-        return familyGraphService.getByFamilyName("Lourd");
+        return familyGraphService.getByFamilyName("Jack");
     }
 
     @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
@@ -59,10 +59,10 @@ public class MainController {
         personService.addPerson(p3);
         personService.addPerson(p4);
 
-        accountService.addAccount(new Account("john@doe.com", p1));
-        accountService.addAccount(new Account("jane@doe.com", p2));
-        accountService.addAccount(new Account("jo@doe.com", p3));
-        accountService.addAccount(new Account("joe@doe.com", p4));
+//        accountService.addAccount(new Account("john@doe.com", "john", false, p1));
+//        accountService.addAccount(new Account("jane@doe.com", "jane", false, p2));
+//        accountService.addAccount(new Account("jo@doe.com", "jo", false, p3));
+//        accountService.addAccount(new Account("joe@doe.com", "joe", false, p4));
 
         FamilyGraph fg = new FamilyGraph("Doe");
 
