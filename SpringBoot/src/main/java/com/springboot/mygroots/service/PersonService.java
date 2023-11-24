@@ -4,9 +4,10 @@ import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.Utils;
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
-import com.springboot.mygroots.model.Person.Gender;
 import com.springboot.mygroots.repository.AccountRepository;
 import com.springboot.mygroots.repository.PersonRepository;
+import com.springboot.mygroots.utils.Enumerations.Gender;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

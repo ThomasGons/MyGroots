@@ -297,10 +297,6 @@ public class FamilyTree {
         return cousins;
     }
 
-
-
-
-
     public Boolean isEquivalant(FamilyTree tree) { // Compare two family trees
         for(Person person : tree.getMembers()) {
             if(this.getMembers().contains(person)) {
@@ -336,13 +332,10 @@ public class FamilyTree {
         });
     }
 
-
-
     private void removeNode(Person person) {
         int ID = getPersonID(person);
         nodes.removeIf(node -> node.getID() == ID);
     }
-
 
     private int getPersonID(Person person) {
         if (person == null) {
@@ -394,9 +387,6 @@ public class FamilyTree {
 
 
 
-
-
-
     public static class TreeNode {
         private int ID;
         private int partnerID;
@@ -409,7 +399,6 @@ public class FamilyTree {
             this.motherID = motherID;
             this.fatherID = fatherID;
         }
-
 
         public int getID() {
             return ID;
@@ -443,8 +432,6 @@ public class FamilyTree {
             this.fatherID = fatherID;
         }
 
-
-
     }
 
     public String getFamilyName() {
@@ -456,7 +443,5 @@ public class FamilyTree {
     }
 
     public List<TreeNode> getNodes() { return nodes; }
-
-
 
 }

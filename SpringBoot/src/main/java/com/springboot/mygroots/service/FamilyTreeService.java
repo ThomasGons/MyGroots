@@ -1,6 +1,7 @@
 package com.springboot.mygroots.service;
 
 import com.springboot.mygroots.model.FamilyTree;
+import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.FamilyTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class FamilyTreeService {
 
     public FamilyTree getFamilyTreeById(String id) {
         return familyTreeRepository.findById(id).get();
+    }
+    
+    public FamilyTree getFamilyTreeByOwner(Person owner) {
+    	return familyTreeRepository.findFamilyTreeByOwner(owner);
     }
 
     public void updateFamilyTree(FamilyTree familyTree) {

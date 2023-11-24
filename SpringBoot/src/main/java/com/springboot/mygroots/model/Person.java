@@ -19,11 +19,6 @@ public class Person {
     private String nationality;
     private String socialSecurityNumber;
     
-    public enum Gender{
-    	MALE,
-    	FEMALE
-    }
-
 
     public Person(String name, String lastName, Gender gender){
         this.name = name;
