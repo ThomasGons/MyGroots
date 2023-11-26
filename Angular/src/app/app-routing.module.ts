@@ -5,7 +5,9 @@ import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
-import { ProfileComponent } from "@app/features/profile/profile.component";
+import { ProfileComponent, NotificationsComponent } from './features/user';
+import { SearchComponent } from './features/search/search.component';
+import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
 
 
 const routes: Routes = [
@@ -27,13 +29,6 @@ const routes: Routes = [
         component: LoginComponent,
         title: environment.title + " - Connexion",
       },
-
-      // TODO: this LogoutComponent + AuthGuard 
-      // {
-      //   path: "logout",
-      //   component: LogoutComponent,
-      // },
-
       {
         path: "register",
         component: RegisterComponent,
@@ -49,29 +44,42 @@ const routes: Routes = [
         component: ChangePasswordComponent,
         title: environment.title + " - Modifier mot de passe",
       },
+      // TODO: this LogoutComponent + AuthGuard to access page
+      // {
+      //   path: "logout",
+      //   component: LogoutComponent,
+      // },
     ]
   },
-
-  // TODO: this FamilyTreeComponent + AuthGuard
-  // {
-  //   path: "family-tree/:id",
-  //   component: FamilyTreeComponent,
-  //   title: environment.title + " - Arbre Familial",
-  // },
-
-  // TODO: this SearchComponent +  children routes (byid, byname)
-  // {
-  //   path: "search",
-  //   component: SearchComponent,
-  //   title: environment.title + " - Recherche",
-  //   children: []
-  // },
-
-  // TODO: AuthGuard
+  // TODO: this FamilyTreeComponent + AuthGuard to access page
   {
-    path: "profile/:id",
-    component: ProfileComponent,
-    title: environment.title + " - Mon profil",
+    path: "family-tree",
+    component: FamilyTreeComponent,
+    title: environment.title + " - Arbre Familial",
+  },
+  // TODO: this SearchComponent +  children routes (byid, byname)
+  {
+    path: "search",
+    component: SearchComponent,
+    title: environment.title + " - Recherche",
+  //   children: []
+  },
+
+  // TODO: AuthGuard to access pages
+  {
+    path: "user",
+    children: [
+      {
+        path: "profile",
+        component: ProfileComponent,
+        title: environment.title + " - Profil",
+      },
+      {
+        path: "notifications",
+        component: NotificationsComponent,
+        title: environment.title + " - Notifications",
+      },
+    ]
   },
   {
     path: "**",

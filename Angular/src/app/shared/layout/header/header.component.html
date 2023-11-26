@@ -10,7 +10,7 @@
       <div class="d-md-block d-none">
         <!-- Navbar -->
         <nav class="d-flex flex-row nav">
-          <button mat-button *ngFor="let item of this.navItems" [routerLink]="item.link" routerLinkActive="active" class="mt-1" type="button">
+          <button mat-button *ngFor="let item of this.navItems.nav" [routerLink]="item.link" routerLinkActive="active" class="mt-1" type="button">
             <span>{{ item.name }}</span>
           </button>
         </nav>
@@ -50,8 +50,7 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <mat-menu #menu="matMenu" class="px-2">
-            <button mat-menu-item [routerLink]="['/profile/TODO:id']">Profil</button>
-            <button mat-menu-item [routerLink]="['/auth/logout']">Deconnexion</button>
+            <button mat-menu-item *ngFor="let item of this.navItems.user" [routerLink]="item.link">{{ item.name }}</button>
           </mat-menu>
         </div>
       </div>
