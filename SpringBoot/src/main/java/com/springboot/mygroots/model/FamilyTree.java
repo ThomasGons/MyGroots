@@ -313,23 +313,21 @@ public class FamilyTree {
         return true;
     }
 
+    //remove a member from the family tree and replace it by temporary member "unknown"
     public void removeMemberFromTree(Person person) {
+        Person unknown = new Person("unknown","unknown",person.getGender());
         int ID = getPersonID(person);
-        if(ID == -1) {
-            return;
-        }
-        // remove the node
+        int partnerID = getNode(person).getPartnerID();
+        int motherID = getNode(person).getMotherID();
+        int fatherID = getNode(person).getFatherID();
+        List<Integer> childrenIDs = getChildren(person).stream().map(this::getPersonID).toList();
+
+
+        TreeNode node = getNode(person);
+        addNode(unknown, getPartner(person), getMother(person), getFather(person));
         removeNode(person);
-        // remove the member
-        removeMember(person);
-        // remove the children
-        nodes.removeIf(node -> node.getFatherID() == ID || node.getMotherID() == ID);
-        // remove the partner
-        nodes.forEach(node -> {
-            if(node.getPartnerID() == ID) {
-                node.setPartnerIDs(-1);
-            }
-        });
+        members.set(ID, unknown);
+
     }
 
     private void removeNode(Person person) {
