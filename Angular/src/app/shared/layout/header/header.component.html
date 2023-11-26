@@ -1,48 +1,57 @@
 <header class="header border-bottom">
   <mat-toolbar class="justify-content-between flex-nowrap bg-white">
     <!-- Left side of header -->
-    <div class="header-content-left d-flex flex-row align-items-center">
-      <img src="../../../../assets/images/mygroots-gradient-logo.png" alt="My Groots logo" width="48px">
+    <div class="d-flex flex-row align-items-center">
+      <img src="assets/images/mygroots-gradient-logo.png" alt="My Groots logo" width="48px" loading="lazy">
       <button mat-button [routerLink]="['/home']" class="me-2">
         <h1>{{ this.title }}</h1>
       </button>
+      <!-- If screen is bigger than medium size 'md' -->
       <div class="d-md-block d-none">
         <!-- Navbar -->
-        <nav class="nav d-flex flex-row">
-          <button mat-button *ngFor="let item of this.navItems" class="mt-1" type="button">
-            <span [routerLink]="item.link" routerLinkActive="active">{{ item.name }}</span>
+        <nav class="d-flex flex-row nav">
+          <button mat-button *ngFor="let item of this.navItems" [routerLink]="item.link" routerLinkActive="active" class="mt-1" type="button">
+            <span>{{ item.name }}</span>
           </button>
         </nav>
       </div>
     </div>
     <!-- Right side of header -->
-    <div class="header-content-right">
+    <div>
       <!-- If not logged in -->
       <div *ngIf="!this.isLoggedIn">
+        <!-- If screen is smaller than medium size 'md' -->
         <div class="d-md-none">
           <button mat-icon-button (click)="this.onToggleSidenav()">
             <mat-icon>menu</mat-icon>
           </button>
         </div>
+        <!-- If screen is bigger than medium size 'md' -->
         <div class="d-md-block d-none">
-          <button mat-raised-button [routerLink]="['/auth/login']">Connexion</button>
-          <button mat-raised-button class="bg-green-light ms-2" [routerLink]="['/auth/register']">Inscription</button>
+          <button mat-raised-button [routerLink]="['/auth/login']" type="button">
+            <span>Connexion</span>
+          </button>
+          <button mat-raised-button [routerLink]="['/auth/register']" class="bg-green-light ms-2" type="button">
+            <span>Inscription</span>
+          </button>
         </div>
       </div> 
       <!-- If logged in -->
       <div *ngIf="this.isLoggedIn">
+        <!-- If screen is smaller than medium size 'md' -->
         <div class="d-md-none">
           <button mat-icon-button (click)="this.onToggleSidenav()">
             <mat-icon>menu</mat-icon>
           </button>
         </div>
+        <!-- If screen is bigger than medium size 'md' -->
         <div class="d-md-block d-none">
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>account_circle</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="['/profile']">Profil</button>
-            <button mat-menu-item (click)="this.logout()">Deconnexion</button>
+          <mat-menu #menu="matMenu" class="px-2">
+            <button mat-menu-item [routerLink]="['/profile/TODO:id']">Profil</button>
+            <button mat-menu-item [routerLink]="['/auth/logout']">Deconnexion</button>
           </mat-menu>
         </div>
       </div>

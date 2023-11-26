@@ -27,6 +27,13 @@ const routes: Routes = [
         component: LoginComponent,
         title: environment.title + " - Connexion",
       },
+
+      // TODO: this LogoutComponent + AuthGuard 
+      // {
+      //   path: "logout",
+      //   component: LogoutComponent,
+      // },
+
       {
         path: "register",
         component: RegisterComponent,
@@ -44,16 +51,25 @@ const routes: Routes = [
       },
     ]
   },
+
+  // TODO: this FamilyTreeComponent + AuthGuard
+  // {
+  //   path: "family-tree/:id",
+  //   component: FamilyTreeComponent,
+  //   title: environment.title + " - Arbre Familial",
+  // },
+
+  // TODO: this SearchComponent +  children routes (byid, byname)
+  // {
+  //   path: "search",
+  //   component: SearchComponent,
+  //   title: environment.title + " - Recherche",
+  //   children: []
+  // },
+
+  // TODO: AuthGuard
   {
-    path: "family-tree",
-    redirectTo: "/TODO-not-implemented",
-  },
-  {
-    path: "search",
-    redirectTo: "/TODO-not-implemented",
-  },
-  {
-    path: "profile",
+    path: "profile/:id",
     component: ProfileComponent,
     title: environment.title + " - Mon profil",
   },

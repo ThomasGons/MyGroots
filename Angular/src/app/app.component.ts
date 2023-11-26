@@ -13,5 +13,5 @@ export class AppComponent{
     { name: "Arbre Familial", link: "/family-tree" },
     { name: "Recherche", link: "/search" },
   ]
-
+  
 }

@@ -1,63 +1,64 @@
-<div class="container-fluid h-100">
-  <!-- <div class="container mt-3 col-xl-8 px-4 py-5 my-5">
-    <div class="pt-5">
-      <div class="row flex-lg-row-reverse justify-content-between align-items-center g-5 py-5 mb-4">
-        <div id="img1" class="col-10 col-sm-8 col-lg-4 mx-auto px-lg-4 py-lg-4 rounded-4 h-50">
-          <img src="assets/images/mygroots-gradient-logo.png" alt="Logo" class="d-block my-auto mx-lg-auto img-fluid" loading="lazy">
+<div class="container-fluid h-100 m-0 p-0">
+  <mat-card class="rounded-0 ">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-md-row justify-content-md-evenly align-items-md-center flex-column justify-content-center align-items-center pb-5">
+        <div>
+          <img src="assets/images/mygroots-gradient-logo.png" alt="My Groots" class="img-fluid rounded-4" style="max-width: 350px; max-height: 350px;" loading="lazy">
         </div>
-        <div class="col-lg-6 text-center text-lg-end text-xl-end">
-          <h1 class="display-5 fw-bold lh-1 mb-3">
-            DECOUVREZ MyGroots !
-          </h1>
-          <p class="lead my-4">
-            MyGroots est un site de fitness vous aidants dans vos objectifs.
-            Nous offrons de nombreux outils pour vous faire gagner du temps.
-            Ne stressez plus pendant vos repas, nous sommes là pour vous.
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <p class="h1 mb-4 text-center">
+            Bienvenue sur My Groots
           </p>
-          <div class=" mx-auto my-5 text-center">
-            <a href="" class="">
-              <button class="button button1">Rechercher une famille</button>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="">
-      <div class="row flex-lg-row align-items-center g-5 py-5 mb-4">
-        <div class="col-10 col-sm-8 col-lg-6 mx-auto">
-          <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/leparisien/JAVQMPEJ6ZGS7HGZ45HF5EQDI4.jpg" class="d-block mx-lg-auto img-fluid rounded-4 "
-               alt="nutrition" width="700" height="500" loading="lazy">
-        </div>
-        <div class="col-lg-6 text-center text-lg-start text-xl-start">
-          <h1 class="display-5 fw-bold lh-1 mb-3">
-            Crée ton arbre généalogique
-          </h1>
-          <p class="lead my-4">
-            Donnez-nous vos caractéristiques physiques et laissez-nous faire le reste !
-            FAToFIT calcule votre apport calorique journalier nécessaire et vous créé un programme
-            alimentaire sur-mesure selon vos objectifs.
+          <p class="lead mb-4 text-center">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
           </p>
         </div>
       </div>
-    </div>
+    </mat-card-content>
+  </mat-card>
 
-    <div id="third-box" class="px-4 pt-5 my-4 text-center">
-      <h1 class="display-4 fw-bold">
-        A toi de jouer !
-      </h1>
-      <div class="col-lg-6 mx-auto">
-        <p class="lead my-4">
-          Inscrivez vos entraînements pour connaître vos calories dépensées.
-          Créez vous un programme dans le calendrier.
-        </p>
-      </div>
-      <div class="overflow-hidden" style="max-height: 30vh;">
-        <div class="container px-5">
-          <img src="https://www.radiofrance.fr/s3/cruiser-production/2020/11/5c804474-68ea-4b58-8fa9-743d1b814fe4/1200x680_gettyimages-1173539611.webp" class="img-fluid border rounded-3 shadow-lg mb-4"
-               alt="arbre" width="1200" height="700" loading="lazy">
+  <mat-card class="rounded-0 mt-1">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-md-row-reverse justify-content-md-evenly align-items-md-center flex-column justify-content-center align-items-center pb-4">
+        <div class="rounded-4">
+          <img src="assets/images/family.jpg" alt="Family" class="img-fluid shadow rounded-top-4 my-5" style="max-width: 450px; max-height: 350px;" loading="lazy">
+        </div>
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <p class="h3 mb-4 text-center">
+            Créez votre arbre généalogique
+          </p>
+          <p class="lead mb-4 text-center">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </p>
+          <button mat-raised-button [routerLink]="['/auth/register']" class="bg-green-light" type="button">
+            <span>Démarrez maintenant</span>
+          </button>
         </div>
       </div>
-    </div>
-  </div> -->
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card class="rounded-0 mt-1">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-column-reverse flex-md-column justify-content-center align-items-center pb-4">
+        <div class="d-flex flex-column justify-content-center align-items-center py-5">
+          <p class="h3 mb-4 text-center">
+            Recherchez vos racines
+          </p>
+          <p class="lead mb-4 text-center">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          </p>
+          <button mat-raised-button [routerLink]="['/search']" class="bg-green-light" type="button">
+            <span>Recherchez maintenant</span>
+          </button>
+        </div>
+        <div>
+          <img src="assets/images/tree.jpg" class="img-fluid rounded-top-4 shadow border-bottom" alt="Tree" style="max-width: 800px; max-height: 440px;" loading="lazy">
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
         this._router.navigate(["/home"]);
       },
       error: (err) => {
-        this._snackbarService.openSnackbar(err.message);
+        this._snackbarService.openSnackbar(err.error.message);
       },
     });
   }

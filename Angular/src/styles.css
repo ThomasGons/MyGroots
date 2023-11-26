@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 
-/****************** Color palette ******************/
+
+/******************* Custom classes *****************/
+
+/** Color palette **/
 :root {
     --color-gray: #BBBBBB;
     --color-gray-light: #EBECEC;
@@ -51,8 +54,13 @@
     color: var(--color-blue-sky) !important;
 }
 
-/***************************************************/
+/** Width and Height **/
 
+
+/****************************************************/
+
+
+/******************** HTML elements *****************/
 
 html, body {
     height: 100%;
@@ -71,7 +79,13 @@ footer {
     min-width: 320px;
 }
 
-/** Angular material customizations **/
+/****************************************************/
+
+
+/********** Angular Material customizations *********/
+
 .mat-expansion-panel-body {
     padding: 0 8px 0 16px !important;
 }
+
+/****************************************************/

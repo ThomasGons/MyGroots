@@ -29,18 +29,14 @@ export class SidenavComponent implements OnInit {
   public toggle(): void {
     this.sidenav.toggle();
   }
-
-  public logout(): void {
-    this._authService.logout().subscribe({
-      next: (response) => {
-        this._jwtService.destroyToken();
-        this._snackbarService.openSnackbar(response.message);
-        this._router.navigate(["/home"]);
-      },
-      error: (err) => {
-        this._snackbarService.openSnackbar(err.message);
-      }
-    });
+  
+  public onActivateRoute(): void {
+    window.scroll({ 
+            top: 0, 
+            left: 0, 
+            behavior: 'smooth'
+     });
+     this.sidenav.close();
   }
   
 }
