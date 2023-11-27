@@ -75,14 +75,14 @@ public class MainController {
         
         ft1.addChild(p1, p3);
         ft1.addMother(p3, p2);
-        ft1.addChild(p1, p4);
         
         familyTreeService.saveFamilyTree(ft1);
         
         Account a1 = accountService.getAccountByEmail("john@doe.com");
         a1.setFamilyTree(ft1);
         accountService.updateAccount(a1);
-        
-        
+
+        ft1.removeMemberFromTree(p2);
+        familyTreeService.updateFamilyTree(ft1);
     }
 }

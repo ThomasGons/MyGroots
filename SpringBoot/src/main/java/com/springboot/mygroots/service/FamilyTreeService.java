@@ -13,8 +13,13 @@ public class FamilyTreeService {
     @Autowired
     private FamilyTreeRepository familyTreeRepository;
 
+    @Autowired
+    private PersonService personService;
+
     public void saveFamilyTree(FamilyTree familyTree) {
+
         familyTreeRepository.save(familyTree);
+
     }
 
     public void deleteFamilyTree(FamilyTree familyTree) {
@@ -30,6 +35,9 @@ public class FamilyTreeService {
     }
 
     public void updateFamilyTree(FamilyTree familyTree) {
+        for(Person person : familyTree.getMembers()){
+            personService.updatePerson(person);
+        }
         familyTreeRepository.save(familyTree);
     }
 

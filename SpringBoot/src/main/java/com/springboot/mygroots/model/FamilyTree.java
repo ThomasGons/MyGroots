@@ -1,10 +1,12 @@
 package com.springboot.mygroots.model;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.sun.source.tree.Tree;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.springboot.mygroots.utils.Enumerations.*;
+import org.springframework.stereotype.Indexed;
 
 import java.beans.Visibility;
 import java.lang.reflect.Array;
@@ -23,6 +25,7 @@ public class FamilyTree {
     @DBRef
     private final Person owner;
     private Visibility visibility;
+    private Person unknown = new Person("unknown","unknown",Gender.FEMALE);
 
     public FamilyTree(String familyName, Person owner) {
         this.owner = owner;
@@ -312,18 +315,29 @@ public class FamilyTree {
 
     //remove a member from the family tree and replace it by temporary member "unknown"
     public void removeMemberFromTree(Person person) {
-        Person unknown = new Person("unknown","unknown",person.getGender());
-        int ID = getPersonID(person);
-        int partnerID = getNode(person).getPartnerID();
-        int motherID = getNode(person).getMotherID();
-        int fatherID = getNode(person).getFatherID();
-        List<Integer> childrenIDs = getChildren(person).stream().map(this::getPersonID).toList();
+        TreeNode node = this.getNode(person);
+        if (this.getChildren(person).isEmpty() && node.getPartnerID() == -1) {
+            int removedID = members.indexOf(person);
+            for (TreeNode extNode : this.getNodes()) {
+                if (extNode.getID() > removedID) {
+                    extNode.setID(extNode.ID - 1);
+                }
+                if (extNode.getFatherID() > removedID) {
+                    extNode.setFatherID(extNode.fatherID - 1);
+                }
+                if (extNode.getMotherID() > removedID) {
+                    extNode.setMotherID(extNode.motherID - 1);
+                }
+                if (extNode.getPartnerID() > removedID) {
+                    extNode.setPartnerIDs(extNode.partnerID - 1);
+                }
+            }
+            members.remove(person);
+        }
+        else{
+            members.set(members.indexOf(person), unknown);
+        }
 
-
-        TreeNode node = getNode(person);
-        addNode(unknown, getPartner(person), getMother(person), getFather(person));
-        removeNode(person);
-        members.set(ID, unknown);
 
     }
 
@@ -338,7 +352,6 @@ public class FamilyTree {
         }
         int ID = members.indexOf(person);
         if (ID == -1) {
-            addMember(person);
             return members.size() - 1;
         }
         return ID;
