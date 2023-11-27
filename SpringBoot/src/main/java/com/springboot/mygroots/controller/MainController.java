@@ -49,6 +49,13 @@ public class MainController {
     // create a init method to create a sample family graph
     @RequestMapping(value= "/init")
     public void init() {
+
+        //delete all database
+        familyTreeService.getAllFamilyTrees().forEach(familyTree -> familyTreeService.removeFamilyTree(familyTree));
+        accountService.getAllAccounts().forEach(account -> accountService.removeAccount(account));
+        personService.getAllPersons().forEach(person -> personService.removePerson(person));
+
+
         Person p1 = new Person("John", "Doe", Gender.MALE);
         Person p2 = new Person("Jane", "Doe", Gender.FEMALE);
         Person p3 = new Person("Jo", "Doe", Gender.MALE);
@@ -67,9 +74,8 @@ public class MainController {
         FamilyTree ft1 = new FamilyTree("Doe", p1);
         
         ft1.addChild(p1, p3);
-        ft1.addFather(p3, p1);
         ft1.addMother(p3, p2);
-        ft1.addPartner(p1, p2);
+        ft1.addChild(p1, p4);
         
         familyTreeService.saveFamilyTree(ft1);
         

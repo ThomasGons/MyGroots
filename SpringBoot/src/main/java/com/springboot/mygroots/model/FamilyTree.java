@@ -66,11 +66,22 @@ public class FamilyTree {
             List<TreeNode> childrenNodes = this.getChildrenNodes(member);
             if(childrenNodes != null && !childrenNodes.isEmpty()) {
                 childrenNodes.forEach(node -> {
-                    if(node.getFatherID() == memberID) {
+                    if(node.getMotherID() == memberID && node.getFatherID() != getPersonID(addedMember)) {
                         node.setFatherID(partnerID);
                     }
-                    else if(node.getMotherID() == memberID) {
+                    else if(node.getFatherID() == memberID && node.getMotherID() != getPersonID(addedMember)) {
                         node.setMotherID(partnerID);
+                    }
+                });
+            }
+            List<TreeNode> childrenNodes2 = this.getChildrenNodes(addedMember);
+            if(childrenNodes2 != null && !childrenNodes2.isEmpty()) {
+                childrenNodes2.forEach(node -> {
+                    if(node.getMotherID() == partnerID && node.getFatherID() != memberID) {
+                        node.setFatherID(memberID);
+                    }
+                    else if(node.getFatherID() == partnerID && node.getMotherID() != memberID) {
+                        node.setMotherID(memberID);
                     }
                 });
             }
@@ -89,14 +100,7 @@ public class FamilyTree {
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
-                List<TreeNode> childrenNodes = this.getChildrenNodes(getPartner(addedMember));
-                if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                    childrenNodes.forEach(node -> {
-                        if(node.getFatherID() == memberID) {
-                            node.setFatherID(getPersonID(addedMember));
-                        }
-                    });
-                }
+
             }
             else{
                 this.addMember(addedMember);
@@ -120,14 +124,7 @@ public class FamilyTree {
         {
             if(this.getNode(member).getFatherID()!= -1){ // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father
-                List<TreeNode> childrenNodes = this.getChildrenNodes(getPartner(addedMember)); // update children
-                if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                    childrenNodes.forEach(node -> {
-                        if(node.getMotherID() == memberID) {
-                            node.setMotherID(getPersonID(addedMember));
-                        }
-                    });
-                }
+
             }
             else{
                 this.addMember(addedMember);
