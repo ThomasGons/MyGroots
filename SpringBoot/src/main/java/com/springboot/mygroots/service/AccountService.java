@@ -1,0 +1,81 @@
+package com.springboot.mygroots.service;
+
+import com.springboot.mygroots.model.Account;
+import com.springboot.mygroots.model.FamilyTree;
+import com.springboot.mygroots.model.Notif;
+import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.repository.AccountRepository;
+import com.springboot.mygroots.repository.FamilyTreeRepository;
+import com.springboot.mygroots.repository.NotifRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AccountService {
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private NotifRepository notifRepository;
+
+    public void addAccount(Account account) {
+        accountRepository.save(account);
+        //sendAccountActivationMail(account.getEmail(), account);
+    }
+
+    public void updateAccount(Account account){
+        accountRepository.save(account);
+    }
+
+    public List<Account> getAllAccounts(){
+        return accountRepository.findAll();
+    }
+
+    public Account getAccountByEmail(String email){
+        return accountRepository.getAccountByEmail(email);
+    }
+    
+    public Account getAccountByPerson(Person person) {
+    	return accountRepository.getAccountByPerson(person);
+    }
+
+    private void sendAccountActivationMail(String to, Account account) {
+        Person person = account.getPerson();
+        SimpleMailMessage message = new SimpleMailMessage();
+        String confirmationLink = "http://localhost:8080/auth/activateAccount?id=" + account.getId();
+        message.setTo(to);
+        message.setSubject("MyGroots Account Activation");
+        message.setText("Hello" + person.getFirstName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
+                "You have successfully created an account. Your temporary password is" + ".\n" +
+                " To activate your account, please follow the link below:\n" +
+                confirmationLink);
+        javaMailSender.send(message);
+    }
+
+    public void removeAccount(Account account){
+        accountRepository.delete(account);
+    }
+
+    public void activateAccount(String id){
+        Account account = accountRepository.getAccountById(id);
+        account.activate();
+        accountRepository.save(account);
+    }
+
+    public FamilyTree getFamilyTree(String email){
+        return accountRepository.getAccountByEmail(email).getFamilyTree();
+    }
+
+    public Account setAccount(String email, String password, Person person, String token) {
+    	Account a = new Account(email, password,  person, token);
+    	return a;
+    }
+}
