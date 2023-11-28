@@ -65,10 +65,10 @@ public class MainController {
         personService.addPerson(p3);
         personService.addPerson(p4);
 
-        accountService.addAccount(new Account("john@doe.com", "john", p1));
-        accountService.addAccount(new Account("jane@doe.com", "jane", p2));
-        accountService.addAccount(new Account("jo@doe.com", "jo", p3));
-        accountService.addAccount(new Account("joe@doe.com", "joe", p4));
+        accountService.addAccount(new Account("john@doe.com", "john", p1, null));
+        accountService.addAccount(new Account("jane@doe.com", "jane", p2, null));
+        accountService.addAccount(new Account("jo@doe.com", "jo", p3, null));
+        accountService.addAccount(new Account("joe@doe.com", "joe", p4, null));
         
         
         FamilyTree ft1 = new FamilyTree("Doe", p1);

@@ -43,7 +43,7 @@ public class PersonService {
     }
     
     public Person getPersonByNameAndLastName(String name, String lastName){
-        return personRepository.getPersonByNameAndLastName(name, lastName);
+        return personRepository.getPersonByFirstNameAndLastName(name, lastName);
     }
 
     public Person getPersonById(String id){
@@ -55,21 +55,21 @@ public class PersonService {
     }
 
     
-    public ResponseEntity<String> signUp(String email, String name, String lastName, LocalDate birthDate, String birthPlace, Gender gender, String nationality, String socialSecurityNumber){
+    public ResponseEntity<String> signUp(String email, String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber){
     	try{
-    		if (this.validedSignUpPerson(name, lastName)) {
-	    		Person p = personRepository.getPersonByNameAndLastName(name, lastName);
+    		if (this.validedSignUpPerson(firstName, lastName)) {
+	    		Person p = personRepository.getPersonByFirstNameAndLastName(firstName, lastName);
 	    		if (Objects.isNull(p)) {
-	    			Person pers = this.setPerson(name, lastName, birthDate, birthPlace, gender, nationality, socialSecurityNumber);
+	    			Person pers = this.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
 	    			this.addPerson(pers);
 	    			// creer un password temporaire avec son prenom
-	    			StringBuilder passwordtmp = Utils.encode(name); 
+	    			StringBuilder passwordtmp = Utils.encode(lastName); 
 	    			System.out.println(passwordtmp);
-	    			Account acc = accountService.setAccount(email, passwordtmp.toString(), pers);
+	    			Account acc = accountService.setAccount(email, passwordtmp.toString(), pers, null);
 	    			accountService.addAccount(acc);
-	        		return new ResponseEntity<String>("{\"message\":\"Succesfully registered\"}", HttpStatus.OK);
+	        		return new ResponseEntity<String>("{\"message\":\"Inscription reussie\"}", HttpStatus.OK);
 	    		}else {
-	        		return new ResponseEntity<String>("{\"message\":\"Already exist\"}", HttpStatus.BAD_REQUEST);
+	        		return new ResponseEntity<String>("{\"message\":\"Compte deja existant\"}", HttpStatus.BAD_REQUEST);
 	    		}
 	    	}else {
 	    		return new ResponseEntity<String>("{\"message\":\"Invalid Data\"}", HttpStatus.BAD_REQUEST);
@@ -79,17 +79,16 @@ public class PersonService {
     	}return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private boolean validedSignUpPerson(String name, String lastName) {
-    	if (name != null && lastName != null) {
+    private boolean validedSignUpPerson(String firstName, String lastName) {
+    	if (firstName != null && lastName != null) {
     		return true;
     	}
     	return false;
     }
     
-    private Person setPerson(String name, String lastName, LocalDate birthDate, String birthPlace, Gender gender, String nationality, String socialSecurityNumber) {
-    	Person p = new Person(name, lastName, gender);
+    private Person setPerson(String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber) {
+    	Person p = new Person(firstName, lastName, gender);
     	p.setBirthDate(birthDate);
-    	p.setBirthPlace(birthPlace);
     	p.setNationality(nationality);
     	p.setSocialSecurityNumber(socialSecurityNumber);
     	return p;
@@ -100,18 +99,37 @@ public class PersonService {
     		StringBuilder password_input = Utils.encode(password);
     		Account account = accountRepository.getAccountByEmail(email);
     		if(account.getPassword().equals(password_input.toString())){
+    			// a supp car pour test
+    			account.activate();
     			if(account.isActive() == true){ 
     				LocalDateTime currentDateTime = LocalDateTime.now();
     				String token = Utils.encode(currentDateTime.toString()).toString();
-    				return new ResponseEntity<String>("{\"message\":\""+token+"\"}", HttpStatus.OK);
+    				account.setToken(token);
+    				return new ResponseEntity<String>("{'token':"+token+",'id':"+account.getPerson().getId()+",'firstName':"+account.getPerson().getFirstName()+"}", HttpStatus.OK);
     			}else {
-    				return new ResponseEntity<String>("{\"message\":\"Wait for verification by email\"}", HttpStatus.BAD_REQUEST);
+    				return new ResponseEntity<String>("{\"message\":\"Compte en attente de verification\"}", HttpStatus.BAD_REQUEST);
     			}
     		}
     	}catch(Exception e){
     		System.out.println(e);
     	}
-		return new ResponseEntity<String>("{\"message\":\"Login failed : bad credentials\"}", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>("{\"message\":\"Email ou mot de passe incorrect\"}", HttpStatus.BAD_REQUEST);
 
+    }
+    
+    public ResponseEntity<String> logout(String id){
+    	try {
+    		System.out.println(id);
+    		Person p = getPersonById(id);
+    		System.out.println(p);
+    		if (p != null) {
+    			Account a = accountRepository.getAccountByPerson(p);
+    			a.setToken(null);
+    			return new ResponseEntity<String>("{'message': 'Deconnexion reussie'}", HttpStatus.OK);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e);
+    	}
+		return new ResponseEntity<String>("{\"message\":\"Echec deconnexion\"}", HttpStatus.BAD_REQUEST);
     }
 }

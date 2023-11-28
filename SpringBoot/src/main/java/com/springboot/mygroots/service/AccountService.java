@@ -42,6 +42,10 @@ public class AccountService {
     public Account getAccountByEmail(String email){
         return accountRepository.getAccountByEmail(email);
     }
+    
+    public Account getAccountByPerson(Person person) {
+    	return accountRepository.getAccountByPerson(person);
+    }
 
     private void sendAccountActivationMail(String to, Account account) {
         Person person = account.getPerson();
@@ -49,7 +53,7 @@ public class AccountService {
         String confirmationLink = "http://localhost:8080/auth/activateAccount?id=" + account.getId();
         message.setTo(to);
         message.setSubject("MyGroots Account Activation");
-        message.setText("Hello" + person.getName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
+        message.setText("Hello" + person.getFirstName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
                 "You have successfully created an account. Your temporary password is" + ".\n" +
                 " To activate your account, please follow the link below:\n" +
                 confirmationLink);
@@ -70,8 +74,8 @@ public class AccountService {
         return accountRepository.getAccountByEmail(email).getFamilyTree();
     }
 
-    public Account setAccount(String email, String password, Person person) {
-    	Account a = new Account(email, password,  person);
+    public Account setAccount(String email, String password, Person person, String token) {
+    	Account a = new Account(email, password,  person, token);
     	return a;
     }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,14 +28,14 @@ public class AuthentificationController {
     private FamilyTreeService familyTreeService;
     	
 	@PostMapping(value= "/signup")
-	public ResponseEntity<String> signUp(@RequestParam String email, @RequestParam String name, @RequestParam String lastName, @RequestParam LocalDate birthDate, @RequestParam String birthPlace, @RequestParam Gender gender, @RequestParam String nationality, @RequestParam String socialSecurityNumber) {
+	public ResponseEntity<String> signUp(@RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam LocalDate birthDate, @RequestParam Gender gender, @RequestParam String nationality, @RequestParam String socialSecurityNumber) {
 		try {
 			System.out.println("SIGNUP");
-			ResponseEntity<String> response = personService.signUp(email, name, lastName, birthDate, birthPlace, gender, nationality, socialSecurityNumber);
-			Person p = personService.getPersonByNameAndLastName(name, lastName);
+			ResponseEntity<String> response = personService.signUp(email, firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
+			Person p = personService.getPersonByNameAndLastName(firstName, lastName);
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
-				ft = new FamilyTree(name, p);
+				ft = new FamilyTree(lastName, p);
 				familyTreeService.saveFamilyTree(ft); 
 			}
 			return response;
@@ -52,8 +53,17 @@ public class AuthentificationController {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
-		
 	}
 	
+	@PostMapping(value="/logout/{id}") // a voir 
+	public ResponseEntity<String> logout(@PathVariable("id") String id){
+		try {
+			System.out.println(id);
+			return personService.logout(id);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 }

@@ -25,10 +25,12 @@ public class Account implements Serializable {
     
     private String password;
     
-    private boolean verified;
+    private String token;
     
     @DBRef
     private Person person;
+    
+    private boolean isActive;
 
     @DBRef
     private FamilyTree familyTree;
@@ -39,18 +41,15 @@ public class Account implements Serializable {
     @DBRef
     private FamilyTree myFamilyTree;
 
-    private boolean isActive;
-
-    public Account(String email, String password, @Nullable Person person) {
+    public Account(String email, String password, @Nullable Person person, @Nullable String token) {
         this.email = email;
         this.password = password;
         this.person = person;
         this.isActive = false;
+        this.token = token;
     }
 
-
-
-    public void activate() {
+	public void activate() {
         this.isActive = true;
     }
 
@@ -98,4 +97,13 @@ public class Account implements Serializable {
     public void setPassword(String password) {
     	this.password = password;
     }
+    
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+    
 }

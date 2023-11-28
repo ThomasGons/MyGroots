@@ -8,6 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PersonRepository extends MongoRepository<Person, String> {
 
-    Person getPersonByNameAndLastName(String name, String lastName);
+    Person getPersonByFirstNameAndLastName(String firstName, String lastName);
     
 }
