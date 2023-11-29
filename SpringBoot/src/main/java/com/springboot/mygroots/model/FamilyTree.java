@@ -11,7 +11,9 @@ import org.springframework.stereotype.Indexed;
 import java.beans.Visibility;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "FamilyTree")
 public class FamilyTree {
@@ -59,7 +61,7 @@ public class FamilyTree {
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
                 && member.getGender() != addedMember.getGender() // the partner added is not of the same gender
-                && nodes.get(memberID).getPartnerID() == -1) // the member does not have a partner
+                && nodes.get(memberID).getPartnerID() == -1  || Objects.equals(members.get(getNode(member).getPartnerID()).getName(), "unknown")) // the member does not have a partner
         {
             this.addMember(addedMember);
             int partnerID = getPersonID(addedMember);
@@ -99,7 +101,7 @@ public class FamilyTree {
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && getNode(member).getFatherID() == -1) // the member does not have a father
+                && getNode(member).getFatherID() == -1  || Objects.equals(members.get(getNode(member).getFatherID()).getName(), "unknown")) // the member does not have a father
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
@@ -123,9 +125,9 @@ public class FamilyTree {
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && getNode(member).getMotherID() == -1) // the member does not have a mother
+                && (getNode(member).getMotherID() == -1 || Objects.equals(members.get(getNode(member).getMotherID()).getName(), "unknown"))) // the member does not have a mother
         {
-            if(this.getNode(member).getFatherID()!= -1){ // if the member has a father
+            if(this.getNode(member).getFatherID()!= -1 ){ // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father
 
             }
@@ -298,20 +300,42 @@ public class FamilyTree {
     }
 
     public Boolean isEquivalant(FamilyTree tree) { // Compare two family trees
-        for(Person person : tree.getMembers()) {
-            if(this.getMembers().contains(person)) {
-                TreeNode node = this.getNode(person);
-                TreeNode node2 = tree.getNode(person);
-                if((node.getPartnerID() != node2.getPartnerID() && node.getPartnerID() != -1 && node2.getPartnerID() != -1)
-                        || (node.getMotherID() != node2.getMotherID() && node.getMotherID() != -1 && node2.getMotherID() != -1)
-                        || (node.getFatherID() != node2.getFatherID() && node.getFatherID() != -1 && node2.getFatherID() != -1)){
-                    System.out.println("The trees are note equivalant");
-                    return false;
+
+        for(Person person : this.getMembers()){
+            if(tree.getMembers().contains(person)){
+                if(getPartner(person) != null && tree.getPartner(person) != null){
+                    if(!getPartner(person).equals(tree.getPartner(person))){
+                        return false;
+                    }
+                }
+                if(getFather(person) != null && tree.getFather(person) != null){
+                    if(!getFather(person).equals(tree.getFather(person))){
+                        return false;
+                    }
+                }
+                if(getMother(person) != null && tree.getMother(person) != null){
+                    if(!getMother(person).equals(tree.getMother(person))){
+                        return false;
+                    }
+                }
+                List<Person> children = getChildren(person);
+                List<Person> children2 = tree.getChildren(person);
+                if(children != null && children2 != null){
+                    if(children.size() == children2.size()){
+                        if(!new HashSet<>(children).containsAll(children2)){
+                            return false;
+                        }
+                    }
                 }
             }
         }
         return true;
     }
+
+
+
+
+
 
     //remove a member from the family tree and replace it by temporary member "unknown"
     public void removeMemberFromTree(Person person) {
