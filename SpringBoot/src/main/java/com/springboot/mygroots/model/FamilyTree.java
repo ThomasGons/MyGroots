@@ -56,6 +56,53 @@ public class FamilyTree {
         nodes.add(node);
     }
 
+    public void addMemberToTree(Person member, Person addedMember, Relation relation) {
+        if(member == null || addedMember == null || relation == null) {
+            return;
+        }
+
+        if(addedMember.getAccount()==null){// if the added member is not registered yet add him directly to the family tree
+            if(this.getMembers().contains(member)
+                    && !this.getMembers().contains(addedMember)) {
+
+                if (relation == Relation.FATHER) {
+                    this.addFather(member, addedMember);
+                }
+                else if (relation == Relation.MOTHER) {
+                    this.addMother(member, addedMember);
+                }
+                else if (relation == Relation.CHILD) {
+                    this.addChild(member, addedMember);
+                }
+                else if (relation == Relation.PARTNER) {
+                    this.addPartner(member, addedMember);
+                }
+            }
+        }
+        else{ // if the added member is already registered send him a notification
+            if(this.getMembers().contains(member)
+                    && !this.getMembers().contains(addedMember)) {
+                if (relation == Relation.FATHER) {
+                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
+                }
+                else if (relation == Relation.MOTHER) {
+                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
+                }
+                else if (relation == Relation.CHILD) {
+                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
+                }
+                else if (relation == Relation.PARTNER) {
+                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
+                }
+            }
+
+        }
+
+
+
+    }
+
+
     public void addPartner(Person member, Person addedMember) {
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree

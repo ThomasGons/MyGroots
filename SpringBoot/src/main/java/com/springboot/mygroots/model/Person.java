@@ -1,6 +1,8 @@
 package com.springboot.mygroots.model;
 
+import com.mongodb.lang.Nullable;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.springboot.mygroots.utils.Enumerations.*;
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 public class Person {
     @Id
     private String id;
+    @DBRef@Nullable
+    private Account account;
     
     private String name;
     private String lastName; 
@@ -93,6 +97,14 @@ public class Person {
 	public void setSocialSecurityNumber(String socialSecurityNumber) {
 		this.socialSecurityNumber = socialSecurityNumber;
 	}
+
+    public void setAccount(Account account) {
+    	this.account = account;
+    }
+
+    public Account getAccount() {
+    	return account;
+    }
 }
 
 

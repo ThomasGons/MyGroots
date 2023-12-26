@@ -45,6 +45,8 @@ public class Account implements Serializable {
         this.email = email;
         this.password = password;
         this.person = person;
+        if(person != null)
+            person.setAccount(this);
         this.isActive = false;
     }
 
@@ -97,5 +99,13 @@ public class Account implements Serializable {
     
     public void setPassword(String password) {
     	this.password = password;
+    }
+
+    public void addNotif(Notif notif) {
+        notifs.add(notif);
+    }
+
+    public void removeNotif(Notif notif) {
+        notifs.remove(notif);
     }
 }

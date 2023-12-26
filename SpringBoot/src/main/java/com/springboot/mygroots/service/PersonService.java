@@ -1,7 +1,6 @@
 package com.springboot.mygroots.service;
 
-import com.springboot.mygroots.model.FamilyTree;
-import com.springboot.mygroots.Utils;
+import com.springboot.mygroots.utils.Utils;
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.AccountRepository;

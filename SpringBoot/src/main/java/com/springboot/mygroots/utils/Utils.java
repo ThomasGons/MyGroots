@@ -1,4 +1,4 @@
-package com.springboot.mygroots;
+package com.springboot.mygroots.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

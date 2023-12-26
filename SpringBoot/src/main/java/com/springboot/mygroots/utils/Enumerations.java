@@ -22,5 +22,12 @@ public class Enumerations {
         DEAD
     }
 
+    public enum Relation{
+        FATHER,
+        MOTHER,
+        CHILD,
+        PARTNER,
+    }
+
 
 }
