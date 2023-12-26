@@ -5,7 +5,7 @@ import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
-import { ProfileComponent, NotificationsComponent } from './features/user';
+import { ProfileComponent, NotificationsComponent, ProfileModifyComponent} from './features/user';
 import { SearchComponent } from './features/search/search.component';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
 
@@ -78,6 +78,11 @@ const routes: Routes = [
         path: "notifications",
         component: NotificationsComponent,
         title: environment.title + " - Notifications",
+      },
+      {
+        path: "profile-modify",
+        component: ProfileModifyComponent,
+        title: environment.title + " - Profil-modify",
       },
     ]
   },

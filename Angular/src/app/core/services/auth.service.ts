@@ -21,7 +21,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // const jwtToken = this._jwtService.getToken();
     // return (jwtToken ? true : false);
-    return false;
+    return true;
   }
 
   public login(data: any): Observable<any> {
@@ -35,7 +35,7 @@ export class AuthService {
   public register(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/register", data, this.httpOptions);
   }
-  
+
   public forgotPassword(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/forgot-password", data, this.httpOptions);
   }
@@ -43,9 +43,9 @@ export class AuthService {
   public changePassword(data: any): Observable<any> {
     return this._httpClient.put(this.url + "/change-password", data, this.httpOptions);
   }
-  
+
   public checkTokenChangePassword(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/change-password", data, this.httpOptions);
   }
-  
+
 }

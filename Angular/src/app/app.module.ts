@@ -15,6 +15,8 @@ import { ProfileComponent } from './features/user/profile/profile.component';
 import { NotificationsComponent } from './features/user/notifications/notifications.component';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
 import { SearchComponent } from './features/search/search.component';
+import { ProfileModifyComponent } from './features/user/profile-modify/profile-modify.component';
+
 
 
 @NgModule({
@@ -33,6 +35,7 @@ import { SearchComponent } from './features/search/search.component';
     NotificationsComponent,
     FamilyTreeComponent,
     SearchComponent,
+    ProfileModifyComponent,
   ],
   imports: [
     BrowserModule,
