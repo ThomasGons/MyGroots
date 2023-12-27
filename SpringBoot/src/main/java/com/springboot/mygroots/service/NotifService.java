@@ -37,11 +37,7 @@ public class NotifService {
 
 
 
-    public void requestAnswer(Notif request){
-        Notif requestAnswer = new Notif(request.getTarget(),request.getSource(),NotifType.ALERT_DEMANDDECLINED);
-        request.getSource().getNotifs().add(requestAnswer);
-        request.getTarget().getNotifs().remove(request);
-    }
+
 
     public List<Notif> getAllNotifs() {
         return notifRepository.findAll();

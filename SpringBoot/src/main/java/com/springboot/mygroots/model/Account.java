@@ -45,8 +45,6 @@ public class Account implements Serializable {
         this.email = email;
         this.password = password;
         this.person = person;
-        if(person != null)
-            person.setAccount(this);
         this.isActive = false;
     }
 
