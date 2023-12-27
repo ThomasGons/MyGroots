@@ -94,6 +94,7 @@ public class Account implements Serializable {
     	return password;
     }
     
+    //TODO : faire un encodage des qu'on set un nouveau password
     public void setPassword(String password) {
     	this.password = password;
     }

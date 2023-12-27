@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils {
 
-	public static StringBuilder encode(String password) {
+	public static String encode(String password) {
         try {
         	System.out.println("encode");
             // Creation instance de MessageDigest pour SHA-256
@@ -29,7 +29,7 @@ public class Utils {
 
             // Affichage du hash SHA256
             System.out.println("SHA256 hash de \"" + password + "\": " + hexString.toString());
-            return hexString;
+            return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;

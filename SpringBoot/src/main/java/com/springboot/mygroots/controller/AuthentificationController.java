@@ -24,7 +24,7 @@ import com.springboot.mygroots.utils.Enumerations.Gender;
 
 @RestController
 @RequestMapping(value="/auth")
-@CrossOrigin(origins = "http://localhostm4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthentificationController {	
     @Autowired
     private PersonService personService;
@@ -32,7 +32,7 @@ public class AuthentificationController {
     @Autowired
     private FamilyTreeService familyTreeService;
     	
-	@PostMapping(value= "/signup")
+	@PostMapping(value= "/register")
 	/**
 	 * Creation of a account and a person
 	 * @param data table of informations
@@ -43,6 +43,7 @@ public class AuthentificationController {
 			System.out.println("SIGNUP");
 			ResponseEntity<String> response = personService.signUp((String) data.get("email"), (String) data.get("FirstName"), (String) data.get("LastName"),LocalDate.parse((String) data.get("BirthDate")), Gender.valueOf((String) data.get("Gender")), (String) data.get("Nationality"), (String) data.get("SocialSecurityNumber"));
 			Person p = personService.getPersonByNameAndLastName((String) data.get("FirstName"), (String) data.get("LastName"));
+			System.out.println();
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
 				ft = new FamilyTree((String) data.get("LastName"), p);

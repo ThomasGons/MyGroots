@@ -73,8 +73,7 @@ public class PersonService {
 	    			Person pers = this.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
 	    			this.addPerson(pers);
 	    			// creer un password temporaire avec son prenom
-	    			StringBuilder passwordtmp = Utils.encode(lastName); 
-	    			System.out.println(passwordtmp);
+	    			String passwordtmp = Utils.encode(lastName);
 	    			Account acc = accountService.setAccount(email, passwordtmp.toString(), pers, null);
 	    			accountService.addAccount(acc);
 	        		return new ResponseEntity<String>("{\"message\":\"Inscription reussie\"}", HttpStatus.OK);
@@ -122,16 +121,19 @@ public class PersonService {
      */
     public ResponseEntity<String> login(String email, String password){
     	try {
-    		StringBuilder password_input = Utils.encode(password);
+    		String password_input = Utils.encode(password);
     		Account account = accountRepository.getAccountByEmail(email);
-    		if(account.getPassword().equals(password_input.toString())){
+    		if(account.getPassword().equals(password_input)){
     			// a supp car pour test
     			account.activate();
     			if(account.isActive() == true){ 
     				LocalDateTime currentDateTime = LocalDateTime.now();
     				String token = Utils.encode(currentDateTime.toString()).toString();
     				account.setToken(token);
-    				return new ResponseEntity<String>("{'token':"+token+",'id':"+account.getPerson().getId()+",'firstName':"+account.getPerson().getFirstName()+"}", HttpStatus.OK);
+    				System.out.println(token);
+    				System.out.println(account.getPerson().getId());
+    				System.out.println("fin du login");
+    				return new ResponseEntity<String>("{\"token\":\""+token+"\",\"id\":\""+account.getPerson().getId()+"\",\"firstName\":\""+account.getPerson().getFirstName()+"\"}", HttpStatus.OK);
     			}else {
     				return new ResponseEntity<String>("{\"message\":\"Compte en attente de verification\"}", HttpStatus.BAD_REQUEST);
     			}
