@@ -54,7 +54,17 @@ public class PersonService {
         personRepository.delete(person);
     }
 
-    
+    /**
+     * 
+     * @param email
+     * @param firstName
+     * @param lastName
+     * @param birthDate
+     * @param gender
+     * @param nationality
+     * @param socialSecurityNumber
+     * @return
+     */
     public ResponseEntity<String> signUp(String email, String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber){
     	try{
     		if (this.validedSignUpPerson(firstName, lastName)) {
@@ -86,6 +96,16 @@ public class PersonService {
     	return false;
     }
     
+    /**
+     * 
+     * @param firstName
+     * @param lastName
+     * @param birthDate
+     * @param gender
+     * @param nationality
+     * @param socialSecurityNumber
+     * @return
+     */
     private Person setPerson(String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber) {
     	Person p = new Person(firstName, lastName, gender);
     	p.setBirthDate(birthDate);
@@ -94,6 +114,12 @@ public class PersonService {
     	return p;
     }
     
+    /**
+     * 
+     * @param email
+     * @param password
+     * @return
+     */
     public ResponseEntity<String> login(String email, String password){
     	try {
     		StringBuilder password_input = Utils.encode(password);
@@ -117,6 +143,11 @@ public class PersonService {
 
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public ResponseEntity<String> logout(String id){
     	try {
     		System.out.println(id);
