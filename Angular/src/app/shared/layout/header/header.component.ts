@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { StorageService, SnackbarService } from '@app/core/services';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { StorageService } from '@app/core/services';
 import { environment } from '@environments/environment.development';
 
 
@@ -8,26 +7,25 @@ import { environment } from '@environments/environment.development';
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  @Input() navItems: any;
-  @Output() signalToggleSidenav = new EventEmitter<void>();
+  @Input()
+  navItems: any;
+
+  @Output()
+  signalToggleSidenav = new EventEmitter<void>();
 
   readonly title: string = environment.title;
-  isLoggedIn: boolean = false;
 
   constructor(
     private _storageService: StorageService,
-    private _snackbarService: SnackbarService,
-    private _router: Router,
   ) {}
-
-  ngOnInit(): void {
-    this._storageService.isLoggedIn();
-  }
 
   public onToggleSidenav(): void {
     this.signalToggleSidenav.emit();
   }
   
+  public isLoggedIn(): boolean {
+    return this._storageService.isLoggedIn();
+  }
 }

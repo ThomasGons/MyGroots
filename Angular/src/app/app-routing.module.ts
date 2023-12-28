@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent, LogoutComponent } from './features/auth';
@@ -46,7 +45,7 @@ const routes: Routes = [
       },
       // TODO: AuthGuard to access page
       {
-        path: "logout/:id",
+        path: "logout",
         component: LogoutComponent,
       },
     ]
@@ -57,12 +56,12 @@ const routes: Routes = [
     component: FamilyTreeComponent,
     title: environment.title + " - Arbre Familial",
   },
-  // TODO: this SearchComponent + children routes (byid, byname)
+  // TODO: this SearchComponent +  children routes (byid, byname)
   {
     path: "search",
     component: SearchComponent,
     title: environment.title + " - Recherche",
-    // children: []
+  //   children: []
   },
 
   // TODO: AuthGuard to access pages

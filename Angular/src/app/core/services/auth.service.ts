@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment.development';
-import { StorageService } from './storage.service';
 
 
 @Injectable({
@@ -11,7 +10,9 @@ import { StorageService } from './storage.service';
 export class AuthService {
 
   private readonly url: string = environment.apiUrl + "/auth";
-  private readonly httpOptions = { headers: new HttpHeaders({ "Content-type": "application/json" }) };
+  private readonly httpOptions = {
+    headers: new HttpHeaders({ "Content-type": "application/json" })
+  };
 
   constructor(
     private _httpClient: HttpClient,
@@ -21,8 +22,8 @@ export class AuthService {
     return this._httpClient.post(this.url + "/login", data, this.httpOptions);
   }
 
-  public logout(id: string): Observable<any> {
-    return this._httpClient.post(this.url + "/logout/" + id, {}, this.httpOptions);
+  public logout(data: any): Observable<any> {
+    return this._httpClient.post(this.url + "/logout", data, this.httpOptions);
   }
 
   public register(data: any): Observable<any> {

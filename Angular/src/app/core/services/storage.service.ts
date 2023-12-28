@@ -14,8 +14,8 @@ export class StorageService {
     window.sessionStorage.setItem(this.keyName, JSON.stringify(user));
   }
 
-  public clean(): void {
-    window.sessionStorage.clear();
+  public deleteUser(): void {
+    window.sessionStorage.removeItem(this.keyName);
   }
 
   public getUser(): User | null {
@@ -32,7 +32,7 @@ export class StorageService {
     if (user) {
       return true;
     } else {
-      return true;
+      return false;
     }
   }
     

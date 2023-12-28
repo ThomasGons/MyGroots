@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthService, SnackbarService, StorageService } from '@app/core/services';
+import { AuthService, StorageService, SnackbarService } from '@app/core/services';
 
 
 @Component({
@@ -15,7 +15,6 @@ export class LoginComponent {
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
-  responseMessage: string = "";
   hidePassword: boolean = true;
 
   constructor(
@@ -39,13 +38,14 @@ export class LoginComponent {
     /* Submit the form */
     this._authService.login(loginData).subscribe({
       next: (response) => {
+        console.log(response);
         this._snackbarService.openSnackbar("Connexion réussie !");
         this._storageService.saveUser(response)
         this._router.navigate(["/home"]);
       },
       error: (err) => {
-        this.responseMessage = err.message;
-        this._snackbarService.openSnackbar(this.responseMessage);
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.errorMessage);
       }
     });
   }
