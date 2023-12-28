@@ -3,7 +3,7 @@
   <mat-sidenav #sidenav mode="over" position="end">
     <mat-nav-list dense>
       <!-- If not logged in -->
-      <div *ngIf="!this.isLoggedIn">
+      <div *ngIf="!this.isLoggedIn()">
         <mat-list-item class="nav-item">
           <a [routerLink]="['/auth/login']" class="nav-link">Connexion</a>
         </mat-list-item>
@@ -12,7 +12,7 @@
         </mat-list-item>
       </div>
       <!-- If logged in -->
-      <div *ngIf="this.isLoggedIn">
+      <div *ngIf="this.isLoggedIn()">
         <mat-expansion-panel class="rounded-0 shadow-none">
           <mat-expansion-panel-header>
             <mat-icon>account_circle</mat-icon>

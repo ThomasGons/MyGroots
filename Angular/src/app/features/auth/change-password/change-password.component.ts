@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService, JwtService, SnackbarService } from '@app/core/services';
+import { AuthService, SnackbarService } from '@app/core/services';
 
 
 @Component({
@@ -19,7 +19,6 @@ export class ChangePasswordComponent implements OnInit {
   
   constructor(
     private _authService: AuthService,
-    private _jwtService: JwtService,
     private _snackbarService: SnackbarService,
     private _activatedRoute: ActivatedRoute,
   ) {}
@@ -41,11 +40,12 @@ export class ChangePasswordComponent implements OnInit {
     }
     /* Submit form */
     this._authService.changePassword(changePasswordData).subscribe({
+      // FIX: TMP
       next: (response) => {
-        
+        this._snackbarService.openSnackbar(response.message);
       },
       error: (err) => {
-
+        this._snackbarService.openSnackbar(err.error.errorMessage);
       }
     });
   }

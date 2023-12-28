@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
-import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent } from './features/auth';
+import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent, LogoutComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { ProfileComponent, NotificationsComponent } from './features/user';
 import { SearchComponent } from './features/search/search.component';
@@ -44,11 +43,11 @@ const routes: Routes = [
         component: ChangePasswordComponent,
         title: environment.title + " - Modifier mot de passe",
       },
-      // TODO: this LogoutComponent + AuthGuard to access page
-      // {
-      //   path: "logout",
-      //   component: LogoutComponent,
-      // },
+      // TODO: AuthGuard to access page
+      {
+        path: "logout",
+        component: LogoutComponent,
+      },
     ]
   },
   // TODO: this FamilyTreeComponent + AuthGuard to access page

@@ -13,7 +13,6 @@ export class ForgotPasswordComponent {
   form = new FormGroup({
     email: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.email] }),
   });
-  responseMessage: string = "";
 
   constructor(
     private _authService: AuthService,
@@ -32,13 +31,12 @@ export class ForgotPasswordComponent {
     }
     /* Submit form */
     this._authService.forgotPassword(forgotPasswordData).subscribe({
+      // FIX: TMP
       next: (response) => {
-        this.responseMessage = response.message;
-        this._snackbarService.openSnackbar(this.responseMessage);
+        this._snackbarService.openSnackbar(response.message);
       },
       error: (err) => {
-        this.responseMessage = err.error.message;
-        this._snackbarService.openSnackbar(this.responseMessage);
+        this._snackbarService.openSnackbar(err.error.errorMessage);
       }
     })
   }

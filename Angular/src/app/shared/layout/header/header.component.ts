@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService, JwtService, SnackbarService } from '@app/core/services';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { StorageService } from '@app/core/services';
 import { environment } from '@environments/environment.development';
 
 
@@ -8,40 +7,25 @@ import { environment } from '@environments/environment.development';
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  @Input() navItems: any;
-  @Output() signalToggleSidenav = new EventEmitter<void>();
+  @Input()
+  navItems: any;
+
+  @Output()
+  signalToggleSidenav = new EventEmitter<void>();
 
   readonly title: string = environment.title;
-  isLoggedIn: boolean = false;
 
   constructor(
-    private _authService: AuthService,
-    private _jwtService: JwtService,
-    private _snackbarService: SnackbarService,
-    private _router: Router,
+    private _storageService: StorageService,
   ) {}
-
-  ngOnInit(): void {
-    this.isLoggedIn = this._authService.isAuthenticated();
-  }
 
   public onToggleSidenav(): void {
     this.signalToggleSidenav.emit();
   }
-
-  public logout(): void {
-    this._authService.logout().subscribe({
-      next: (response) => {
-        this._jwtService.destroyToken();
-        this._snackbarService.openSnackbar(response.message);
-        this._router.navigate(["/home"]);
-      },
-      error: (err) => {
-        this._snackbarService.openSnackbar(err.error.message);
-      },
-    });
+  
+  public isLoggedIn(): boolean {
+    return this._storageService.isLoggedIn();
   }
-
 }

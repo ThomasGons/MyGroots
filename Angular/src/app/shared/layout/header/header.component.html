@@ -19,7 +19,7 @@
     <!-- Right side of header -->
     <div>
       <!-- If not logged in -->
-      <div *ngIf="!this.isLoggedIn">
+      <div *ngIf="!this.isLoggedIn()">
         <!-- If screen is smaller than medium size 'md' -->
         <div class="d-md-none">
           <button mat-icon-button (click)="this.onToggleSidenav()">
@@ -37,7 +37,7 @@
         </div>
       </div> 
       <!-- If logged in -->
-      <div *ngIf="this.isLoggedIn">
+      <div *ngIf="this.isLoggedIn()">
         <!-- If screen is smaller than medium size 'md' -->
         <div class="d-md-none">
           <button mat-icon-button (click)="this.onToggleSidenav()">
