@@ -1,5 +1,6 @@
 package com.springboot.mygroots.service;
 
+import com.springboot.mygroots.Utils;
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Notif;
@@ -75,7 +76,7 @@ public class AccountService {
     }
 
     public Account setAccount(String email, String password, Person person, String token) {
-    	Account a = new Account(email, password,  person, token);
+    	Account a = new Account(email, Utils.encode(password),  person, token);
     	return a;
     }
 }

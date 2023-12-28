@@ -44,7 +44,7 @@ public class Account implements Serializable {
 
     public Account(String email, String password, @Nullable Person person, @Nullable String token) {
         this.email = email;
-        this.password = Utils.encode(password);
+        this.password = password;
         this.person = person;
         this.isActive = false;
         this.token = token;

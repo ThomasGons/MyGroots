@@ -49,6 +49,8 @@ public class AuthenticationService {
 	    			// Password temporaire a changer lors de la validation du compte
 	    			String passwordtmp = firstName;
 	    			Account acc = accountService.setAccount(email, passwordtmp, pers, "");
+	    			System.out.println("DB password " + acc.getPassword());
+	    			
 	    			accountService.addAccount(acc);
 	        		return new ResponseEntity<String>("{\"message\":\"Inscription reussie !\"}", HttpStatus.OK);
 	    		}else {
@@ -72,6 +74,9 @@ public class AuthenticationService {
     	try {
     		String password_input = Utils.encode(password);
     		Account account = accountService.getAccountByEmail(email);
+    		System.out.println("DB password " + account.getPassword());
+    		System.out.println("User input  " + password_input);
+    		
     		if(account != null && account.getPassword().equals(password_input)){
     			// a supp car pour test
     			account.activate();
@@ -94,7 +99,6 @@ public class AuthenticationService {
     	}
 		return new ResponseEntity<String>("{\"errorMessage\":\"Email ou mot de passe incorrect !\"}", HttpStatus.BAD_REQUEST);
     }
-    
     
     /**
      * 
