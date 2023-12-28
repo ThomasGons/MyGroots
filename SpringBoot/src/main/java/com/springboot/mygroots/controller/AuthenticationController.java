@@ -70,7 +70,7 @@ public class AuthenticationController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
 	
 	@PostMapping(value="/login")
@@ -86,7 +86,7 @@ public class AuthenticationController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@PostMapping(value="/logout")
@@ -95,19 +95,15 @@ public class AuthenticationController {
 	 * @param id current account ID
 	 * @return message to indicated whether the logout has been carried out correctly
 	 */
-	public ResponseEntity<String> logout(@RequestBody Map<String, Object> data){
+	public ResponseEntity<String> logout(@RequestBody Map<String, String> data){
 		try {
-			System.out.println("token: "+data.get("token"));
-			System.out.println("id: "+data.get("id"));
-			
-			String token = String.valueOf(data.get("token"));
-			String id = String.valueOf(data.get("id"));
-			
+			String token = data.get("token");
+			String id = data.get("id");
 			return authenticationService.logout(token, id);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 }
