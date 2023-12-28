@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FamilyTreeService {
@@ -47,5 +48,14 @@ public class FamilyTreeService {
 
     public void removeFamilyTree(FamilyTree familyTree) {
         familyTreeRepository.delete(familyTree);
+    }
+
+    public List<String> getHelp() {
+    	return List.of (
+                "father", "mother", "partner", "parents",
+                "children", "siblings", "grandparents",
+                "grandchildren", "cousins", "uncles_aunts",
+                "nephews_nieces"
+        );
     }
 }

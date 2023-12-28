@@ -5,21 +5,17 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
-import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
 @RestController
 @RequestMapping(value="/auth")
-public class AuthentificationController {	
+public class Auth {
     @Autowired
     private PersonService personService;
     
@@ -35,13 +31,13 @@ public class AuthentificationController {
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
 				ft = new FamilyTree(name, p);
-				familyTreeService.saveFamilyTree(ft); 
+				familyTreeService.saveFamilyTree(ft);
 			}
 			return response;
-		}catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
+		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@PostMapping(value="/login")

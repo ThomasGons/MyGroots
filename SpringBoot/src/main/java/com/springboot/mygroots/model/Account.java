@@ -106,4 +106,8 @@ public class Account implements Serializable {
     public void removeNotif(Notif notif) {
         notifs.remove(notif);
     }
+
+    public List<Notif> getNotifications() {
+    	return notifs;
+    }
 }

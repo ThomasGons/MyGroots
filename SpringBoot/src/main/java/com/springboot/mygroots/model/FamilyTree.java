@@ -79,7 +79,7 @@ public class FamilyTree {
                 }
             }
         }
-        else{ // if the added member is already registered send him a notification
+        else { // if the added member is already registered send him a notification
             if(this.getMembers().contains(member)
                     && !this.getMembers().contains(addedMember)) {
                 if (relation == Relation.FATHER) {
@@ -101,7 +101,6 @@ public class FamilyTree {
 
 
     }
-
 
     public void addPartner(Person member, Person addedMember) {
         int memberID = getPersonID(member);
@@ -145,7 +144,7 @@ public class FamilyTree {
         if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isBefore(member.getBirthDate())){ // if the father is born before the member
             return;
         }
-        int memberID = getPersonID(member);
+
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
                 && getNode(member).getFatherID() == -1  || Objects.equals(members.get(getNode(member).getFatherID()).getName(), "unknown")) // the member does not have a father
@@ -159,8 +158,6 @@ public class FamilyTree {
                 int fatherID = getPersonID(addedMember);
                 this.getNode(member).setFatherID(fatherID);
                 this.addNode(addedMember, null, null, null);
-                // update children
-
             }
         }
     }
@@ -378,10 +375,6 @@ public class FamilyTree {
         }
         return true;
     }
-
-
-
-
 
 
     //remove a member from the family tree and replace it by temporary member "unknown"
