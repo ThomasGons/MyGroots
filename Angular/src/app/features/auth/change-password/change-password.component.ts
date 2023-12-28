@@ -40,11 +40,12 @@ export class ChangePasswordComponent implements OnInit {
     }
     /* Submit form */
     this._authService.changePassword(changePasswordData).subscribe({
+      // FIX: TMP
       next: (response) => {
-        
+        this._snackbarService.openSnackbar(response.message);
       },
       error: (err) => {
-
+        this._snackbarService.openSnackbar(err.error.errorMessage);
       }
     });
   }

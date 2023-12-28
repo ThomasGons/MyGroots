@@ -1,28 +1,26 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
-import { StorageService, SnackbarService } from '@app/core/services';
+import { StorageService } from '@app/core/services';
 
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent {
 
-  @Input() navItems: any;
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+  @Input()
+  navItems: any;
 
-  isLoggedIn: boolean = false;
+  @ViewChild('sidenav')
+  sidenav!: MatSidenav;
 
   constructor(
     private _storageService: StorageService,
-    private _snackbarService: SnackbarService,
-    private _router: Router,
   ) {}
 
-  ngOnInit(): void {
-    this.isLoggedIn = this._storageService.isLoggedIn();
+  public isLoggedIn(): boolean {
+    return this._storageService.isLoggedIn();
   }
 
   public toggle(): void {
@@ -30,12 +28,12 @@ export class SidenavComponent implements OnInit {
   }
   
   public onActivateRoute(): void {
+    this.sidenav.close();
     window.scroll({ 
             top: 0, 
             left: 0, 
             behavior: 'smooth'
      });
-     this.sidenav.close();
   }
   
 }

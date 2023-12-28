@@ -28,12 +28,12 @@ import { SearchComponent } from './features/search/search.component';
     RegisterComponent,
     ForgotPasswordComponent,
     ChangePasswordComponent,
+    LogoutComponent,
     PageNotFoundComponent,
     ProfileComponent,
     NotificationsComponent,
     FamilyTreeComponent,
     SearchComponent,
-    LogoutComponent,
   ],
   imports: [
     BrowserModule,

@@ -40,7 +40,7 @@
           </mat-error>
         </mat-form-field>
         <!-- birthDate -->
-        <mat-form-field appearance="outline" class="flex-grow-1 py-2">
+        <mat-form-field appearance="outline" class="py-2">
           <mat-label>Date de naissance</mat-label>
           <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="DD/MM/YYYY">
           <mat-icon matPrefix>cake</mat-icon>
@@ -50,38 +50,40 @@
             <span *ngIf="this.form.controls.birthDate.hasError('required')">Veuillez saisir une date de naissance.</span>
           </mat-error>
         </mat-form-field>
-        <div class="d-flex">
-          <!-- gender -->
-          <mat-form-field appearance="outline" class="gender-select py-2 pe-1">
-            <mat-label>Genre</mat-label>
-            <mat-select matNativeControl formControlName="gender" required>
-              <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="this.form.controls.gender.touched && this.form.controls.gender.invalid">
-              <span *ngIf="this.form.controls.gender.hasError('required')">Veuillez saisir un genre.</span>
-            </mat-error>
-          </mat-form-field>
-          <!-- nationality -->
-          <mat-form-field appearance="outline" class="py-2 ps-1 flex-grow-1">
-            <mat-label>Nationalité</mat-label>
-            <input matInput formControlName="nationality" type="text" required>
-            <mat-icon matPrefix>public</mat-icon>
-            <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
-              <span *ngIf="this.form.controls.nationality.hasError('required')">Veuillez saisir une nationalité.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
+        <!-- gender -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Genre</mat-label>
+          <mat-select matNativeControl formControlName="gender" required>
+            <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>face</mat-icon>
+          <mat-error *ngIf="this.form.controls.gender.touched && this.form.controls.gender.invalid">
+            <span *ngIf="this.form.controls.gender.hasError('required')">Veuillez saisir un genre.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- nationality -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Nationalité</mat-label>
+          <!-- <input matInput formControlName="nationality" type="text" required> -->
+          <mat-select matNativeControl formControlName="nationality" required>
+            <mat-option *ngFor="let nationality of this.nationalities" [value]="nationality">{{ nationality }}</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>public</mat-icon>
+          <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
+            <span *ngIf="this.form.controls.nationality.hasError('required')">Veuillez saisir une nationalité.</span>
+          </mat-error>
+        </mat-form-field>
         <!-- socialSecurityNumber -->
         <mat-slide-toggle (change)="this.onToggleForeigner()" class="py-2" color="primary">Êtes-vous étranger ?</mat-slide-toggle>
         <mat-form-field appearance="outline" class="py-2 flex-grow-1">
           <mat-label>Numéro sécurité sociale</mat-label>
-          <input matInput formControlName="socialSecurityNumber" type="text" required>
+          <input matInput formControlName="socialSecurity" type="text" required>
           <mat-icon matPrefix>account_balance</mat-icon>
           <mat-hint *ngIf="!this.isForeigner">Saisir les 13 premiers caractères présents sur la carte vitale.</mat-hint>
-          <mat-error *ngIf="this.form.controls.socialSecurityNumber.touched && this.form.controls.socialSecurityNumber.invalid">
-            <span *ngIf="this.form.controls.socialSecurityNumber.hasError('required')">Veuillez saisir un numéro de sécurité social.</span>
-            <span *ngIf="this.form.controls.socialSecurityNumber.hasError('minlength') || this.form.controls.socialSecurityNumber.hasError('maxlength')">Numéro de sécurité social invalide, veuillez saisir les 13 premiers caractères présents sur la carte vitale.</span>
-            <!-- <span *ngIf="this.form.controls.socialSecurityNumber.hasError('pattern')">Numéro de sécurité social invalide.</span> -->
+          <mat-error *ngIf="this.form.controls.socialSecurity.touched && this.form.controls.socialSecurity.invalid">
+            <span *ngIf="this.form.controls.socialSecurity.hasError('required')">Veuillez saisir un numéro de sécurité social.</span>
+            <span *ngIf="this.form.controls.socialSecurity.hasError('minlength') || this.form.controls.socialSecurity.hasError('maxlength')">Numéro de sécurité social invalide, veuillez saisir les 13 premiers caractères présents sur la carte vitale.</span>
+            <!-- <span *ngIf="this.form.controls.socialSecurity.hasError('pattern')">Numéro de sécurité social invalide.</span> -->
           </mat-error>
         </mat-form-field>
         <!-- submit and redirections -->
