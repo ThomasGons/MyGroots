@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.Nullable;
+import com.springboot.mygroots.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class Account implements Serializable {
 
     public Account(String email, String password, @Nullable Person person, @Nullable String token) {
         this.email = email;
-        this.password = password;
+        this.password = Utils.encode(password);
         this.person = person;
         this.isActive = false;
         this.token = token;
@@ -94,9 +95,8 @@ public class Account implements Serializable {
     	return password;
     }
     
-    //TODO : faire un encodage des qu'on set un nouveau password
     public void setPassword(String password) {
-    	this.password = password;
+    	this.password = Utils.encode(password);
     }
     
     public String getToken() {

@@ -42,7 +42,7 @@ public class MainController {
 
     @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
     public List<Email> inbox (@RequestParam String name, @RequestParam String lastName){
-        Person p = personService.getPersonByNameAndLastName(name, lastName);
+        Person p = personService.getPersonByFirstNameAndLastName(name, lastName);
         return emailService.getInbox(p);
     }
 

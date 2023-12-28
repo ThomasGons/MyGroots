@@ -1,5 +1,6 @@
 package com.springboot.mygroots.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -20,29 +21,45 @@ import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
+import com.springboot.mygroots.service.AuthenticationService;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
 @RestController
 @RequestMapping(value="/auth")
 @CrossOrigin(origins = "http://localhost:4200")
-public class AuthentificationController {	
+public class AuthenticationController {	
     @Autowired
-    private PersonService personService;
+    private AuthenticationService authenticationService;
+    
+    @Autowired
+    private PersonService personService; 
     
     @Autowired
     private FamilyTreeService familyTreeService;
     	
 	@PostMapping(value= "/register")
 	/**
-	 * Creation of a account and a person
+	 * Register a new user into the database. Creation of an account and a person.
 	 * @param data table of informations
-	 * @return message to indicated whether the signup has been carried out correctly
+	 * @return message to indicated whether the registration has been carried out correctly
 	 */
-	public ResponseEntity<String> signUp(@RequestBody Map<String, Object> data){
+	public ResponseEntity<String> register(@RequestBody Map<String, String> data){
 		try {
 			System.out.println("SIGNUP");
-			ResponseEntity<String> response = personService.signUp((String) data.get("email"), (String) data.get("FirstName"), (String) data.get("LastName"),LocalDate.parse((String) data.get("BirthDate")), Gender.valueOf((String) data.get("Gender")), (String) data.get("Nationality"), (String) data.get("SocialSecurityNumber"));
-			Person p = personService.getPersonByNameAndLastName((String) data.get("FirstName"), (String) data.get("LastName"));
+			System.out.println(data.values());
+			ResponseEntity<String> response = authenticationService.register(
+				data.get("email"),
+				data.get("firstName"),
+				data.get("lastName"),
+				LocalDate.parse(data.get("birthDate")),
+				Gender.valueOf(data.get("gender")),
+				data.get("nationality"),
+				data.get("socialSecurityNumber")
+			);
+			Person p = personService.getPersonByFirstNameAndLastName(
+				String.valueOf(data.get("firstName")),
+				String.valueOf(data.get("lastName"))
+			);
 			System.out.println();
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
@@ -53,7 +70,7 @@ public class AuthentificationController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
+		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
 	
 	@PostMapping(value="/login")
@@ -65,27 +82,32 @@ public class AuthentificationController {
 	public ResponseEntity<String> login(@RequestBody Account account_login){
 		System.out.println("test login");
 		try {
-			return personService.login(account_login.getEmail(), account_login.getPassword());
+			return authenticationService.login(account_login.getEmail(), account_login.getPassword());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/logout/{id}")
+	@PostMapping(value="/logout")
 	/**
 	 * Account logout
 	 * @param id current account ID
 	 * @return message to indicated whether the logout has been carried out correctly
 	 */
-	public ResponseEntity<String> logout(@PathVariable("id") String id){
+	public ResponseEntity<String> logout(@RequestBody Map<String, Object> data){
 		try {
-			System.out.println(id);
-			return personService.logout(id);
+			System.out.println("token: "+data.get("token"));
+			System.out.println("id: "+data.get("id"));
+			
+			String token = String.valueOf(data.get("token"));
+			String id = String.valueOf(data.get("id"));
+			
+			return authenticationService.logout(token, id);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 }

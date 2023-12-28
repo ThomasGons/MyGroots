@@ -28,7 +28,7 @@ public class Utils {
             }
 
             // Affichage du hash SHA256
-            System.out.println("SHA256 hash de \"" + password + "\": " + hexString.toString());
+            System.out.println("SHA256 hash de \"" + password + "\": \"" + hexString.toString() + "\"");
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
