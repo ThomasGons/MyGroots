@@ -107,7 +107,7 @@ public class FamilyTree {
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
                 && member.getGender() != addedMember.getGender() // the partner added is not of the same gender
-                && nodes.get(memberID).getPartnerID() == -1  || Objects.equals(members.get(getNode(member).getPartnerID()).getName(), "unknown")) // the member does not have a partner
+                && nodes.get(memberID).getPartnerID() == -1  || Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")) // the member does not have a partner
         {
             this.addMember(addedMember);
             int partnerID = getPersonID(addedMember);
@@ -147,7 +147,7 @@ public class FamilyTree {
 
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && getNode(member).getFatherID() == -1  || Objects.equals(members.get(getNode(member).getFatherID()).getName(), "unknown")) // the member does not have a father
+                && getNode(member).getFatherID() == -1  || Objects.equals(members.get(getNode(member).getFatherID()).getFirstName(), "unknown")) // the member does not have a father
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
@@ -169,7 +169,7 @@ public class FamilyTree {
         int memberID = getPersonID(member);
         if(this.getMembers().contains(member) // member is in the family tree
                 && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && (getNode(member).getMotherID() == -1 || Objects.equals(members.get(getNode(member).getMotherID()).getName(), "unknown"))) // the member does not have a mother
+                && (getNode(member).getMotherID() == -1 || Objects.equals(members.get(getNode(member).getMotherID()).getFirstName(), "unknown"))) // the member does not have a mother
         {
             if(this.getNode(member).getFatherID()!= -1 ){ // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father

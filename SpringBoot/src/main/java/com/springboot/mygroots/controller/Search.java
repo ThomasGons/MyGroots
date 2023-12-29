@@ -1,6 +1,9 @@
 package com.springboot.mygroots.controller;
 
 import com.springboot.mygroots.service.PersonService;
+
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +24,7 @@ public class Search {
     }
 
     @RequestMapping(value= "/name")
-    public Person searchByName(@RequestBody String name, @RequestBody String lastName) {
-        return personService.getPersonByNameAndLastName(name, lastName);
+    public Person searchByName(@RequestBody String firstName, @RequestBody String lastName, @RequestBody LocalDate birthdate) {
+        return personService.getPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthdate);
     }
 }

@@ -30,7 +30,7 @@ public class Notif {
         this.member = member;
         this.type = type;
         if(type == NotifType.DEMAND_ADDTOFAMILY){
-            this.body = source.getPerson().getName() + " " + source.getPerson().getLastName() + " wants to add you to his family as " + relation + " of " + member.getName() + " " + member.getLastName();
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " wants to add you to his family as " + relation + " of " + member.getFirstName() + " " + member.getLastName();
         }
         else if(type == NotifType.ALERT_DEMANDACCEPTED){
             this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " accepted your demand";
