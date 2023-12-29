@@ -1,6 +1,7 @@
 package com.springboot.mygroots.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -107,4 +108,18 @@ public class Account implements Serializable {
 		this.token = token;
 	}
     
+	public boolean isAuthenticated(String token) {
+		return this.getToken().equals(token);
+	}
+	
+	public String generateToken() {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		String token = Utils.encode(currentDateTime.toString());
+		this.setToken(token);
+		return token;
+	}
+	
+	public void resetToken() {
+		this.setToken("");
+	}
 }

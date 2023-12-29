@@ -23,11 +23,6 @@ public class AuthenticationService {
     @Autowired
     private AccountService accountService;
     
-    
-    public boolean isAuthenticated(String token) {
-    	return true;
-    }
-    
     /**
      * 
      * @param email
@@ -41,27 +36,25 @@ public class AuthenticationService {
      */
     public ResponseEntity<String> register(String email, String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber){
     	try{
-    		if (personService.validedSignUpPerson(firstName, lastName)) {
-	    		Person p = personService.getPersonByFirstNameAndLastName(firstName, lastName);
-	    		if (Objects.isNull(p)) {
-	    			Person pers = personService.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
-	    			personService.addPerson(pers);
-	    			// Password temporaire a changer lors de la validation du compte
-	    			String passwordtmp = firstName;
-	    			Account acc = accountService.setAccount(email, passwordtmp, pers, "");
-	    			System.out.println("DB password " + acc.getPassword());
-	    			
-	    			accountService.addAccount(acc);
-	        		return new ResponseEntity<String>("{\"message\":\"Inscription reussie !\"}", HttpStatus.OK);
-	    		}else {
-	        		return new ResponseEntity<String>("{\"errorMessage\":\"Compte deja existant.\"}", HttpStatus.BAD_REQUEST);
-	    		}
-	    	}else {
-	    		return new ResponseEntity<String>("{\"errorMessage\":\"Donnees invalides !\"}", HttpStatus.BAD_REQUEST);
-	    	}
+    		Account checkExistingAccount = accountService.getAccountByEmail(email);
+    		if (checkExistingAccount != null) {
+        		return new ResponseEntity<String>("{\"errorMessage\":\"Compte deja existant avec l'email "+email+".\"}", HttpStatus.BAD_REQUEST);
+    		}
+    		
+			Person pers = personService.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
+			personService.addPerson(pers);
+			// Password temporaire a changer lors de la validation du compte
+			String passwordtmp = firstName.toLowerCase();
+			Account acc = accountService.setAccount(email, passwordtmp, pers, "");
+			accountService.addAccount(acc);
+			// Activation mail
+			accountService.sendAccountActivationMail(acc);
+    		return new ResponseEntity<String>("{\"message\":\"Inscription reussie !\"}", HttpStatus.OK);
+	    	
     	} catch(Exception e){
     		e.printStackTrace();
-    	}return new ResponseEntity<String>("{\"errorMessage\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+    	return new ResponseEntity<String>("{\"errorMessage\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     /**
@@ -73,25 +66,14 @@ public class AuthenticationService {
     public ResponseEntity<String> login(String email, String password){
     	try {
     		String password_input = Utils.encode(password);
-    		Account account = accountService.getAccountByEmail(email);
-    		System.out.println("DB password " + account.getPassword());
-    		System.out.println("User input  " + password_input);
-    		
+    		Account account = accountService.getAccountByEmail(email);    		
     		if(account != null && account.getPassword().equals(password_input)){
-    			// a supp car pour test
-    			account.activate();
-    			
-    			if(account.isActive() == true){ 
-    				LocalDateTime currentDateTime = LocalDateTime.now();
-    				String token = Utils.encode(currentDateTime.toString());
-    				account.setToken(token);
+    			if(account.isActive()){ 
+    				String token = account.generateToken();
     				accountService.updateAccount(account);
-    				System.out.println(token);
-    				System.out.println(account.getPerson().getId());
-    				System.out.println("fin du login");
     				return new ResponseEntity<String>("{\"token\":\""+token+"\",\"id\":\""+account.getPerson().getId()+"\",\"firstName\":\""+account.getPerson().getFirstName()+"\"}", HttpStatus.OK);
     			}else {
-    				return new ResponseEntity<String>("{\"errorMessage\":\"Compte en attente de verification.\"}", HttpStatus.BAD_REQUEST);
+    				return new ResponseEntity<String>("{\"errorMessage\":\"Compte en attente d'activation.\"}", HttpStatus.BAD_REQUEST);
     			}
     		}
     	}catch(Exception e){
@@ -102,6 +84,7 @@ public class AuthenticationService {
     
     /**
      * 
+     * @param token
      * @param id
      * @return
      */
@@ -110,8 +93,8 @@ public class AuthenticationService {
     		Person p = personService.getPersonById(id);
     		if (p != null) {
     			Account acc = accountService.getAccountByPerson(p);
-    			if (acc != null && acc.getToken().equals(token)) {
-    				acc.setToken("");
+    			if (acc != null && acc.isAuthenticated(token)) {
+    				acc.resetToken();
     				accountService.updateAccount(acc);
         			return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);
     			}
@@ -122,4 +105,69 @@ public class AuthenticationService {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Echec de la deconnexion !\"}", HttpStatus.BAD_REQUEST);
     }
     
+    
+    /**
+     * 
+     */
+    public ResponseEntity<String> forgotPassword(String email) {
+    	try {
+    		Account acc = accountService.getAccountByEmail(email);
+    		if (acc == null) {
+    			return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a ce mail !\"}", HttpStatus.BAD_REQUEST);
+    		}
+    		String token = acc.generateToken();
+    		accountService.updateAccount(acc);
+    		String firstName = acc.getPerson().getFirstName();
+    		return new ResponseEntity<String>("{\"id\":\""+acc.getId()+"\", \"token\":\""+token+"\", \"firstName\":\""+firstName+"\"}", HttpStatus.OK);
+    	} catch (Exception e) {
+    		System.out.println(e);
+    	}
+    	return new ResponseEntity<String>("{\"errorMessage\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    
+    /**
+     * 
+     */
+    public ResponseEntity<String> changePassword(String accountId, String token, String newPassword) {
+    	try {
+    		Account acc = accountService.getAccountById(accountId);
+        	if (acc == null) {
+        		return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a cet id !\"}", HttpStatus.BAD_REQUEST);
+        	}
+        	if (acc.isAuthenticated(token)) {
+        		acc.setPassword(newPassword);
+        		acc.resetToken();
+        		accountService.updateAccount(acc);
+        		return new ResponseEntity<String>("{\"message\":\"Modification du mot de passe reussie !\"}", HttpStatus.OK);
+        	}
+        	return new ResponseEntity<String>("{\"errorMessage\":\"Impossible, donnees d'authentification invalides ou expirees !\"}", HttpStatus.BAD_REQUEST);
+    	} catch (Exception e) {
+    		System.out.println(e);
+    	}
+    	
+    	return new ResponseEntity<String>("{\"errorMessage\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    
+    /**
+     * 
+     */
+    public ResponseEntity<String> activateAccount(String accountId) {
+    	try {
+    		Account acc = accountService.getAccountById(accountId);
+    		if (acc == null) {
+    			return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a cet id !\"}", HttpStatus.BAD_REQUEST);
+    		}
+    		if (!acc.isActive()) {
+    			acc.activate();
+    			accountService.updateAccount(acc);
+    			return new ResponseEntity<String>("{\"message\":\"Activation du compte "+acc.getEmail()+" reussie !\"}", HttpStatus.OK);
+    		}
+    		return new ResponseEntity<String>("{\"message\":\"Compte "+acc.getEmail()+" deja active !\"}", HttpStatus.OK);
+    	} catch (Exception e) {
+    		System.out.println(e);
+    	}
+    	return new ResponseEntity<String>("{\"errorMessage\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
