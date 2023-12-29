@@ -20,7 +20,7 @@ export class SidenavComponent {
   ) {}
 
   public isLoggedIn(): boolean {
-    return this._storageService.isLoggedIn();
+    return this._storageService.isAuthenticated();
   }
 
   public toggle(): void {

@@ -19,7 +19,7 @@ export class RegisterComponent {
     birthDate: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     gender: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
     nationality: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-    socialSecurity: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
+    socialSecurityNumber: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
   });
   isForeigner: boolean = false;
 
@@ -240,16 +240,14 @@ export class RegisterComponent {
       return;
     }
     /* Get form data */
-    const date = new Date(String(this.form.get("birthDate")?.value));
-    const formattedDate = this.formatBirthDate(date);
     const registerData = {
-      email: this.form.get("email")?.value,
-      firstName: this.form.get("firstName")?.value,
-      lastName: this.form.get("lastName")?.value,
-      birthDate: formattedDate,
-      gender: this.form.get("gender")?.value,
-      nationality: this.form.get("nationality")?.value,
-      socialSecurityNumber: this.form.get("socialSecurityNumber")?.value,
+      email: this.form.value.email,
+      firstName: this.form.value.firstName,
+      lastName: this.form.value.lastName,
+      birthDate: this.formatBirthDate(String(this.form.value.birthDate)),
+      gender: this.form.value.gender,
+      nationality: this.form.value.nationality,
+      socialSecurityNumber: this.form.value.socialSecurityNumber,
     };
     /* Submit form */
     this._authService.register(registerData).subscribe({
@@ -266,31 +264,27 @@ export class RegisterComponent {
   }
 
   public onToggleForeigner(): void {
+    console.log(this.form.value.birthDate);
+    console.log(this.formatBirthDate(String(this.form.value.birthDate)));
+
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {
-      this.form.controls.socialSecurity.disable();
-      this.form.controls.socialSecurity.setValue("99");
+      this.form.controls.socialSecurityNumber.disable();
+      this.form.controls.socialSecurityNumber.setValue("99");
     }
     else {
-      this.form.controls.socialSecurity.enable();
-      this.form.controls.socialSecurity.setValue("");
+      this.form.controls.socialSecurityNumber.enable();
+      this.form.controls.socialSecurityNumber.setValue("");
     }
   }
 
-  private formatBirthDate(date: Date): String {
-    let formatted: String = "";
-    const year = date.getFullYear().toString();
-    let month = date.getMonth().toString();
-    let day = date.getDay().toString();
-    if (month.length < 2) {
-      month = "0" + month;
-    }
-    if (day.length < 2) {
-      day = "0" + day;
-    }
-    formatted = year + "-" + month + "-" + day;
-    console.log(formatted);
-    return formatted;
+  private formatBirthDate(inputDate: string): string {
+    const dateObject = new Date(inputDate);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
+    const formattedDate = year+"-"+month+"-"+day;
+    return formattedDate;
   }
 
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, SnackbarService } from '@app/core/services';
 
 
@@ -9,24 +9,25 @@ import { AuthService, SnackbarService } from '@app/core/services';
   templateUrl: './change-password.component.html',
   styleUrls: ['.././auth.css']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
 
   form = new FormGroup({
     password: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
   });
   hidePassword: boolean = true;
-  hidePasswordConfirm: boolean = true;
+  private _id: string;
+  private _token: string;
   
   constructor(
     private _authService: AuthService,
     private _snackbarService: SnackbarService,
     private _activatedRoute: ActivatedRoute,
-  ) {}
-
-  ngOnInit(): void {
-    console.log(this._activatedRoute.snapshot.paramMap.get("token"));
+    private _router: Router,
+  ) {
+    this._id = String(this._activatedRoute.snapshot.paramMap.get("id"));
+    this._token = String(this._activatedRoute.snapshot.paramMap.get("token"));
   }
-  
+
   public onSubmit(): void {
     /* Validate the form */
     this.form.markAllAsTouched();
@@ -35,17 +36,21 @@ export class ChangePasswordComponent implements OnInit {
     }
     /* Get form data */
     const changePasswordData = {
-      token: this._activatedRoute.snapshot.paramMap.get("token"),
-      password: this.form.value.password,
+      id: this._id,
+      token: this._token,
+      newPassword: this.form.value.password,
     }
     /* Submit form */
     this._authService.changePassword(changePasswordData).subscribe({
-      // FIX: TMP
       next: (response) => {
+        console.log(response);
         this._snackbarService.openSnackbar(response.message);
+        this._router.navigate(["/auth/login"]);
       },
       error: (err) => {
+        console.log(err);
         this._snackbarService.openSnackbar(err.error.errorMessage);
+        this._router.navigate(["/home"]);
       }
     });
   }

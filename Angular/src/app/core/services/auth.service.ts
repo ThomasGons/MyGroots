@@ -38,8 +38,7 @@ export class AuthService {
     return this._httpClient.put(this.url + "/change-password", data, this.httpOptions);
   }
   
-  public checkTokenChangePassword(data: any): Observable<any> {
-    return this._httpClient.post(this.url + "/change-password", data, this.httpOptions);
+  public activateAccount(token: string): Observable<any> {
+    return this._httpClient.post(this.url + "/activate-account/" + token, {}, this.httpOptions);
   }
-  
 }

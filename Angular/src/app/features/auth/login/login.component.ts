@@ -46,6 +46,8 @@ export class LoginComponent {
       error: (err) => {
         console.log(err);
         this._snackbarService.openSnackbar(err.error.errorMessage);
+        this.form.controls.email.setValue("");
+        this.form.controls.password.setValue("");
       }
     });
   }

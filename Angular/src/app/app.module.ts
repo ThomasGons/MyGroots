@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent, FooterComponent, SidenavComponent } from './shared/layout';
 import { HomeComponent } from './features/home/home.component';
-import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent, LogoutComponent } from './features/auth';
+import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { ProfileComponent } from './features/user/profile/profile.component';
 import { NotificationsComponent } from './features/user/notifications/notifications.component';
@@ -26,9 +26,10 @@ import { SearchComponent } from './features/search/search.component';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
+    LogoutComponent,
     ForgotPasswordComponent,
     ChangePasswordComponent,
-    LogoutComponent,
+    ActivateAccountComponent,
     PageNotFoundComponent,
     ProfileComponent,
     NotificationsComponent,

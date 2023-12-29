@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
-import { LoginComponent, RegisterComponent, ForgotPasswordComponent, ChangePasswordComponent, LogoutComponent } from './features/auth';
+import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { ProfileComponent, NotificationsComponent } from './features/user';
 import { SearchComponent } from './features/search/search.component';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
+import { authGuard } from './core/guards/auth.guard';
 
 
 const routes: Routes = [
@@ -34,25 +35,30 @@ const routes: Routes = [
         title: environment.title + " - Inscription",
       },
       {
+        path: "logout",
+        canActivate: [authGuard],
+        component: LogoutComponent,
+      },
+      {
         path: "forgot-password",
         component: ForgotPasswordComponent,
         title: environment.title + " - Mot de passe oublié",
       },
       {
-        path: "change-password/:token",
+        path: "change-password/:id/:token",
         component: ChangePasswordComponent,
         title: environment.title + " - Modifier mot de passe",
       },
-      // TODO: AuthGuard to access page
       {
-        path: "logout",
-        component: LogoutComponent,
-      },
+        path: "activate-account/:token",
+        component: ActivateAccountComponent,
+      }
     ]
   },
-  // TODO: this FamilyTreeComponent + AuthGuard to access page
+  // TODO: this FamilyTreeComponent
   {
     path: "family-tree",
+    canActivate: [authGuard],
     component: FamilyTreeComponent,
     title: environment.title + " - Arbre Familial",
   },
@@ -63,18 +69,18 @@ const routes: Routes = [
     title: environment.title + " - Recherche",
   //   children: []
   },
-
-  // TODO: AuthGuard to access pages
   {
     path: "user",
     children: [
       {
         path: "profile",
+        canActivate: [authGuard],
         component: ProfileComponent,
         title: environment.title + " - Profil",
       },
       {
         path: "notifications",
+        canActivate: [authGuard],
         component: NotificationsComponent,
         title: environment.title + " - Notifications",
       },

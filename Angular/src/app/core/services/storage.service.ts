@@ -27,9 +27,9 @@ export class StorageService {
     }
   }
 
-  public isLoggedIn(): boolean {
-    const user = window.sessionStorage.getItem(this.keyName);
-    if (user) {
+  public isAuthenticated(): boolean {
+    const user = this.getUser();
+    if (user && user.token && user.id && user.firstName) {
       return true;
     } else {
       return false;
