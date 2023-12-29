@@ -1,6 +1,5 @@
 package com.springboot.mygroots.controller;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -8,19 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
-import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.service.AuthenticationService;
@@ -41,9 +37,9 @@ public class AuthenticationController {
     	
 	@PostMapping(value= "/register")
 	/**
-	 * Register a new user into the database. Creation of an account and a person.
-	 * @param data table of informations
-	 * @return message to indicated whether the registration has been carried out correctly
+	 * Register a new user into the database. Creation of an account and a person. Potentially create a tree if his family tree does not exist.
+	 * @param data Table of informations
+	 * @return Message to indicated whether the registration has been carried out correctly
 	 */
 	public ResponseEntity<String> register(@RequestBody Map<String, String> data){
 		try {
@@ -56,14 +52,14 @@ public class AuthenticationController {
 				data.get("nationality"),
 				data.get("socialSecurityNumber")
 			);
-			Person p = personService.getPersonByFirstNameAndLastNameAndEmail(
+			Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(
 				data.get("firstName"),
 				data.get("lastName"),
 				LocalDate.parse(data.get("birthDate"))
 			);
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
-				ft = new FamilyTree((String) data.get("LastName"), p);
+				ft = new FamilyTree(data.get("lastName"), p);
 				familyTreeService.saveFamilyTree(ft); 
 			}
 			return response;
@@ -76,8 +72,9 @@ public class AuthenticationController {
 	@PostMapping(value="/login")
 	/**
 	 * Connection to the account with the email and the password
-	 * @param account_login search for an account that matches the email address and password
-	 * @return message to indicated whether the login has been carried out correctly
+	 * @param account_login Search for an account that matches the email address and password
+	 * @return Message to indicated whether the login has been carried out correctly
+	 * When it is done correctly, it returns the current token, the account ID and the person's first name linked to this account.
 	 */
 	public ResponseEntity<String> login(@RequestBody Account account_login){
 		try {
@@ -90,15 +87,13 @@ public class AuthenticationController {
 	
 	@PostMapping(value="/logout")
 	/**
-	 * Account logout
-	 * @param data
-	 * @return message to indicated whether the logout has been carried out correctly
+	 * Account logout : reset the token of the current connected account
+	 * @param data Account data containing account ID and token. 
+	 * @return Message to indicated whether the logout has been carried out correctly
 	 */
 	public ResponseEntity<String> logout(@RequestBody Map<String, String> data){
 		try {
-			String token = data.get("token");
-			String id = data.get("id");
-			return authenticationService.logout(token, id);
+			return authenticationService.logout(data.get("token"), data.get("id"));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -107,13 +102,14 @@ public class AuthenticationController {
 	
 	@PostMapping(value="/forgot-password")
 	/**
-	 * 
-	 * @param data
+	 * Sending an e-mail if you forget your password
+	 * @param data account data containing email
+	 * @return message to indicated whether the changing of password has been carried out correctly
+	 * When it is done correctly, return the account ID, the token and the first name of the person who forget his password.
 	 */
 	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> data) {
 		try {
-			String email = data.get("email");
-			return authenticationService.forgotPassword(email);
+			return authenticationService.forgotPassword(data.get("email"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -122,14 +118,13 @@ public class AuthenticationController {
 	
 	@PutMapping(value="/change-password")
 	/**
-	 * 
+	 * Creation of a new password
+	 * @param data account data containing ID, token and new password
+	 * @return message to indicated whether the changing of password has been carried out correctly
 	 */
 	public ResponseEntity<String> changePassword(@RequestBody Map<String, String> data) {
 		try {
-			String accountId = data.get("id");
-			String token = data.get("token");
-			String newPassword = data.get("newPassword");
-			return this.authenticationService.changePassword(accountId, token, newPassword);
+			return this.authenticationService.changePassword(data.get("id"), data.get("token"), data.get("newPassword"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -138,7 +133,10 @@ public class AuthenticationController {
 	
 	@PostMapping(value="/activate-account/{accountId}")
 	/**
-	 * 
+	 * Account activation by email
+	 * @param accountId ID of the account to be activated
+	 * @return message to indicated whether the activation of the account has been carried out correctly
+	 * When the account is already activated or when the account was correctly activated, it return the email of the account.
 	 */
 	public ResponseEntity<String> activateAccount(@PathVariable("accountId") String accountId) {
 		try {

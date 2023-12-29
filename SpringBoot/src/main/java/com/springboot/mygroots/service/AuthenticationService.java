@@ -1,17 +1,15 @@
 package com.springboot.mygroots.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.springboot.mygroots.Utils;
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.utils.Utils;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
 @Service
@@ -24,7 +22,7 @@ public class AuthenticationService {
     private AccountService accountService;
     
     /**
-     * 
+     * Creation of a person and account, send a email to activate the account
      * @param email
      * @param firstName
      * @param lastName
@@ -32,7 +30,7 @@ public class AuthenticationService {
      * @param gender
      * @param nationality
      * @param socialSecurityNumber
-     * @return
+     * @return message to indicated whether the sign up has been carried out correctly
      */
     public ResponseEntity<String> register(String email, String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber){
     	try{
@@ -40,17 +38,15 @@ public class AuthenticationService {
     		if (checkExistingAccount != null) {
         		return new ResponseEntity<String>("{\"errorMessage\":\"Compte deja existant avec l'email "+email+".\"}", HttpStatus.BAD_REQUEST);
     		}
-    		
 			Person pers = personService.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
 			personService.addPerson(pers);
-			// Password temporaire a changer lors de la validation du compte
+			// Temporary password
 			String passwordtmp = firstName.toLowerCase();
 			Account acc = accountService.setAccount(email, passwordtmp, pers, "");
 			accountService.addAccount(acc);
-			// Activation mail
+			// Send a email to activate the account
 			accountService.sendAccountActivationMail(acc);
     		return new ResponseEntity<String>("{\"message\":\"Inscription reussie !\"}", HttpStatus.OK);
-	    	
     	} catch(Exception e){
     		e.printStackTrace();
     	}
@@ -58,10 +54,11 @@ public class AuthenticationService {
     }
     
     /**
-     * 
+     * Attempt to log in with an email and password
      * @param email
      * @param password
-     * @return
+     * @return Message to indicated whether the login has been carried out correctly and if the account is pending validation. 
+     * When it is done correctly, it returns the current token, the account ID and the person's first name linked to this account.
      */
     public ResponseEntity<String> login(String email, String password){
     	try {
@@ -83,10 +80,10 @@ public class AuthenticationService {
     }
     
     /**
-     * 
+     * Reset the current token linked to the account to disconnect the user
      * @param token
      * @param id
-     * @return
+     * @return Message to indicated whether the logout has been carried out correctly
      */
     public ResponseEntity<String> logout(String token, String id){
     	try {
@@ -105,9 +102,11 @@ public class AuthenticationService {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Echec de la deconnexion !\"}", HttpStatus.BAD_REQUEST);
     }
     
-    
     /**
-     * 
+     * Sending an e-mail if you forget your password
+     * @param email
+     * @return Message to indicated whether the new temporary token has been created correctly
+     * When it is done correctly, return the account ID, the token and the first name of the person who forget his password.
      */
     public ResponseEntity<String> forgotPassword(String email) {
     	try {
@@ -127,8 +126,12 @@ public class AuthenticationService {
     
     
     /**
-     * 
-     */
+	 * Creation of a new password
+	 * @param accountId
+	 * @param token
+	 * @param newPassword
+	 * @return message to indicated whether the changing of password has been carried out correctly
+	 */
     public ResponseEntity<String> changePassword(String accountId, String token, String newPassword) {
     	try {
     		Account acc = accountService.getAccountById(accountId);
@@ -151,8 +154,11 @@ public class AuthenticationService {
     
     
     /**
-     * 
-     */
+	 * Account activation by email
+	 * @param accountId ID of the account to be activated
+	 * @return message to indicated whether the activation of the account has been carried out correctly
+	 * When the account is already activated or when the account was correctly activated, it return the email of the account.
+	 */
     public ResponseEntity<String> activateAccount(String accountId) {
     	try {
     		Account acc = accountService.getAccountById(accountId);

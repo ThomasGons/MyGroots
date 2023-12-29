@@ -1,22 +1,14 @@
 package com.springboot.mygroots.service;
 
-import com.springboot.mygroots.model.FamilyTree;
-import com.springboot.mygroots.Utils;
-import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
-import com.springboot.mygroots.repository.AccountRepository;
 import com.springboot.mygroots.repository.PersonRepository;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PersonService {
@@ -40,7 +32,7 @@ public class PersonService {
     	return personRepository.findById(id).get();
     }
     
-    public Person getPersonByFirstNameAndLastNameAndEmail(String firstName, String lastName, LocalDate birthDate){
+    public Person getPersonByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate){
         return personRepository.getPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
     }
 
@@ -48,22 +40,15 @@ public class PersonService {
         personRepository.delete(person);
     }
 
-    protected boolean validedSignUpPerson(String firstName, String lastName) {
-    	if (firstName != null && lastName != null) {
-    		return true;
-    	}
-    	return false;
-    }
-    
     /**
-     * 
+     * Creation of a Person
      * @param firstName
      * @param lastName
      * @param birthDate
      * @param gender
      * @param nationality
      * @param socialSecurityNumber
-     * @return
+     * @return person created
      */
     protected Person setPerson(String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber) {
     	Person p = new Person(firstName, lastName, gender);
@@ -72,90 +57,4 @@ public class PersonService {
     	p.setSocialSecurityNumber(socialSecurityNumber);
     	return p;
     }
-
-//    /**
-//     * 
-//     * @param email
-//     * @param firstName
-//     * @param lastName
-//     * @param birthDate
-//     * @param gender
-//     * @param nationality
-//     * @param socialSecurityNumber
-//     * @return
-//     */
-//    public ResponseEntity<String> signUp(String email, String firstName, String lastName, LocalDate birthDate, Gender gender, String nationality, String socialSecurityNumber){
-//    	try{
-//    		if (this.validedSignUpPerson(firstName, lastName)) {
-//	    		Person p = personRepository.getPersonByFirstNameAndLastName(firstName, lastName);
-//	    		if (Objects.isNull(p)) {
-//	    			Person pers = this.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
-//	    			this.addPerson(pers);
-//	    			// creer un password temporaire avec son prenom
-//	    			String passwordtmp = Utils.encode(lastName);
-//	    			Account acc = accountService.setAccount(email, passwordtmp.toString(), pers, null);
-//	    			accountService.addAccount(acc);
-//	        		return new ResponseEntity<String>("{\"message\":\"Inscription reussie\"}", HttpStatus.OK);
-//	    		}else {
-//	        		return new ResponseEntity<String>("{\"message\":\"Compte deja existant\"}", HttpStatus.BAD_REQUEST);
-//	    		}
-//	    	}else {
-//	    		return new ResponseEntity<String>("{\"message\":\"Invalid Data\"}", HttpStatus.BAD_REQUEST);
-//	    	}
-//    	} catch(Exception e){
-//    		e.printStackTrace();
-//    	}return new ResponseEntity<String>("{\"message\":\"Something wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-    
-//    /**
-//     * 
-//     * @param email
-//     * @param password
-//     * @return
-//     */
-//    public ResponseEntity<String> login(String email, String password){
-//    	try {
-//    		String password_input = Utils.encode(password);
-//    		Account account = accountService.getAccountByEmail(email);
-//    		if(account.getPassword().equals(password_input)){
-//    			// a supp car pour test
-//    			account.activate();
-//    			if(account.isActive() == true){ 
-//    				LocalDateTime currentDateTime = LocalDateTime.now();
-//    				String token = Utils.encode(currentDateTime.toString()).toString();
-//    				account.setToken(token);
-//    				System.out.println(token);
-//    				System.out.println(account.getPerson().getId());
-//    				System.out.println("fin du login");
-//    				return new ResponseEntity<String>("{\"token\":\""+token+"\",\"id\":\""+account.getPerson().getId()+"\",\"firstName\":\""+account.getPerson().getFirstName()+"\"}", HttpStatus.OK);
-//    			}else {
-//    				return new ResponseEntity<String>("{\"message\":\"Compte en attente de verification\"}", HttpStatus.BAD_REQUEST);
-//    			}
-//    		}
-//    	}catch(Exception e){
-//    		System.out.println(e);
-//    	}
-//		return new ResponseEntity<String>("{\"message\":\"Email ou mot de passe incorrect\"}", HttpStatus.BAD_REQUEST);
-//
-//    }
-    
-//    /**
-//     * 
-//     * @param id
-//     * @return
-//     */
-//    public ResponseEntity<String> logout(String token, String id){
-//    	try {
-//    		Person p = getPersonById(id);
-//    		if (p != null) {
-//    			Account a = accountService.getAccountByPerson(p);
-//    			if (a.getToken() == token )
-//    			a.setToken(null);
-//    			return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie\"}", HttpStatus.OK);
-//    		}
-//    	}catch(Exception e){
-//    		System.out.println(e);
-//    	}
-//		return new ResponseEntity<String>("{\"message\":\"Echec deconnexion\"}", HttpStatus.BAD_REQUEST);
-//    }
 }

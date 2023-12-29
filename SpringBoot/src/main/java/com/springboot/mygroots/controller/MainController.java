@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,8 +42,8 @@ public class MainController {
     }
 
     @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
-    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName){
-        Person p = personService.getPersonByFirstNameAndLastName(name, lastName);
+    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName, LocalDate birthdate){
+        Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(name, lastName, birthdate);
         return emailService.getInbox(p);
     }
 

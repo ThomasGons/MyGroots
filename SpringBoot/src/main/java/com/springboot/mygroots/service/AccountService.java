@@ -1,13 +1,13 @@
 package com.springboot.mygroots.service;
 
-import com.springboot.mygroots.Utils;
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Notif;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.AccountRepository;
-import com.springboot.mygroots.repository.FamilyTreeRepository;
 import com.springboot.mygroots.repository.NotifRepository;
+import com.springboot.mygroots.utils.Utils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
