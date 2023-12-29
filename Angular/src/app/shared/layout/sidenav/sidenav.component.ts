@@ -15,12 +15,19 @@ export class SidenavComponent {
   @ViewChild('sidenav')
   sidenav!: MatSidenav;
 
+  username: string = "";
+
   constructor(
     private _storageService: StorageService,
   ) {}
 
   public isLoggedIn(): boolean {
-    return this._storageService.isAuthenticated();
+    const authenticated: boolean = this._storageService.isAuthenticated();
+    if (authenticated) {
+      this.username = String(this._storageService.getUser()?.firstName);
+      return true;
+    }
+    return false;
   }
 
   public toggle(): void {

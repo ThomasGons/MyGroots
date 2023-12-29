@@ -15,6 +15,7 @@ export class HeaderComponent {
   @Output()
   signalToggleSidenav = new EventEmitter<void>();
 
+  username: string = "";
   readonly title: string = environment.title;
 
   constructor(
@@ -26,6 +27,11 @@ export class HeaderComponent {
   }
   
   public isLoggedIn(): boolean {
-    return this._storageService.isAuthenticated();
+    const authenticated: boolean = this._storageService.isAuthenticated();
+    if (authenticated) {
+      this.username = String(this._storageService.getUser()?.firstName);
+      return true;
+    }
+    return false;
   }
 }

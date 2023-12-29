@@ -247,7 +247,7 @@ export class RegisterComponent {
       birthDate: this.formatBirthDate(String(this.form.value.birthDate)),
       gender: this.form.value.gender,
       nationality: this.form.value.nationality,
-      socialSecurityNumber: this.form.value.socialSecurityNumber,
+      socialSecurityNumber: this.form.controls.socialSecurityNumber.value,
     };
     /* Submit form */
     this._authService.register(registerData).subscribe({
@@ -264,13 +264,10 @@ export class RegisterComponent {
   }
 
   public onToggleForeigner(): void {
-    console.log(this.form.value.birthDate);
-    console.log(this.formatBirthDate(String(this.form.value.birthDate)));
-
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {
-      this.form.controls.socialSecurityNumber.disable();
       this.form.controls.socialSecurityNumber.setValue("99");
+      this.form.controls.socialSecurityNumber.disable();
     }
     else {
       this.form.controls.socialSecurityNumber.enable();
