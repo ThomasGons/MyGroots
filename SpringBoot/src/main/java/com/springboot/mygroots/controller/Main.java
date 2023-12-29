@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,8 +40,8 @@ public class Main {
     }
 
     @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
-    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName){
-        Person p = personService.getPersonByNameAndLastName(name, lastName);
+    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName, LocalDate birthdate){
+        Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(name, lastName, birthdate);
         return emailService.getInbox(p);
     }
 
@@ -63,10 +64,10 @@ public class Main {
         personService.addPerson(p3);
         personService.addPerson(p4);
 
-        accountService.addAccount(new Account("john@doe.com", "john", p1));
-        accountService.addAccount(new Account("jane@doe.com", "jane", p2));
-        accountService.addAccount(new Account("jo@doe.com", "jo", p3));
-        accountService.addAccount(new Account("joe@doe.com", "joe", p4));
+        accountService.addAccount(new Account("john@doe.com", "john", p1, null));
+        accountService.addAccount(new Account("jane@doe.com", "jane", p2, null));
+        accountService.addAccount(new Account("jo@doe.com", "jo", p3, null));
+        accountService.addAccount(new Account("joe@doe.com", "joe", p4, null));
         
         
         FamilyTree ft1 = new FamilyTree("Doe", p1);

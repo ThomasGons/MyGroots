@@ -5,19 +5,17 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils {
 
-	public static StringBuilder encode(String password) {
+	/**
+	 * Encodes a string using the sha256 hash algorithm 
+	 * @param password
+	 * @return the encoded text
+	 */
+	public static String encode(String text) {
         try {
-        	System.out.println("encode");
-            // Creation instance de MessageDigest pour SHA-256
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
-            // Mise a jour du digest avec les donnees
-            digest.update(password.getBytes());
-
-            // Récupération valeur de hash
+            digest.update(text.getBytes());
             byte[] hash = digest.digest();
-
-            // Conversion hash en representation hexadecimale
+            // Converting hash to hexadecimal representation
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
@@ -26,10 +24,7 @@ public class Utils {
                 }
                 hexString.append(hex);
             }
-
-            // Affichage du hash SHA256
-            System.out.println("SHA256 hash de \"" + password + "\": " + hexString.toString());
-            return hexString;
+            return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;

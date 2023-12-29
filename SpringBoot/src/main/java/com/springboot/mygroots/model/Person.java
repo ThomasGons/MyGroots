@@ -14,18 +14,17 @@ public class Person {
     @DBRef@Nullable
     private Account account;
     
-    private String name;
+    private String firstName;
     private String lastName; 
     private LocalDate birthDate;
-    private String birthPlace;
     private Gender gender;
     private boolean isAlive;
     private String nationality;
     private String socialSecurityNumber;
     
 
-    public Person(String name, String lastName, Gender gender){
-        this.name = name;
+    public Person(String firstName, String lastName, Gender gender){
+        this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
     }
@@ -34,12 +33,12 @@ public class Person {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -56,14 +55,6 @@ public class Person {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-
-    public void setBirthPlace(String birthPlace) {
-        this.birthPlace = birthPlace;
     }
 
     public Gender getGender() {

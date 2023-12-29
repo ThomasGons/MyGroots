@@ -33,10 +33,10 @@ public class Notif {
             this.body = source.getPerson().getName() + " " + source.getPerson().getLastName() + " wants to add you to his family as " + relation + " of " + member.getName() + " " + member.getLastName();
         }
         else if(type == NotifType.ALERT_DEMANDACCEPTED){
-            this.body = source.getPerson().getName() + " " + source.getPerson().getLastName() + " accepted your demand";
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " accepted your demand";
         }
         else if(type == NotifType.ALERT_DEMANDDECLINED){
-            this.body = source.getPerson().getName() + " " + source.getPerson().getLastName() + " declined your demand";
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " declined your demand";
         }
     }
 

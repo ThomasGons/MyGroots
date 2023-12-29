@@ -1,6 +1,7 @@
 package com.springboot.mygroots.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.Nullable;
+import com.springboot.mygroots.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,12 @@ public class Account implements Serializable {
     
     private String password;
     
-    private boolean verified;
+    private String token;
     
     @DBRef
     private Person person;
+    
+    private boolean isActive;
 
     @DBRef
     private FamilyTree familyTree;
@@ -39,18 +43,15 @@ public class Account implements Serializable {
     @DBRef
     private FamilyTree myFamilyTree;
 
-    private boolean isActive;
-
-    public Account(String email, String password, @Nullable Person person) {
+    public Account(String email, String password, @Nullable Person person, @Nullable String token) {
         this.email = email;
         this.password = password;
         this.person = person;
         this.isActive = false;
+        this.token = token;
     }
 
-
-
-    public void activate() {
+	public void activate() {
         this.isActive = true;
     }
 
@@ -96,7 +97,7 @@ public class Account implements Serializable {
     }
     
     public void setPassword(String password) {
-    	this.password = password;
+    	this.password = Utils.encode(password);
     }
 
     public void addNotif(Notif notif) {
@@ -110,4 +111,27 @@ public class Account implements Serializable {
     public List<Notif> getNotifications() {
     	return notifs;
     }
+    
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+    
+	public boolean isAuthenticated(String token) {
+		return this.getToken().equals(token);
+	}
+	
+	public String generateToken() {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		String token = Utils.encode(currentDateTime.toString());
+		this.setToken(token);
+		return token;
+	}
+	
+	public void resetToken() {
+		this.setToken("");
+	}
 }

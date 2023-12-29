@@ -1,0 +1,59 @@
+<header class="header border-bottom">
+  <mat-toolbar class="justify-content-between flex-nowrap bg-white">
+    <!-- Left side of header -->
+    <div class="d-flex flex-row align-items-center">
+      <img src="assets/images/mygroots-gradient-logo.png" alt="My Groots logo" width="48px" loading="lazy">
+      <button mat-button [routerLink]="['/home']" class="me-2">
+        <h1>{{ this.title }}</h1>
+      </button>
+      <!-- If screen is bigger than medium size 'md' -->
+      <div class="d-md-block d-none">
+        <!-- Navbar -->
+        <nav class="d-flex flex-row nav">
+          <button mat-button *ngFor="let item of this.navItems.nav" [routerLink]="item.link" routerLinkActive="active" class="mt-1" type="button">
+            <span>{{ item.name }}</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+    <!-- Right side of header -->
+    <div>
+      <!-- If not logged in -->
+      <div *ngIf="!this.isLoggedIn()">
+        <!-- If screen is smaller than medium size 'md' -->
+        <div class="d-md-none">
+          <button mat-icon-button (click)="this.onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <!-- If screen is bigger than medium size 'md' -->
+        <div class="d-md-block d-none">
+          <button mat-raised-button [routerLink]="['/auth/login']" type="button">
+            <span>Connexion</span>
+          </button>
+          <button mat-raised-button [routerLink]="['/auth/register']" class="bg-green-light ms-2" type="button">
+            <span>Inscription</span>
+          </button>
+        </div>
+      </div> 
+      <!-- If logged in -->
+      <div *ngIf="this.isLoggedIn()">
+        <!-- If screen is smaller than medium size 'md' -->
+        <div class="d-md-none">
+          <button mat-icon-button (click)="this.onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <!-- If screen is bigger than medium size 'md' -->
+        <div class="d-md-block d-none">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="px-2">
+            <button mat-menu-item *ngFor="let item of this.navItems.user" [routerLink]="item.link">{{ item.name }}</button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>

@@ -1,0 +1,38 @@
+<mat-sidenav-container class="h-100 bg-white" [hasBackdrop]="true">
+  <!-- Side navbar -->
+  <mat-sidenav #sidenav mode="over" position="end">
+    <mat-nav-list dense>
+      <!-- If not logged in -->
+      <div *ngIf="!this.isLoggedIn()">
+        <mat-list-item class="nav-item">
+          <a [routerLink]="['/auth/login']" class="nav-link">Connexion</a>
+        </mat-list-item>
+        <mat-list-item class="nav-item">
+          <a [routerLink]="['/auth/register']" class="nav-link">Inscription</a>
+        </mat-list-item>
+      </div>
+      <!-- If logged in -->
+      <div *ngIf="this.isLoggedIn()">
+        <mat-expansion-panel class="rounded-0 shadow-none">
+          <mat-expansion-panel-header>
+            <mat-icon>account_circle</mat-icon>
+          </mat-expansion-panel-header>
+          <mat-list-item *ngFor="let item of this.navItems.user" class="nav-item">
+            <a [routerLink]="item.link" class="nav-item nav-link">{{ item.name }}</a>
+          </mat-list-item>
+        </mat-expansion-panel>
+      </div>
+      <!-- Navbar items -->
+      <mat-divider></mat-divider>
+      <mat-list-item *ngFor="let item of this.navItems.nav" class="nav-item mt-1">
+        <a [routerLink]="item.link" routerLinkActive="active" class="nav-link">{{ item.name }}</a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- Main content where components are loaded -->
+  <mat-sidenav-content>
+    <router-outlet (activate)="this.onActivateRoute()"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

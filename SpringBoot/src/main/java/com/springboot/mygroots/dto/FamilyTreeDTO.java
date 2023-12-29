@@ -28,7 +28,7 @@ public class FamilyTreeDTO {
         private int[] pids;
         private int mid;
         private int fid;
-        private String name;
+        private String lastName;
         private String gender;
 
         public TreeNodeFront(Person person, FamilyTree.TreeNode node) {
@@ -36,7 +36,7 @@ public class FamilyTreeDTO {
             this.pids = new int[]{node.getPartnerID()};
             this.mid = node.getMotherID();
             this.fid = node.getFatherID();
-            this.name = person.getName();
+            this.lastName = person.getLastName();
             this.gender = person.getGender().toString();
         }
 
@@ -56,8 +56,8 @@ public class FamilyTreeDTO {
             return fid;
         }
 
-        public String getName() {
-            return name;
+        public String getLastName() {
+            return lastName;
         }
 
         public String getGender() {

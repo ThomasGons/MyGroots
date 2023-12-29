@@ -1,0 +1,64 @@
+<div class="container-fluid h-100 m-0 p-0">
+  <mat-card class="rounded-0 ">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-md-row justify-content-md-evenly align-items-md-center flex-column justify-content-center align-items-center pb-5">
+        <div>
+          <img src="assets/images/mygroots-gradient-logo.png" alt="My Groots" class="img-fluid rounded-4" style="max-width: 350px; max-height: 350px;" loading="lazy">
+        </div>
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <p class="h1 mb-4 text-center">
+            Bienvenue sur My Groots
+          </p>
+          <p class="lead mb-4 text-center">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="rounded-0 mt-1">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-md-row-reverse justify-content-md-evenly align-items-md-center flex-column-reverse justify-content-center align-items-center pb-4">
+        <div class="rounded-4">
+          <img src="assets/images/family.jpg" alt="Family" class="img-fluid shadow rounded-top-4 my-5" style="max-width: 450px; max-height: 350px;" loading="lazy">
+        </div>
+        <div class="d-flex flex-column justify-content-center align-items-center pt-5">
+          <p class="h3 mb-4 text-center">
+            Créez votre arbre généalogique
+          </p>
+          <p class="lead mb-4 text-center">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </p>
+          <button mat-raised-button [routerLink]="['/auth/register']" class="bg-green-light" type="button">
+            <span>Démarrez maintenant</span>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card class="rounded-0 mt-1">
+    <mat-card-content>
+      <!-- Div that adapts on medium size 'md' -->
+      <div class="d-flex flex-column justify-content-center align-items-center pb-4">
+        <div class="d-flex flex-column justify-content-center align-items-center py-5">
+          <p class="h3 mb-4 text-center">
+            Recherchez vos racines
+          </p>
+          <p class="lead mb-4 text-center">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          </p>
+          <button mat-raised-button [routerLink]="['/search']" class="bg-green-light" type="button">
+            <span>Recherchez maintenant</span>
+          </button>
+        </div>
+        <div>
+          <img src="assets/images/tree.jpg" class="img-fluid rounded-top-4 shadow border-bottom" alt="Tree" style="max-width: 800px; max-height: 440px;" loading="lazy">
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

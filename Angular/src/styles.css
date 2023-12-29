@@ -1,1 +1,91 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.css';
+
+
+/******************* Custom classes *****************/
+
+/** Color palette **/
+:root {
+    --color-gray: #BBBBBB;
+    --color-gray-light: #EBECEC;
+    --color-green: #6DB344;
+    --color-green-light: #DAEAB5;
+    --color-green-dark: #3C8632;
+    --color-blue-sky: #ECF9FB;
+}
+
+/** Background colors **/
+.bg-gray {
+    background-color: var(--color-gray) !important;
+}
+.bg-gray-light {
+    background-color: var(--color-gray-light) !important;
+}
+.bg-green {
+    background-color: var(--color-green) !important;
+}
+.bg-green-light {
+    background-color: var(--color-green-light) !important;
+}
+.bg-green-dark {
+    background-color: var(--color-green-dark) !important;
+}
+.bg-blue-sky {
+    background-color: var(--color-blue-sky) !important;
+}
+
+/** Foreground colors **/
+.fg-gray {
+    color: var(--color-gray) !important;
+}
+.fg-gray-light {
+    color: var(--color-gray-light) !important;
+}
+.fg-green {
+    color: var(--color-green) !important;
+}
+.fg-green-light {
+    color: var(--color-green-light) !important;
+}
+.fg-green-dark {
+    color: var(--color-green-dark) !important;
+}
+.fg-blue-sky {
+    color: var(--color-blue-sky) !important;
+}
+
+/** Width and Height **/
+
+
+/****************************************************/
+
+
+/******************** HTML elements *****************/
+
+html, body {
+    height: 100%;
+    min-width: 320px;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    overflow: auto;
+    scrollbar-gutter: stable;
+}
+header {
+    min-width: 320px;
+}
+footer {
+    min-width: 320px;
+}
+
+/****************************************************/
+
+
+/********** Angular Material customizations *********/
+
+.mat-expansion-panel-body {
+    padding: 0 8px 0 16px !important;
+}
+
+/****************************************************/
