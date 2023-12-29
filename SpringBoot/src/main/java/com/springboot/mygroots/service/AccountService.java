@@ -40,6 +40,10 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    public Account getAccountById(String id) {
+    	return accountRepository.getAccountById(id);
+    }
+    
     public Account getAccountByEmail(String email){
         return accountRepository.getAccountByEmail(email);
     }
@@ -48,15 +52,15 @@ public class AccountService {
     	return accountRepository.getAccountByPerson(person);
     }
 
-    private void sendAccountActivationMail(String to, Account account) {
+    protected void sendAccountActivationMail(Account account) {
         Person person = account.getPerson();
         SimpleMailMessage message = new SimpleMailMessage();
-        String confirmationLink = "http://localhost:8080/auth/activateAccount?id=" + account.getId();
-        message.setTo(to);
+        String confirmationLink = "http://localhost:4200/auth/activate-account/" + account.getId();
+        message.setTo(account.getEmail());
         message.setSubject("MyGroots Account Activation");
-        message.setText("Hello" + person.getFirstName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
-                "You have successfully created an account. Your temporary password is" + ".\n" +
-                " To activate your account, please follow the link below:\n" +
+        message.setText("Hello " + person.getFirstName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
+                "You have successfully created an account. Your temporary password is : " + person.getFirstName() + "\n" +
+                "To activate your account, please follow the link below :\n" +
                 confirmationLink);
         javaMailSender.send(message);
     }

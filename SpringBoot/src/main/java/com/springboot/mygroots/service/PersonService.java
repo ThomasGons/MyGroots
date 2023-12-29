@@ -36,12 +36,12 @@ public class PersonService {
         return personRepository.findAll();
     }
     
-    public Person getPersonByFirstNameAndLastName(String firstName, String lastName){
-        return personRepository.getPersonByFirstNameAndLastName(firstName, lastName);
-    }
-
     public Person getPersonById(String id){
-        return personRepository.findById(id).get();
+    	return personRepository.findById(id).get();
+    }
+    
+    public Person getPersonByFirstNameAndLastNameAndEmail(String firstName, String lastName, LocalDate birthDate){
+        return personRepository.getPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
     }
 
     public void removePerson(Person person){

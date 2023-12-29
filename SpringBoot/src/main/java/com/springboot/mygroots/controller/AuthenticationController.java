@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +34,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     
     @Autowired
-    private PersonService personService; 
+    private PersonService personService;
     
     @Autowired
     private FamilyTreeService familyTreeService;
@@ -45,8 +47,6 @@ public class AuthenticationController {
 	 */
 	public ResponseEntity<String> register(@RequestBody Map<String, String> data){
 		try {
-			System.out.println("SIGNUP");
-			System.out.println(data.values());
 			ResponseEntity<String> response = authenticationService.register(
 				data.get("email"),
 				data.get("firstName"),
@@ -56,11 +56,11 @@ public class AuthenticationController {
 				data.get("nationality"),
 				data.get("socialSecurityNumber")
 			);
-			Person p = personService.getPersonByFirstNameAndLastName(
-				String.valueOf(data.get("firstName")),
-				String.valueOf(data.get("lastName"))
+			Person p = personService.getPersonByFirstNameAndLastNameAndEmail(
+				data.get("firstName"),
+				data.get("lastName"),
+				LocalDate.parse(data.get("birthDate"))
 			);
-			System.out.println();
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
 				ft = new FamilyTree((String) data.get("LastName"), p);
@@ -80,7 +80,6 @@ public class AuthenticationController {
 	 * @return message to indicated whether the login has been carried out correctly
 	 */
 	public ResponseEntity<String> login(@RequestBody Account account_login){
-		System.out.println("test login");
 		try {
 			return authenticationService.login(account_login.getEmail(), account_login.getPassword());
 		}catch(Exception e) {
@@ -92,7 +91,7 @@ public class AuthenticationController {
 	@PostMapping(value="/logout")
 	/**
 	 * Account logout
-	 * @param id current account ID
+	 * @param data
 	 * @return message to indicated whether the logout has been carried out correctly
 	 */
 	public ResponseEntity<String> logout(@RequestBody Map<String, String> data){
@@ -106,4 +105,47 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@PostMapping(value="/forgot-password")
+	/**
+	 * 
+	 * @param data
+	 */
+	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> data) {
+		try {
+			String email = data.get("email");
+			return authenticationService.forgotPassword(email);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
+	
+	@PutMapping(value="/change-password")
+	/**
+	 * 
+	 */
+	public ResponseEntity<String> changePassword(@RequestBody Map<String, String> data) {
+		try {
+			String accountId = data.get("id");
+			String token = data.get("token");
+			String newPassword = data.get("newPassword");
+			return this.authenticationService.changePassword(accountId, token, newPassword);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
+	
+	@PostMapping(value="/activate-account/{accountId}")
+	/**
+	 * 
+	 */
+	public ResponseEntity<String> activateAccount(@PathVariable("accountId") String accountId) {
+		try {
+			return authenticationService.activateAccount(accountId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
 }
