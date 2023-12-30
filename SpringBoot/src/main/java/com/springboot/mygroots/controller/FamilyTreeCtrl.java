@@ -6,9 +6,12 @@ import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.springboot.mygroots.dto.FamilyTreeDTO;
 
@@ -16,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value="/family-tree")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FamilyTreeCtrl {
 
     @Autowired
@@ -30,12 +34,12 @@ public class FamilyTreeCtrl {
         return new FamilyTreeDTO(ft);
     }
 
-    @RequestMapping(value= "/help")
+    @GetMapping(value= "/help")
     public List<String> help() {
         return familyTreeService.getHelp();
     }
 
-    @RequestMapping(value="/nodes", method=RequestMethod.GET)
+    @GetMapping(value="/nodes")
     public List<Person> search(@RequestBody String src_id, @RequestBody String relation, @RequestBody String owner_id) {
         FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id == null ? src_id : owner_id);
         Person p = personService.getPersonById(src_id);
@@ -56,7 +60,7 @@ public class FamilyTreeCtrl {
     }
 
 
-    @RequestMapping(value="/nodes", method=RequestMethod.PUT)
+    @PutMapping(value="/nodes")
     public void addNode(@RequestBody String src_id, @RequestBody String dst_id, @RequestBody String relation, @RequestBody String owner_id) {
         FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id == null ? src_id : owner_id);
         Person sp = personService.getPersonById(src_id);
@@ -65,7 +69,7 @@ public class FamilyTreeCtrl {
         familyTreeService.updateFamilyTree(ft);
     }
 
-    @RequestMapping(value="/nodes", method=RequestMethod.DELETE)
+    @DeleteMapping(value="/nodes")
     public void removeNode(@RequestBody String owner_id, @RequestBody String removal_id) {
         FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id);
         Person p = personService.getPersonById(removal_id);
