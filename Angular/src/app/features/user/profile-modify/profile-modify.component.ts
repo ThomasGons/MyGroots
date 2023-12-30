@@ -7,12 +7,6 @@ import { Gender } from '@app/core/models';
 import {Router} from "@angular/router";
 
 
-interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  text: string;
-}
 
 @Component({
   selector: 'app-profile-modify',
@@ -57,26 +51,18 @@ export class ProfileModifyComponent implements OnInit{
           gender: this.user.gender,
           nationality: this.user.nationality,
           socialSecurity:this.user.socialSecurity});
+        if (this.user.socialSecurity == "99"){
+          this.isForeigner = true;
+          this.form.controls.socialSecurity.disable();
+          this.form.controls.socialSecurity.setValue("99");
+        };
       },
       error: (err) => {
         console.log(err);
 
       }
     });
-
-    if (this.user.socialSecurity == '99'){
-      this.isForeigner = true;
-      this.form.controls.socialSecurity.disable();
-      this.form.controls.socialSecurity.setValue("99");
-    }
   }
-
-  tiles: Tile[] = [
-    {text: 'One', cols: 2, rows: 1, color: 'lightblue'},
-    {text: 'Two', cols: 2, rows: 1, color: 'lightgreen'},
-    {text: 'Three', cols: 2, rows: 1, color: 'lightpink'},
-    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
-  ];
 
   form = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
@@ -304,10 +290,11 @@ export class ProfileModifyComponent implements OnInit{
     // const date = new Date(String(this.form.get("birthDate")?.value));
     // const dateString = date.getFullYear().toString() + "-" + date.getMonth().toString() + "-" + date.getDate().toString();
     const modifyData = {
+      id: this.user.id,
       email: this.form.get("email")?.value,
       firstName: this.form.get("firstName")?.value,
       lastName: this.form.get("lastName")?.value,
-      birthDate: this.form.get("birthDate")?.value, // ou dateString
+      birthDate: this.formatBirthDate(String(this.form.value.birthDate)), // ou dateString
       gender: this.form.get("gender")?.value,
       nationality: this.form.get("nationality")?.value,
       socialSecurity: this.form.get("socialSecurity")?.value,
@@ -336,6 +323,15 @@ export class ProfileModifyComponent implements OnInit{
       this.form.controls.socialSecurity.enable();
       this.form.controls.socialSecurity.setValue("");
     }
+  }
+
+  private formatBirthDate(inputDate: string): string {
+    const dateObject = new Date(inputDate);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
+    const formattedDate = year+"-"+month+"-"+day;
+    return formattedDate;
   }
 
 
