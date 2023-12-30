@@ -7,9 +7,9 @@ declare class FamilyTree extends FamilyTreeBase {
 
     /**
      * @param element HTML element or string selector for example '#tree'
-     * @param options???? configuration options
+     * @param options????? configuration options
      */
-    constructor(element: HTMLElement, options?: { nodeBinding: { field_0: string; img_0: string } });
+    constructor(element: HTMLElement, options?: { nodeBinding: { field_0: string } });
 
 
     /**
