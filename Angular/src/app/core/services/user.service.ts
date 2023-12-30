@@ -17,23 +17,13 @@ export class UserService {
   constructor(
     private _httpClient: HttpClient,
   ) {}
-  getUser(): User {
-    // Simuler une récupération de données
-    return {
-      id: '1825',
-      token: 'token',
-      email: 'ThomasGons@gmail.com',
-      firstName: 'Thomas',
-      birthDate : '10/11/2002',
-      lastName: 'Gons',
-      gender: Gender.MALE,
-      nationality: 'Francais',
-      socialSecurity: '1545154845678'
-    };
-  }
 
   public profile(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/profile", data, this.httpOptions);
+  }
+
+  public modify(data: any): Observable<any> {
+    return this._httpClient.post(this.url + "/profile-modify", data, this.httpOptions);
   }
 
 }

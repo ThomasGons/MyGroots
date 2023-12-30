@@ -59,9 +59,12 @@
             </mat-error>
           </mat-form-field>
           <!-- nationality -->
-          <mat-form-field appearance="outline" class="py-2 ps-1 flex-grow-1">
+          <mat-form-field appearance="outline" class="py-2">
             <mat-label>Nationalité</mat-label>
-            <input matInput formControlName="nationality" type="text" required>
+            <!-- <input matInput formControlName="nationality" type="text" required> -->
+            <mat-select matNativeControl formControlName="nationality" required>
+              <mat-option *ngFor="let nationality of this.nationalities" [value]="nationality">{{ nationality }}</mat-option>
+            </mat-select>
             <mat-icon matPrefix>public</mat-icon>
             <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
               <span *ngIf="this.form.controls.nationality.hasError('required')">Veuillez saisir une nationalité.</span>
