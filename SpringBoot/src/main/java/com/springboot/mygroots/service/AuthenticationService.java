@@ -68,7 +68,7 @@ public class AuthenticationService {
     			if(account.isActive()){ 
     				String token = account.generateToken();
     				accountService.updateAccount(account);
-    				return new ResponseEntity<String>("{\"token\":\""+token+"\",\"id\":\""+account.getPerson().getId()+"\",\"firstName\":\""+account.getPerson().getFirstName()+"\"}", HttpStatus.OK);
+    				return new ResponseEntity<String>("{\"token\":\""+token+"\",\"id\":\""+account.getId()+"\",\"firstName\":\""+account.getPerson().getFirstName()+"\"}", HttpStatus.OK);
     			}else {
     				return new ResponseEntity<String>("{\"errorMessage\":\"Compte en attente d'activation.\"}", HttpStatus.BAD_REQUEST);
     			}
@@ -87,15 +87,12 @@ public class AuthenticationService {
      */
     public ResponseEntity<String> logout(String token, String id){
     	try {
-    		Person p = personService.getPersonById(id);
-    		if (p != null) {
-    			Account acc = accountService.getAccountByPerson(p);
-    			if (acc != null && acc.isAuthenticated(token)) {
-    				acc.resetToken();
-    				accountService.updateAccount(acc);
-        			return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);
-    			}
-    		}
+			Account acc = accountService.getAccountById(id);
+			if (acc != null && acc.isAuthenticated(token)) {
+				acc.resetToken();
+				accountService.updateAccount(acc);
+				return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);
+			}
     	}catch(Exception e){
     		System.out.println(e);
     	}
