@@ -29,7 +29,7 @@ export class AuthService {
   public register(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/register", data, this.httpOptions);
   }
-  
+
   public forgotPassword(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/forgot-password", data, this.httpOptions);
   }
@@ -41,4 +41,5 @@ export class AuthService {
   public activateAccount(token: string): Observable<any> {
     return this._httpClient.post(this.url + "/activate-account/" + token, {}, this.httpOptions);
   }
+
 }
