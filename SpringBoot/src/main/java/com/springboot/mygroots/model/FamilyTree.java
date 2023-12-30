@@ -1,15 +1,14 @@
 package com.springboot.mygroots.model;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.sun.source.tree.Tree;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.springboot.mygroots.utils.Enumerations.*;
-import org.springframework.stereotype.Indexed;
 
 import java.beans.Visibility;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
