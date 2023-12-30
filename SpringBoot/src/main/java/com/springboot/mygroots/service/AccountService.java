@@ -59,7 +59,7 @@ public class AccountService {
         message.setTo(account.getEmail());
         message.setSubject("MyGroots Account Activation");
         message.setText("Hello " + person.getFirstName() + " " + person.getLastName() + " ! Welcome to MyGroots.\n" +
-                "You have successfully created an account. Your temporary password is : " + person.getFirstName() + "\n" +
+                "You have successfully created an account. Your temporary password is : " + person.getFirstName().toLowerCase() + "\n" +
                 "To activate your account, please follow the link below :\n" +
                 confirmationLink);
         javaMailSender.send(message);
