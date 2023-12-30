@@ -1,0 +1,18 @@
+:host ::ng-deep .node.male>rect {
+  fill: #d1e1ac;
+}
+
+:host ::ng-deep .node.female>rect {
+  fill: #750000;
+}
+
+:host ::ng-deep .bft-edit-form.node.female .bft-edit-form-header,
+.bft-edit-form.node.female .bft-img-button{
+  background-color: #FFCA28;
+}
+
+:host ::ng-deep .field_0 {
+  font-family: Impact;
+  text-transform: uppercase;
+  fill: black;
+}

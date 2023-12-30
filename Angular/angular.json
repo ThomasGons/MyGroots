@@ -31,7 +31,8 @@
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/balkanapp/familytree.js"
             ]
           },
           "configurations": {
@@ -111,3 +112,4 @@
     "analytics": "11a56178-b686-4aa8-8c59-07d4f721e636"
   }
 }
+

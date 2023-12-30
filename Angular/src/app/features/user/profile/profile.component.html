@@ -1,15 +1,63 @@
-<div class="container-fluid h-100 py-5 justify-content-center">
-<mat-card>
-  <mat-card-content>
-    <mat-grid-list cols="4" rowHeight="100px">
-      <mat-grid-tile
-        *ngFor="let tile of tiles"
-        [colspan]="tile.cols"
-        [rowspan]="tile.rows"
-        [style.background]="tile.color">
-        {{tile.text}}
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-</mat-card>
+<div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(&quot;https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg&quot;); background-size: cover;">
+  <mat-card class="card justify-content-center container-fluid">
+    <i class="bi bi-person-circle user-icon d-flex justify-content-center" style="font-size:80px;text-align: center"></i>
+    <h2 style="text-align: center"><strong>{{user.firstName}} {{user.lastName}}</strong></h2>
+    <br>
+    <hr>
+
+    <mat-card-header>
+      <mat-card-title>Nom :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.lastName }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title>Prénom :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.firstName }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title><i class="bi bi-envelope"></i> Adresse e-mail :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.email }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title><i class="bi bi-calendar"></i> Date de naissance :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.birthDate }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title><i class="bi bi-gender-ambiguous"></i> Genre :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.gender }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title><i class="bi bi-flag"></i> Nationalité :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.nationality }}</h2>
+    </mat-card-content>
+    <br>
+    <mat-card-header>
+      <mat-card-title><i class="bi bi-bank"></i> Numéro de sécurité social :</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2 style="text-align: center">{{ user.socialSecurity }}</h2>
+    </mat-card-content>
+      <mat-card-content style="text-align: center;">
+        <button mat-raised-button class="bg-green-light my-4 py-4" [routerLink]="['/user/profile-modify']" type="button">
+          <mat-icon>edit</mat-icon>
+          <span>Modifier mes informations</span>
+        </button>
+      </mat-card-content>
+  </mat-card>
 </div>

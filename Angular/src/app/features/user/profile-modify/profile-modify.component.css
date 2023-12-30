@@ -1,0 +1,9 @@
+.card {
+  min-width: 200px;
+  width: 1000px;
+  height: max-content;
+}
+
+.h3{
+  text-align: center;
+}

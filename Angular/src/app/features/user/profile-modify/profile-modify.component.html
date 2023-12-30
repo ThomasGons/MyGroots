@@ -1,0 +1,97 @@
+<div class="container-fluid h-100 py-5 d-flex justify-content-center"  style="background-image: url(&quot;https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg&quot;); background-size: cover;">
+  <mat-card class="auth-card p-2 shadow">
+    <mat-card-header>
+      <mat-card-title class="pb-4">
+        <p class="h3 m-0 text-center">Modifier vos informations personnelles</p>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Form -->
+      <form [formGroup]="this.form" (ngSubmit)="this.onSubmit()" class="d-flex flex-column">
+        <!-- email -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="text" required>
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="this.form.controls.email.touched && this.form.controls.email.invalid">
+            <span *ngIf="this.form.controls.email.hasError('required')">Veuillez saisir un email.</span>
+            <span *ngIf="this.form.controls.email.hasError('email')">Veuillez saisir un email valide.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- firstName -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="firstName" type="text" value="{{user.firstName}}"required>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="this.form.controls.firstName.touched && this.form.controls.firstName.invalid">
+            <span *ngIf="this.form.controls.firstName.hasError('required')">Veuillez saisir un prénom.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- lastName -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Nom de famille</mat-label>
+          <input matInput formControlName="lastName" type="text" required>
+          <mat-icon matPrefix>people</mat-icon>
+          <mat-error *ngIf="this.form.controls.lastName.touched && this.form.controls.lastName.invalid">
+            <span *ngIf="this.form.controls.lastName.hasError('required')">Veuillez saisir un nom de famille.</span>
+          </mat-error>
+        </mat-form-field>
+        <!-- birthDate -->
+        <mat-form-field appearance="outline" class="flex-grow-1 py-2">
+          <mat-label>Date de naissance</mat-label>
+          <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="DD/MM/YYYY">
+          <mat-icon matPrefix>cake</mat-icon>
+          <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
+          <mat-datepicker #birthDate></mat-datepicker>
+          <mat-error *ngIf="this.form.controls.birthDate.touched && this.form.controls.birthDate.invalid">
+            <span *ngIf="this.form.controls.birthDate.hasError('required')">Veuillez saisir une date de naissance.</span>
+          </mat-error>
+        </mat-form-field>
+        <div class="d-flex">
+          <!-- gender -->
+          <mat-form-field appearance="outline" class="gender-select py-2 pe-1">
+            <mat-label>Genre</mat-label>
+            <mat-select matNativeControl formControlName="gender" required>
+              <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.form.controls.gender.touched && this.form.controls.gender.invalid">
+              <span *ngIf="this.form.controls.gender.hasError('required')">Veuillez saisir un genre.</span>
+            </mat-error>
+          </mat-form-field>
+          <!-- nationality -->
+          <mat-form-field appearance="outline" class="py-2 ps-1 flex-grow-1">
+            <mat-label>Nationalité</mat-label>
+            <input matInput formControlName="nationality" type="text" required>
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-error *ngIf="this.form.controls.nationality.touched && this.form.controls.nationality.invalid">
+              <span *ngIf="this.form.controls.nationality.hasError('required')">Veuillez saisir une nationalité.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- socialSecurity -->
+        <mat-slide-toggle (change)="this.onToggleForeigner()" [checked]="this.isForeigner" class="py-2" color="primary">Êtes-vous étranger ?</mat-slide-toggle>
+        <mat-form-field appearance="outline" class="py-2 flex-grow-1">
+          <mat-label>Numéro sécurité sociale</mat-label>
+          <input matInput formControlName="socialSecurity" type="text" required>
+          <mat-icon matPrefix>account_balance</mat-icon>
+          <mat-hint *ngIf="!this.isForeigner">Saisir les 13 premiers caractères présents sur la carte vitale.</mat-hint>
+          <mat-error *ngIf="this.form.controls.socialSecurity.touched && this.form.controls.socialSecurity.invalid">
+            <span *ngIf="this.form.controls.socialSecurity.hasError('required')">Veuillez saisir un numéro de sécurité social.</span>
+            <span *ngIf="this.form.controls.socialSecurity.hasError('minlength') || this.form.controls.socialSecurity.hasError('maxlength')">Numéro de sécurité social invalide, veuillez saisir les 13 premiers caractères présents sur la carte vitale.</span>
+            <!-- <span *ngIf="this.form.controls.socialSecurity.hasError('pattern')">Numéro de sécurité social invalide.</span> -->
+          </mat-error>
+        </mat-form-field>
+        <!-- submit and redirections -->
+        <button mat-raised-button class="bg-green-light my-4 py-4" [disabled]="!this.form.valid" type="submit">
+          <mat-icon>done</mat-icon>
+          <span>Modifier</span>
+        </button>
+        <button mat-raised-button style="background-color: #E1ACAC" class="my-4 py-4" [routerLink]="['/user/profile']" type="button">
+          <mat-icon>close</mat-icon>
+          <span>Annuler</span>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
