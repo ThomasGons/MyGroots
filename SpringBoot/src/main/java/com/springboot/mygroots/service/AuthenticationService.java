@@ -87,12 +87,12 @@ public class AuthenticationService {
      */
     public ResponseEntity<String> logout(String token, String id){
     	try {
-			Account acc = accountService.getAccountById(id);
-			if (acc != null && acc.isAuthenticated(token)) {
+    		Account acc = Utils.AuthentificatedUser(token, id, personService, accountService);
+    		if (acc != null) {
 				acc.resetToken();
 				accountService.updateAccount(acc);
-				return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);
-			}
+    			return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);
+    		}
     	}catch(Exception e){
     		System.out.println(e);
     	}

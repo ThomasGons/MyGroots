@@ -3,8 +3,13 @@ package com.springboot.mygroots.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Utils {
+import com.springboot.mygroots.model.Account;
+import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.service.AccountService;
+import com.springboot.mygroots.service.PersonService;
 
+public class Utils {
+	
 	/**
 	 * Encodes a string using the sha256 hash algorithm 
 	 * @param password
@@ -29,6 +34,17 @@ public class Utils {
             e.printStackTrace();
             return null;
         }
+    }
+	
+	public static Account AuthentificatedUser(String token, String id, PersonService personService, AccountService accountService) {
+    	Person p = personService.getPersonById(id);
+		if (p != null) {
+			Account acc = accountService.getAccountByPerson(p);
+			if (acc != null && acc.isAuthenticated(token)) {
+				return acc;
+			}
+		}
+		return null;
     }
 	
 }
