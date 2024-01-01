@@ -7,7 +7,7 @@ export class User {
     birthDate?: string;
     gender?: Gender;
     nationality?: string;
-    socialSecurity?: string;
+    socialSecurityNumber?: string;
 }
 
 export enum Gender {

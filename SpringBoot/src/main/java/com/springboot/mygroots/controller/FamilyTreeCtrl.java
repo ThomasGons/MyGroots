@@ -37,7 +37,7 @@ public class FamilyTreeCtrl {
     //TODO : verifier que c'est bien id du compte et pas de la personne
     @GetMapping(value= "/")
     public FamilyTreeDTO root(@RequestBody Map<String, String> data) {
-    	Account acc = accountService.AuthentificatedUser(data.get("token"), data.get("id"));
+    	Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
 		if ( acc != null) {
 	        FamilyTree ft = familyTreeService.getFamilyTreeById(data.get("id"));
 	        return new FamilyTreeDTO(ft);

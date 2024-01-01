@@ -9,7 +9,7 @@ import { AuthService, SnackbarService } from '@app/core/services';
 })
 export class ActivateAccountComponent implements OnInit {
 
-  private _token: string;
+  private _id: string;
 
   constructor(
     private _authService: AuthService,
@@ -17,13 +17,11 @@ export class ActivateAccountComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
   ) {
-    this._token = String(this._activatedRoute.snapshot.paramMap.get("token"));
+    this._id = String(this._activatedRoute.snapshot.paramMap.get("id"));
   }
 
   ngOnInit(): void {
-    console.log(this._token);
-
-    this._authService.activateAccount(this._token).subscribe({
+    this._authService.activateAccount(this._id).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar(response.message);

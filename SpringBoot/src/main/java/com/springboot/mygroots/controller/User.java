@@ -42,7 +42,7 @@ public class User {
         String accountId = data.get("id");
         String token = data.get("token");
         System.out.println(accountId);
-        Account acc = accountService.AuthentificatedUser(token, accountId);
+        Account acc = accountService.AuthenticatedAccount(token, accountId);
 		if ( acc != null) {
             Person p = acc.getPerson();
             return new ResponseEntity<String>("{\"id\":\"" + acc.getId() + "\", \"email\":\"" + acc.getEmail()
@@ -56,7 +56,7 @@ public class User {
     //TODO : changer retour en ReponseEntity
     @GetMapping(value = "/notifications")
     public List<Notif> getNotifications(@RequestBody Map<String, String> data) {
-    	Account acc = accountService.AuthentificatedUser(data.get("token"), data.get("id"));
+    	Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
 		if ( acc != null) {
 			return acc.getNotifications();
 		}
@@ -81,18 +81,18 @@ public class User {
         }
         
         String email = data.get("email");
-        String firstname = data.get("firstName");
-        String lastname = data.get("lastName");
+        String firstName = data.get("firstName");
+        String lastName = data.get("lastName");
         LocalDate birthDate = LocalDate.parse(data.get("birthDate"));
         String nationality = data.get("nationality");
-        String socialsecurity = data.get("socialSecurity");
+        String socialSecurityNumber = data.get("socialSecurityNumber");
 
         a.setEmail(email);
-        p.setFirstName(firstname);
-        p.setLastName(lastname);
+        p.setFirstName(firstName);
+        p.setLastName(lastName);
         p.setBirthDate(birthDate);
         p.setNationality(nationality);
-        p.setSocialSecurityNumber(socialsecurity);
+        p.setSocialSecurityNumber(socialSecurityNumber);
         p.setGender(Enumerations.Gender.valueOf(data.get("gender")));
 
         accountService.updateAccount(a);

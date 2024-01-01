@@ -84,7 +84,7 @@ public class AccountService {
     	return a;
     }
     
-    public Account AuthentificatedUser(String token, String accountId) {
+    public Account AuthenticatedAccount(String token, String accountId) {
 		Account acc = getAccountById(accountId);
 		if (acc != null && acc.isAuthenticated(token)) {
 			return acc;

@@ -28,11 +28,9 @@ export class ForgotPasswordComponent {
       return;
     }
     /* Get form data */
-    const forgotPasswordData = {
-      email: this.form.value.email,
-    }
+    const email = String(this.form.value.email);
     /* Submit form */
-    this._authService.forgotPassword(forgotPasswordData).subscribe({
+    this._authService.forgotPassword(email).subscribe({
       next: (response) => {
         console.log(response);
         const id: string = response.id;

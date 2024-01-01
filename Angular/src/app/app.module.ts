@@ -11,12 +11,9 @@ import { HeaderComponent, FooterComponent, SidenavComponent } from './shared/lay
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
-import { ProfileComponent } from './features/user/profile/profile.component';
-import { NotificationsComponent } from './features/user/notifications/notifications.component';
+import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
 import { SearchComponent } from './features/search/search.component';
-import { ProfileModifyComponent } from './features/user/profile-modify/profile-modify.component';
-
 
 
 @NgModule({
@@ -33,11 +30,11 @@ import { ProfileModifyComponent } from './features/user/profile-modify/profile-m
     ChangePasswordComponent,
     ActivateAccountComponent,
     PageNotFoundComponent,
-    ProfileComponent,
     NotificationsComponent,
+    ProfileComponent,
+    ProfileModifyComponent,
     FamilyTreeComponent,
     SearchComponent,
-    ProfileModifyComponent,
   ],
   imports: [
     BrowserModule,

@@ -83,7 +83,6 @@
           <mat-error *ngIf="this.form.controls.socialSecurityNumber.touched && this.form.controls.socialSecurityNumber.invalid">
             <span *ngIf="this.form.controls.socialSecurityNumber.hasError('required')">Veuillez saisir un numéro de sécurité social.</span>
             <span *ngIf="this.form.controls.socialSecurityNumber.hasError('minlength') || this.form.controls.socialSecurityNumber.hasError('maxlength')">Numéro de sécurité social invalide, veuillez saisir les 13 premiers caractères présents sur la carte vitale.</span>
-            <!-- <span *ngIf="this.form.controls.socialSecurityNumber.hasError('pattern')">Numéro de sécurité social invalide.</span> -->
           </mat-error>
         </mat-form-field>
         <!-- submit and redirections -->

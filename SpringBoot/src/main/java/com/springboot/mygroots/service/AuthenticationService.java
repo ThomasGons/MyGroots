@@ -46,7 +46,7 @@ public class AuthenticationService {
 			accountService.addAccount(acc);
 			// Send a email to activate the account
 			accountService.sendAccountActivationMail(acc);
-    		return new ResponseEntity<String>("{\"message\":\"Inscription reussie !\"}", HttpStatus.OK);
+    		return new ResponseEntity<String>("{\"message\":\"Inscription reussie ! Un email d'activation a ete envoyé à l'adresse : "+acc.getEmail()+"\"}", HttpStatus.OK);
     	} catch(Exception e){
     		e.printStackTrace();
     	}
@@ -87,7 +87,7 @@ public class AuthenticationService {
      */
     public ResponseEntity<String> logout(String token, String accountId){
     	try {
-    		Account acc = accountService.AuthentificatedUser(token, accountId);
+    		Account acc = accountService.AuthenticatedAccount(token, accountId);
     		if ( acc != null) {
 				acc.resetToken();
 				accountService.updateAccount(acc);

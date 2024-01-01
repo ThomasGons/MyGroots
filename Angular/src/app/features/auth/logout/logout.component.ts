@@ -19,14 +19,12 @@ export class LogoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    /* Get data */
     const userData = this._storageService.getUser();
-    const logoutData: any = {
-      token: userData?.token,
-      id: userData?.id,
-    }
-    console.log(logoutData);
-    
-    this._authService.logout(logoutData).subscribe({
+    const id = String(userData!.id);
+    const token = String(userData!.token);
+    /* Send request */
+    this._authService.logout(id, token).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar(response.message);
