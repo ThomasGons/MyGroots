@@ -35,16 +35,5 @@ public class Utils {
             return null;
         }
     }
-	
-	public static Account AuthentificatedUser(String token, String id, PersonService personService, AccountService accountService) {
-    	Person p = personService.getPersonById(id);
-		if (p != null) {
-			Account acc = accountService.getAccountByPerson(p);
-			if (acc != null && acc.isAuthenticated(token)) {
-				return acc;
-			}
-		}
-		return null;
-    }
-	
+
 }

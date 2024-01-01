@@ -19,6 +19,7 @@ import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
+import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.AuthenticationService;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
@@ -30,7 +31,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     
     @Autowired
-    private PersonService personService;
+    private AccountService accountService;
     
     @Autowired
     private FamilyTreeService familyTreeService;
@@ -52,11 +53,8 @@ public class AuthenticationController {
 				data.get("nationality"),
 				data.get("socialSecurityNumber")
 			);
-			Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(
-				data.get("firstName"),
-				data.get("lastName"),
-				LocalDate.parse(data.get("birthDate"))
-			);
+			Account acc = accountService.getAccountByEmail(data.get("email"));
+			Person p = acc.getPerson();
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
 				ft = new FamilyTree(data.get("lastName"), p);
