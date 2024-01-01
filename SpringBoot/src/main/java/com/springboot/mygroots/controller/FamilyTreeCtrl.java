@@ -5,7 +5,9 @@ import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
+import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.mygroots.dto.FamilyTreeDTO;
 
 import java.util.List;
+import java.util.Map;
 
+
+/**
+ * Controller for the family tree requests (e.g. search, add, remove)
+ */
 @RestController
 @RequestMapping(value="/family-tree")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -28,53 +35,136 @@ public class FamilyTreeCtrl {
     @Autowired
     PersonService personService;
 
+    /**
+     * Get the root of the family tree by the id of the owner
+     * @param data map containing the id of the owner
+     * @return the root of the family tree
+     */
     @RequestMapping(value= "/")
-    public FamilyTreeDTO root(@RequestBody String id) {
-        FamilyTree ft = familyTreeService.getFamilyTreeById(id);
-        return new FamilyTreeDTO(ft);
+    public ExtResponseEntity<FamilyTreeDTO> root(@RequestBody Map<String, String> data) {
+        Person p = personService.getPersonById(data.get("id"));
+        if (p == null) {
+            return new ExtResponseEntity<>("Aucune personne correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
+        if (ft == null) {
+            return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
     }
 
+    /**
+     * Get the help for searchable relations
+     * @return list of available relations
+     */
     @GetMapping(value= "/help")
-    public List<String> help() {
-        return familyTreeService.getHelp();
+    public ExtResponseEntity<List<String>> help() {
+        return new ExtResponseEntity<>(familyTreeService.getHelp(), HttpStatus.OK);
     }
 
+    /**
+     * Search a list of persons by a relation to a person
+     * @param data map containing the id of the source person,
+     *                            the relation between the source and the destination and
+     *                            the id of the owner whether the source_id is not the owner
+     * @return list of persons
+     */
     @GetMapping(value="/nodes")
-    public List<Person> search(@RequestBody String src_id, @RequestBody String relation, @RequestBody String owner_id) {
-        FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id == null ? src_id : owner_id);
-        Person p = personService.getPersonById(src_id);
-        return switch (relation) {
-            case "father" -> List.of(ft.getFather(p));
-            case "mother" -> List.of(ft.getMother(p));
-            case "partner" -> List.of(ft.getPartner(p));
-            case "parents" -> ft.getParents(p);
-            case "children" -> ft.getChildren(p);
-            case "siblings" -> ft.getSiblings(p);
-            case "grandparents" -> ft.getGrandParents(p);
-            case "grandchildren" -> ft.getGrandChildren(p);
-            case "cousins" -> ft.getCousins(p);
-            case "uncles_aunts" -> ft.getUnclesAndAunts(p);
-            case "nephews_nieces" -> ft.getNephewsAndNieces(p);
+    public ExtResponseEntity<List<Person>> search(@RequestBody Map<String, String> data) {
+        String src_id = data.get("src_id");
+        String relation = data.get("relation");
+        String owner_id = data.get("owner_id");
+        Person owner = personService.getPersonById(owner_id == null ? src_id : owner_id);
+        if (owner == null) {
+            return new ExtResponseEntity<>("Aucune personne (propriétaire) correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(owner);
+        if (ft == null) {
+            return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        Person sp = personService.getPersonById(src_id);
+        if (sp == null) {
+            return new ExtResponseEntity<>("Aucune personne (source) correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        List <Person> relatedPeople = switch (relation) {
+            case "father" -> List.of(ft.getFather(sp));
+            case "mother" -> List.of(ft.getMother(sp));
+            case "partner" -> List.of(ft.getPartner(sp));
+            case "parents" -> ft.getParents(sp);
+            case "children" -> ft.getChildren(sp);
+            case "siblings" -> ft.getSiblings(sp);
+            case "grandparents" -> ft.getGrandParents(sp);
+            case "grandchildren" -> ft.getGrandChildren(sp);
+            case "cousins" -> ft.getCousins(sp);
+            case "uncles_aunts" -> ft.getUnclesAndAunts(sp);
+            case "nephews_nieces" -> ft.getNephewsAndNieces(sp);
             default -> null;
         };
+        return new ExtResponseEntity<>(relatedPeople, HttpStatus.OK);
     }
 
-
+    /**
+     * Add a person to the family tree
+     * @param data map containing the id of the source person,
+     *                            the id of the destination person,
+     *                            the relation between the source and the destination and
+     *                            the id of the owner whether the source_id is not the owner
+     *
+     * @return message to indicate whether the addition has been carried out correctly
+     */
     @PutMapping(value="/nodes")
-    public void addNode(@RequestBody String src_id, @RequestBody String dst_id, @RequestBody String relation, @RequestBody String owner_id) {
-        FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id == null ? src_id : owner_id);
+    public ExtResponseEntity<?> addNode(@RequestBody Map<String, String> data) {
+        String src_id = data.get("src_id");
+        String dst_id = data.get("dst_id");
+        Enumerations.Relation relation = Enumerations.Relation.valueOf(data.get("relation"));
+        String owner_id = data.get("owner_id");
+        Person owner = personService.getPersonById(owner_id == null ? src_id : owner_id);
+        if (owner == null) {
+            return new ExtResponseEntity<>("Aucune personne (propriétaire) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
+        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(owner);
+        if (ft == null) {
+            return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
         Person sp = personService.getPersonById(src_id);
+        if (sp == null) {
+            return new ExtResponseEntity<>("Aucune personne (source) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
         Person dp = personService.getPersonById(dst_id);
-        ft.addMemberToTree(sp, dp, Enumerations.Relation.valueOf(relation));
+        if (dp == null) {
+            return new ExtResponseEntity<>("Aucune personne (destination) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
+        ft.addMemberToTree(sp, dp, relation);
         familyTreeService.updateFamilyTree(ft);
+        return new ExtResponseEntity<>("Ajout réussi!", HttpStatus.OK);
     }
 
+    /**
+     * Add a person to the family tree
+     * @param data map containing the id of the owner person,
+     *                            the id of the person to remove
+     *
+     * @return message to indicate whether the deletion has been carried out correctly
+     */
     @DeleteMapping(value="/nodes")
-    public void removeNode(@RequestBody String owner_id, @RequestBody String removal_id) {
-        FamilyTree ft = familyTreeService.getFamilyTreeById(owner_id);
-        Person p = personService.getPersonById(removal_id);
+    public ExtResponseEntity<?> removeNode(@RequestBody Map<String, String> data) {
+        String owner_id = data.get("owner_id");
+        Person owner = personService.getPersonById(owner_id);
+        if (owner == null) {
+            return new ExtResponseEntity<>("Aucune personne (propriétaire) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
+        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(owner);
+        if (ft == null) {
+            return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
+        String r_id = data.get("r_id");
+        Person p = personService.getPersonById(r_id);
+        if (p == null) {
+            return new ExtResponseEntity<>("Aucune personne (destination) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
         ft.removeMemberFromTree(p);
         familyTreeService.updateFamilyTree(ft);
+        return new ExtResponseEntity<>("Suppression réussie!", HttpStatus.OK);
     }
 
 }

@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Controller for the back only requests (test purposes)
+ */
 @RestController
-public class Main {
+public class MiscCtrl {
 
     @Autowired
     private AccountService accountService;
@@ -29,23 +32,11 @@ public class Main {
     private PersonService personService;
 
     @Autowired
-    private EmailService emailService;
-    
-    @Autowired
     private FamilyTreeService familyTreeService;
 
-    @RequestMapping(value= "/")
-    public FamilyTreeDTO root() {
-    	return new FamilyTreeDTO(accountService.getFamilyTree("john@doe.com"));
-    }
-
-    @RequestMapping(value="/inbox") // localhost:8080/inbox?name=John&lastName=Doe
-    public List<Email> inbox (@RequestParam String name, @RequestParam String lastName, LocalDate birthdate){
-        Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(name, lastName, birthdate);
-        return emailService.getInbox(p);
-    }
-
-    // create a init method to create a sample family graph
+    /**
+     * Initialize the database with some data
+     */
     @RequestMapping(value= "/init")
     public void init() {
 

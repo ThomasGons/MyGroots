@@ -3,6 +3,7 @@ package com.springboot.mygroots.controller;
 import java.time.LocalDate;
 import java.util.Map;
 
+import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,6 @@ import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.FamilyTreeService;
-import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.AuthenticationService;
 import com.springboot.mygroots.utils.Enumerations.Gender;
@@ -26,7 +26,7 @@ import com.springboot.mygroots.utils.Enumerations.Gender;
 @RestController
 @RequestMapping(value="/auth")
 @CrossOrigin(origins = "http://localhost:4200")
-public class AuthenticationController {	
+public class AuthCtrl {
     @Autowired
     private AuthenticationService authenticationService;
     
@@ -35,16 +35,16 @@ public class AuthenticationController {
     
     @Autowired
     private FamilyTreeService familyTreeService;
-    	
-	@PostMapping(value= "/register")
+
 	/**
 	 * Register a new user into the database. Creation of an account and a person. Potentially create a tree if his family tree does not exist.
 	 * @param data Table of informations
 	 * @return Message to indicated whether the registration has been carried out correctly
 	 */
-	public ResponseEntity<String> register(@RequestBody Map<String, String> data){
+	@PostMapping(value= "/register")
+	public ExtResponseEntity<?> register(@RequestBody Map<String, String> data){
 		try {
-			ResponseEntity<String> response = authenticationService.register(
+			ExtResponseEntity<String> response = authenticationService.register(
 				data.get("email"),
 				data.get("firstName"),
 				data.get("lastName"),
@@ -61,87 +61,87 @@ public class AuthenticationController {
 				familyTreeService.saveFamilyTree(ft); 
 			}
 			return response;
-		}catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/login")
 	/**
 	 * Connection to the account with the email and the password
 	 * @param account_login Search for an account that matches the email address and password
 	 * @return Message to indicated whether the login has been carried out correctly
 	 * When it is done correctly, it returns the current token, the account ID and the person's first name linked to this account.
 	 */
-	public ResponseEntity<String> login(@RequestBody Account account_login){
+	@PostMapping(value="/login")
+	public ExtResponseEntity<Map<String, String>> login(@RequestBody Account account_login){
 		try {
 			return authenticationService.login(account_login.getEmail(), account_login.getPassword());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/logout")
 	/**
 	 * Account logout : reset the token of the current connected account
-	 * @param data Account data containing account ID and token. 
+	 * @param data Account data containing account ID and token.
 	 * @return Message to indicated whether the logout has been carried out correctly
 	 */
-	public ResponseEntity<String> logout(@RequestBody Map<String, String> data){
+	@PostMapping(value="/logout")
+	public ExtResponseEntity<String> logout(@RequestBody Map<String, String> data){
 		try {
 			return authenticationService.logout(data.get("token"), data.get("id"));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/forgot-password")
 	/**
 	 * Sending an e-mail if you forget your password
 	 * @param data account data containing email
 	 * @return message to indicated whether the changing of password has been carried out correctly
 	 * When it is done correctly, return the account ID, the token and the first name of the person who forget his password.
 	 */
-	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> data) {
+	@PostMapping(value="/forgot-password")
+	public ExtResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> data) {
 		try {
 			return authenticationService.forgotPassword(data.get("email"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PutMapping(value="/change-password")
 	/**
 	 * Creation of a new password
 	 * @param data account data containing ID, token and new password
 	 * @return message to indicated whether the changing of password has been carried out correctly
 	 */
-	public ResponseEntity<String> changePassword(@RequestBody Map<String, String> data) {
+	@PutMapping(value="/change-password")
+	public ExtResponseEntity<String> changePassword(@RequestBody Map<String, String> data) {
 		try {
 			return this.authenticationService.changePassword(data.get("id"), data.get("token"), data.get("newPassword"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	@PostMapping(value="/activate-account/{accountId}")
+
 	/**
 	 * Account activation by email
 	 * @param accountId ID of the account to be activated
 	 * @return message to indicated whether the activation of the account has been carried out correctly
 	 * When the account is already activated or when the account was correctly activated, it return the email of the account.
 	 */
-	public ResponseEntity<String> activateAccount(@PathVariable("accountId") String accountId) {
+	@PostMapping(value="/activate-account/{accountId}")
+	public ExtResponseEntity<String> activateAccount(@PathVariable("accountId") String accountId) {
 		try {
 			return authenticationService.activateAccount(accountId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
+		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
