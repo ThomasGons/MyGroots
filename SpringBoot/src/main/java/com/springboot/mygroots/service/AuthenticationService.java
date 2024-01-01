@@ -87,8 +87,8 @@ public class AuthenticationService {
      */
     public ResponseEntity<String> logout(String token, String accountId){
     	try {
-    		Account acc = accountService.getAccountById(accountId);
-			if (acc != null && acc.isAuthenticated(token)) {
+    		Account acc = accountService.AuthentificatedUser(token, accountId);
+    		if ( acc != null) {
 				acc.resetToken();
 				accountService.updateAccount(acc);
 				return new ResponseEntity<String>("{\"message\": \"Deconnexion reussie !\"}", HttpStatus.OK);

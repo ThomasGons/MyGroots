@@ -32,50 +32,60 @@ public class User {
     @Autowired
     PersonService personService;
 
+    /**
+     * Post informations of the user's account
+     * @param data Data of the user's session
+     * @return all informations of the current account connected
+     */
     @PostMapping(value = "/profile")
     public ResponseEntity<String> searchById(@RequestBody Map<String, String> data) {
-        String id = data.get("id");
-        System.out.println(id);
-        Account a = accountService.getAccountById(id);
-        if (a == null) {
-            return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a cet id !\"}", HttpStatus.BAD_REQUEST);
-        }
-        Person p = a.getPerson();
-        return new ResponseEntity<String>("{\"id\":\"" + a.getId() + "\", \"email\":\"" + a.getEmail()
-                + "\", \"firstName\":\"" + p.getFirstName() + "\", \"lastName\":\"" + p.getLastName()
-                + "\", \"birthDate\":\"" + p.getBirthDate().toString() + "\", \"gender\":\"" + p.getGender()
-                + "\", \"nationality\":\"" + p.getNationality() + "\", \"socialSecurityNumber\":\"" + p.getSocialSecurityNumber() + "\"}", HttpStatus.OK);
+        String accountId = data.get("id");
+        String token = data.get("token");
+        System.out.println(accountId);
+        Account acc = accountService.AuthentificatedUser(token, accountId);
+		if ( acc != null) {
+            Person p = acc.getPerson();
+            return new ResponseEntity<String>("{\"id\":\"" + acc.getId() + "\", \"email\":\"" + acc.getEmail()
+            + "\", \"firstName\":\"" + p.getFirstName() + "\", \"lastName\":\"" + p.getLastName()
+            + "\", \"birthDate\":\"" + p.getBirthDate().toString() + "\", \"gender\":\"" + p.getGender()
+            + "\", \"nationality\":\"" + p.getNationality() + "\", \"socialSecurityNumber\":\"" + p.getSocialSecurityNumber() + "\"}", HttpStatus.OK);
+        }            
+		return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a cet id !\"}", HttpStatus.BAD_REQUEST);
     }
 
+    //TODO : changer retour en ReponseEntity
     @GetMapping(value = "/notifications")
-    public List<Notif> getNotifications(@RequestBody String email) {
-        Account a = accountService.getAccountByEmail(email);
-        return a.getNotifications();
+    public List<Notif> getNotifications(@RequestBody Map<String, String> data) {
+    	Account acc = accountService.AuthentificatedUser(data.get("token"), data.get("id"));
+		if ( acc != null) {
+			return acc.getNotifications();
+		}
+		return null;
     }
 
-
+    /**
+     * Post modified informations of the user's account
+     * @param data Data of the user's session
+     * @return all the informations of the current account connected with modifications
+     */
     @PostMapping(value = "/profile-modify")
     public ResponseEntity<String> modify(@RequestBody Map<String, String> data) {
-        String id = data.get("id");
-
-        Account a = accountService.getAccountById(id);
-        Person p = a.getPerson();
-
+        String accountId = data.get("id");
+        Account a = accountService.getAccountById(accountId);
         if (a == null) {
             return new ResponseEntity<String>("{\"errorMessage\":\"Aucun compte correspondant a cet id !\"}", HttpStatus.BAD_REQUEST);
         }
+        Person p = a.getPerson();
         if (p == null) {
             return new ResponseEntity<String>("{\"errorMessage\":\"Aucune personne correspondante a ce compte !\"}", HttpStatus.BAD_REQUEST);
         }
-
-
+        
         String email = data.get("email");
         String firstname = data.get("firstName");
         String lastname = data.get("lastName");
         LocalDate birthDate = LocalDate.parse(data.get("birthDate"));
         String nationality = data.get("nationality");
         String socialsecurity = data.get("socialSecurity");
-
 
         a.setEmail(email);
         p.setFirstName(firstname);

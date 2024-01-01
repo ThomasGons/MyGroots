@@ -36,12 +36,12 @@ public class AuthenticationController {
     @Autowired
     private FamilyTreeService familyTreeService;
     	
-	@PostMapping(value= "/register")
 	/**
 	 * Register a new user into the database. Creation of an account and a person. Potentially create a tree if his family tree does not exist.
 	 * @param data Table of informations
 	 * @return Message to indicated whether the registration has been carried out correctly
 	 */
+    @PostMapping(value= "/register")
 	public ResponseEntity<String> register(@RequestBody Map<String, String> data){
 		try {
 			ResponseEntity<String> response = authenticationService.register(
@@ -67,13 +67,13 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
 	
-	@PostMapping(value="/login")
 	/**
 	 * Connection to the account with the email and the password
 	 * @param account_login Search for an account that matches the email address and password
 	 * @return Message to indicated whether the login has been carried out correctly
 	 * When it is done correctly, it returns the current token, the account ID and the person's first name linked to this account.
 	 */
+	@PostMapping(value="/login")
 	public ResponseEntity<String> login(@RequestBody Account account_login){
 		try {
 			return authenticationService.login(account_login.getEmail(), account_login.getPassword());
@@ -83,12 +83,12 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/logout")
 	/**
 	 * Account logout : reset the token of the current connected account
 	 * @param data Account data containing account ID and token. 
 	 * @return Message to indicated whether the logout has been carried out correctly
 	 */
+	@PostMapping(value="/logout")
 	public ResponseEntity<String> logout(@RequestBody Map<String, String> data){
 		try {
 			return authenticationService.logout(data.get("token"), data.get("id"));
@@ -98,13 +98,13 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping(value="/forgot-password")
 	/**
 	 * Sending an e-mail if you forget your password
 	 * @param data account data containing email
 	 * @return message to indicated whether the changing of password has been carried out correctly
 	 * When it is done correctly, return the account ID, the token and the first name of the person who forget his password.
 	 */
+	@PostMapping(value="/forgot-password")
 	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> data) {
 		try {
 			return authenticationService.forgotPassword(data.get("email"));
@@ -114,12 +114,12 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
 	}
 	
-	@PutMapping(value="/change-password")
 	/**
 	 * Creation of a new password
 	 * @param data account data containing ID, token and new password
 	 * @return message to indicated whether the changing of password has been carried out correctly
 	 */
+	@PutMapping(value="/change-password")
 	public ResponseEntity<String> changePassword(@RequestBody Map<String, String> data) {
 		try {
 			return this.authenticationService.changePassword(data.get("id"), data.get("token"), data.get("newPassword"));
@@ -129,13 +129,13 @@ public class AuthenticationController {
 		return new ResponseEntity<String>("{\"errorMessage\":\"Une erreur s'est produite.\"}", HttpStatus.INTERNAL_SERVER_ERROR); 
 	}
 	
-	@PostMapping(value="/activate-account/{accountId}")
 	/**
 	 * Account activation by email
 	 * @param accountId ID of the account to be activated
 	 * @return message to indicated whether the activation of the account has been carried out correctly
 	 * When the account is already activated or when the account was correctly activated, it return the email of the account.
 	 */
+	@PostMapping(value="/activate-account/{accountId}")
 	public ResponseEntity<String> activateAccount(@PathVariable("accountId") String accountId) {
 		try {
 			return authenticationService.activateAccount(accountId);

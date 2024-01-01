@@ -1,7 +1,9 @@
 package com.springboot.mygroots.controller;
 
+import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.mygroots.dto.FamilyTreeDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="/family-tree")
@@ -27,11 +30,19 @@ public class FamilyTreeCtrl {
 
     @Autowired
     PersonService personService;
+    
+    @Autowired
+    AccountService accountService;
 
-    @RequestMapping(value= "/")
-    public FamilyTreeDTO root(@RequestBody String id) {
-        FamilyTree ft = familyTreeService.getFamilyTreeById(id);
-        return new FamilyTreeDTO(ft);
+    //TODO : verifier que c'est bien id du compte et pas de la personne
+    @GetMapping(value= "/")
+    public FamilyTreeDTO root(@RequestBody Map<String, String> data) {
+    	Account acc = accountService.AuthentificatedUser(data.get("token"), data.get("id"));
+		if ( acc != null) {
+	        FamilyTree ft = familyTreeService.getFamilyTreeById(data.get("id"));
+	        return new FamilyTreeDTO(ft);
+		}
+		return null;
     }
 
     @GetMapping(value= "/help")

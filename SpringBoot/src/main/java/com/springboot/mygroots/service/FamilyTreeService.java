@@ -27,6 +27,7 @@ public class FamilyTreeService {
         familyTreeRepository.delete(familyTree);
     }
 
+    //TODO: préciser si c'est ID de person ou de account
     public FamilyTree getFamilyTreeById(String id) {
         return familyTreeRepository.findById(id).get();
     }
