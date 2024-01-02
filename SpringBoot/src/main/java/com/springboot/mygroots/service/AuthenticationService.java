@@ -48,7 +48,7 @@ public class AuthenticationService {
 			accountService.addAccount(acc);
 			// Send an email to activate the account
 			accountService.sendAccountActivationMail(acc);
-			return new ExtResponseEntity<>("Inscription réussie !", HttpStatus.OK);
+			return new ExtResponseEntity<>("Inscription réussie ! Un email d'activation a ete envoyé à l'adresse indiquée à l'inscription.", HttpStatus.OK);
     	} catch(Exception e){
     		e.printStackTrace();
     	}
@@ -87,10 +87,10 @@ public class AuthenticationService {
      * @param accountId
      * @return Message to indicated whether the logout has been carried out correctly
      */
-    public ExtResponseEntity<String> logout(String token, String accountId){
+    public ExtResponseEntity<Map<String, String>> logout(String token, String accountId){
     	try {
-    		Account acc = accountService.getAccountById(accountId);
-			if (acc != null && acc.isAuthenticated(token)) {
+    		Account acc = accountService.AuthenticatedAccount(token, accountId);
+    		if ( acc != null) {
 				acc.resetToken();
 				accountService.updateAccount(acc);
 				return new ExtResponseEntity<>("Deconnexion reussie !", HttpStatus.OK);

@@ -40,8 +40,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Account getAccountById(String id) {
-    	return accountRepository.getAccountById(id);
+    public Account getAccountById(String accountId) {
+    	return accountRepository.getAccountById(accountId);
     }
     
     public Account getAccountByEmail(String email){
@@ -69,8 +69,8 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
-    public void activateAccount(String id){
-        Account account = accountRepository.getAccountById(id);
+    public void activateAccount(String accountId){
+        Account account = accountRepository.getAccountById(accountId);
         account.activate();
         accountRepository.save(account);
     }
@@ -82,5 +82,13 @@ public class AccountService {
     public Account setAccount(String email, String password, Person person, String token) {
     	Account a = new Account(email, Utils.encode(password),  person, token);
     	return a;
+    }
+    
+    public Account AuthenticatedAccount(String token, String accountId) {
+		Account acc = getAccountById(accountId);
+		if (acc != null && acc.isAuthenticated(token)) {
+			return acc;
+		}
+		return null;
     }
 }

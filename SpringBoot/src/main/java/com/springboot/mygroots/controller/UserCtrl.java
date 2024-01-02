@@ -31,7 +31,6 @@ public class UserCtrl {
 
     @Autowired
     AccountService accountService;
-
     @Autowired
     PersonService personService;
 
@@ -74,11 +73,11 @@ public class UserCtrl {
         String id = data.get("id");
 
         Account a = accountService.getAccountById(id);
-        Person p = a.getPerson();
 
         if (a == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
+        Person p = a.getPerson();
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne correspondante a ce compte !", HttpStatus.BAD_REQUEST);
         }
@@ -87,7 +86,7 @@ public class UserCtrl {
         String lastname = data.get("lastName");
         LocalDate birthDate = LocalDate.parse(data.get("birthDate"));
         String nationality = data.get("nationality");
-        String socialsecurity = data.get("socialSecurity");
+        String socialSecurityNumber = data.get("socialSecurityNumber");
 
 
         a.setEmail(email);
@@ -95,7 +94,7 @@ public class UserCtrl {
         p.setLastName(lastname);
         p.setBirthDate(birthDate);
         p.setNationality(nationality);
-        p.setSocialSecurityNumber(socialsecurity);
+        p.setSocialSecurityNumber(socialSecurityNumber);
         p.setGender(Enumerations.Gender.valueOf(data.get("gender")));
 
         accountService.updateAccount(a);

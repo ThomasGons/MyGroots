@@ -18,12 +18,12 @@ export class StorageService {
     window.sessionStorage.removeItem(this.keyName);
   }
 
-  public getUser(): User | null {
+  public getUser(): User {
     const user = window.sessionStorage.getItem(this.keyName);
     if (user) {
       return JSON.parse(user);
     } else {
-      return null;
+      return {};
     }
   }
 

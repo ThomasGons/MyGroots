@@ -6,11 +6,11 @@ export const authGuard: CanActivateFn = (route, state) => {
   const storageService = inject(StorageService);
   const snackbarService = inject(SnackbarService);
   const router = inject(Router);
-
+  
   if (storageService.isAuthenticated()) {
     return true;
   }
-  router.navigate(['auth/login']);
+  router.navigate(["auth/login"]);
   snackbarService.openSnackbar("Vous devez d'abord vous connecter !");
   return false;
 };

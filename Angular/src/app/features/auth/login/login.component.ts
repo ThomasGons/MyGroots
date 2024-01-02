@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, StorageService, SnackbarService } from '@app/core/services';
 
@@ -31,12 +31,10 @@ export class LoginComponent {
       return;
     }
     /* Get form data */
-    const loginData = {
-      email: this.form.value.email,
-      password: this.form.value.password,
-    }
+    const email = String(this.form.value.email);
+    const password = String(this.form.value.password);
     /* Submit the form */
-    this._authService.login(loginData).subscribe({
+    this._authService.login(email, password).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar("Connexion réussie !");

@@ -1,7 +1,9 @@
 package com.springboot.mygroots.controller;
 
+import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
@@ -34,6 +36,9 @@ public class FamilyTreeCtrl {
 
     @Autowired
     PersonService personService;
+    
+    @Autowired
+    AccountService accountService;
 
     /**
      * Get the root of the family tree by the id of the owner
@@ -42,15 +47,19 @@ public class FamilyTreeCtrl {
      */
     @RequestMapping(value= "/")
     public ExtResponseEntity<FamilyTreeDTO> root(@RequestBody Map<String, String> data) {
-        Person p = personService.getPersonById(data.get("id"));
-        if (p == null) {
-            return new ExtResponseEntity<>("Aucune personne correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+		if ( acc != null) {
+            Person p = acc.getPerson();
+            if (p == null) {
+                return new ExtResponseEntity<>("Aucune personne correspondante à cet id !", HttpStatus.BAD_REQUEST);
+            }
+            FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
+            if (ft == null) {
+                return new ExtResponseEntity<>("Aucun arbre correspondant à cet id !", HttpStatus.BAD_REQUEST);
+            }
+            return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
         }
-        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
-        if (ft == null) {
-            return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
-        }
-        return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
+        return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
     }
 
     /**

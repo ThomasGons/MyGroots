@@ -1,4 +1,4 @@
-import { Component, KeyValueDiffers } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, SnackbarService } from '@app/core/services';
@@ -22,6 +22,7 @@ export class RegisterComponent {
     socialSecurityNumber: new FormControl("", { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
   });
   isForeigner: boolean = false;
+  previousSocialSecurityNumber: string = "";
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
@@ -247,7 +248,7 @@ export class RegisterComponent {
       birthDate: this.formatBirthDate(String(this.form.value.birthDate)),
       gender: this.form.value.gender,
       nationality: this.form.value.nationality,
-      socialSecurityNumber: this.form.value.socialSecurityNumber == undefined ? "99" : this.form.controls.socialSecurityNumber.value,
+      socialSecurityNumber: this.isForeigner ? "99" : this.form.controls.socialSecurityNumber.value,
     };
     /* Submit form */
     this._authService.register(registerData).subscribe({
@@ -264,21 +265,23 @@ export class RegisterComponent {
   }
 
   public onToggleForeigner(): void {
-
-    console.log(this.form.value.socialSecurityNumber == undefined ? "99" : this.form.controls.socialSecurityNumber.value);
-
+    /* Change form field SocialSecurityNumber behavior */
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {
-      this.form.controls.socialSecurityNumber.setValue("99")
+      if (this.form.value.socialSecurityNumber) {
+        this.previousSocialSecurityNumber = this.form.value.socialSecurityNumber;
+      }
+      this.form.patchValue({socialSecurityNumber: "99"});
       this.form.controls.socialSecurityNumber.disable();
     }
     else {
       this.form.controls.socialSecurityNumber.enable();
-      this.form.controls.socialSecurityNumber.setValue("")
+      this.form.patchValue({socialSecurityNumber: this.previousSocialSecurityNumber});
     }
   }
 
   private formatBirthDate(inputDate: string): string {
+    /* Format the input date to YYYY-MM-DD string */
     const dateObject = new Date(inputDate);
     const year = dateObject.getFullYear();
     const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
