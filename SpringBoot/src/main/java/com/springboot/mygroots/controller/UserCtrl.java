@@ -44,10 +44,10 @@ public class UserCtrl {
         String accountId = data.get("id");
         String token = data.get("token");
         Account acc = accountService.AuthenticatedAccount(token, accountId);
-        if (a == null) {
+        if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(a, HttpStatus.OK);
+        return new ExtResponseEntity<>(acc, HttpStatus.OK);
     }
 
     /**
@@ -61,7 +61,7 @@ public class UserCtrl {
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(a.getNotifications(), HttpStatus.OK);
+        return new ExtResponseEntity<>(acc.getNotifications(), HttpStatus.OK);
     }
 
     /**
@@ -72,11 +72,11 @@ public class UserCtrl {
     @PostMapping(value = "/profile-modify")
     public ExtResponseEntity<?> modify(@RequestBody Map<String, String> data) {
         String accountId = data.get("id");
-        Account a = accountService.getAccountById(accountId);
-        if (a == null) {
+        Account acc = accountService.getAccountById(accountId);
+        if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        Person p = a.getPerson();
+        Person p = acc.getPerson();
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne correspondante a ce compte !", HttpStatus.BAD_REQUEST);
         }
@@ -87,7 +87,7 @@ public class UserCtrl {
         String nationality = data.get("nationality");
         String socialSecurityNumber = data.get("socialSecurityNumber");
 
-        a.setEmail(email);
+        acc.setEmail(email);
         p.setFirstName(firstName);
         p.setLastName(lastName);
         p.setBirthDate(birthDate);
@@ -95,7 +95,7 @@ public class UserCtrl {
         p.setSocialSecurityNumber(socialSecurityNumber);
         p.setGender(Enumerations.Gender.valueOf(data.get("gender")));
 
-        accountService.updateAccount(a);
+        accountService.updateAccount(acc);
         personService.updatePerson(p);
         return new ExtResponseEntity<>("Modification reussie !", HttpStatus.OK);
     }

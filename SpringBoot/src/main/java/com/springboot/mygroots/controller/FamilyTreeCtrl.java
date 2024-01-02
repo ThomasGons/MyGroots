@@ -49,7 +49,7 @@ public class FamilyTreeCtrl {
     public ExtResponseEntity<FamilyTreeDTO> root(@RequestBody Map<String, String> data) {
         Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
 		if ( acc != null) {
-            Person p = acc.getPerson()
+            Person p = acc.getPerson();
             if (p == null) {
                 return new ExtResponseEntity<>("Aucune personne correspondante à cet id !", HttpStatus.BAD_REQUEST);
             }
