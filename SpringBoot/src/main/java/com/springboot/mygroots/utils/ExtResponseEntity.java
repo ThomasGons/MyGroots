@@ -1,30 +1,23 @@
 package com.springboot.mygroots.utils;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Custom response entity to add a message to the response
+ * Custom response entity to include a message in the response body
  */
-public class ExtResponseEntity<T> extends ResponseEntity<T> {
-    private final String message;
+public class ExtResponseEntity<T> extends ResponseEntity<ExtResponse<T>> {
 
     public ExtResponseEntity(T body, String message, HttpStatus status) {
-        super(body, null, status);
-        this.message = message;
+        super(new ExtResponse<>(body, message), status);
     }
 
     public ExtResponseEntity(String message, HttpStatus status) {
-        super(null, null, status);
-        this.message = message;
+        super(new ExtResponse<>(null, message), status);
     }
 
     public ExtResponseEntity(T body, HttpStatus status) {
-        super(body, null, status);
-        this.message = null;
-    }
-
-    public String getMessage() {
-        return message;
+        super(new ExtResponse<>(body, null), status);
     }
 }

@@ -84,7 +84,7 @@ public class AuthenticationService {
     /**
      * Reset the current token linked to the account to disconnect the user
      * @param token
-     * @param id
+     * @param accountId
      * @return Message to indicated whether the logout has been carried out correctly
      */
     public ExtResponseEntity<String> logout(String token, String accountId){

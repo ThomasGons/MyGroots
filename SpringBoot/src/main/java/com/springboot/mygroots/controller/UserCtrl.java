@@ -40,18 +40,13 @@ public class UserCtrl {
      * @return the profile of the user
      */
     @PostMapping(value = "/profile")
-    public ExtResponseEntity<Person> searchById(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
         String id = data.get("id");
-        System.out.println(id);
         Account a = accountService.getAccountById(id);
         if (a == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        Person p = a.getPerson();
-        if (p == null) {
-            return new ExtResponseEntity<>("Aucune personne correspondante a ce compte !", HttpStatus.BAD_REQUEST);
-        }
-        return new ExtResponseEntity<>(p, HttpStatus.OK);
+        return new ExtResponseEntity<>(a, HttpStatus.OK);
     }
 
     /**
