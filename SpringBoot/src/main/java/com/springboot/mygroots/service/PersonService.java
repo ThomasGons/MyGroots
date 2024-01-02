@@ -34,8 +34,8 @@ public class PersonService {
     	return personRepository.findById(id).get();
     }
     
-    public Person getPersonByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate){
-        return personRepository.getPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
+    public List<Person> findAllByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate){
+        return personRepository.findAllPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
     }
 
     public void removePerson(Person person){

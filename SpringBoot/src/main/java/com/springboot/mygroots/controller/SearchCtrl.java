@@ -3,7 +3,9 @@ package com.springboot.mygroots.controller;
 import com.springboot.mygroots.service.PersonService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +44,23 @@ public class SearchCtrl {
     }
 
     /**
-     * Search a person by his name
+     * Search a person by his name or his last name or his birthdate
      * @param data map containing the name, the last name and the birthdate of the person
-     * @return the person
+     * @return list of persons corresponding to the search
      */
     @GetMapping(value= "/name")
-    public ExtResponseEntity<Person> searchByPersonalData(@RequestBody Map<String, String> data) {
-        Person p = personService.getPersonByFirstNameAndLastNameAndBirthDate(
-                data.get("firstName"), data.get("lastName"), LocalDate.parse(data.get("birthDate"))
+    public ExtResponseEntity<List<Person>> searchByPersonalData(@RequestBody Map<String, String> data) {
+        String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
+        String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
+        LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
+        List<Person> p = personService.findAllByFirstNameAndLastNameAndBirthDate(
+                firstName, lastName, birthDate
         );
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne correspondante a ce nom !", HttpStatus.BAD_REQUEST);
         }
+
+        p.removeIf(person -> person.getFirstName().equals("unknown") && person.getLastName().equals("unknown"));
         return new ExtResponseEntity<>(p, HttpStatus.OK);
     }
 }

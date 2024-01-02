@@ -31,6 +31,7 @@ public class UserCtrl {
 
     @Autowired
     AccountService accountService;
+
     @Autowired
     PersonService personService;
 
@@ -40,13 +41,13 @@ public class UserCtrl {
      * @return the profile of the user
      */
     @PostMapping(value = "/profile")
-    public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<Map<String, ?>> searchById(@RequestBody Map<String, String> data) {
         String id = data.get("id");
         Account a = accountService.getAccountById(id);
         if (a == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(a, HttpStatus.OK);
+        return new ExtResponseEntity<>(Map.of("email", a.getEmail(), "person", a.getPerson()), HttpStatus.OK);
     }
 
     /**

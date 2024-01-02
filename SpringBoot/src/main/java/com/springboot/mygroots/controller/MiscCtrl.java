@@ -12,12 +12,14 @@ import com.springboot.mygroots.service.EmailService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for the back only requests (test purposes)
@@ -33,6 +35,12 @@ public class MiscCtrl {
 
     @Autowired
     private FamilyTreeService familyTreeService;
+
+    @RequestMapping(value= "/test")
+    public FamilyTreeDTO root(@RequestBody Map<String, String> data) {
+        FamilyTree ft = familyTreeService.getFamilyTreeById(data.get("id"));
+        return new FamilyTreeDTO(ft);
+    }
 
     /**
      * Initialize the database with some data

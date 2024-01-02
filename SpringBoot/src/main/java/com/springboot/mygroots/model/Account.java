@@ -55,11 +55,6 @@ public class Account implements Serializable {
         this.isActive = true;
     }
 
-
-    public List<Notif> getNotifs() {
-        return notifs;
-    }
-
     public String getEmail() {
         return email;
     }
