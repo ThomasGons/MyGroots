@@ -246,14 +246,15 @@ export class ProfileModifyComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.user = {
-          id: response.id,
-          email: response.email,
-          firstName: response.firstName,
-          lastName: response.lastName,
-          birthDate: response.birthDate,
-          gender: response.gender,
-          nationality: response.nationality,
-          socialSecurityNumber: response.socialSecurityNumber,
+          id: this.user.id,
+          token: this.user.token,
+          email: response.body.email,
+          firstName: response.body.person.firstName,
+          lastName: response.body.person.lastName,
+          birthDate: response.body.person.birthDate,
+          gender: response.body.person.gender,
+          nationality: response.body.person.nationality,
+          socialSecurityNumber: response.body.person.socialSecurityNumber,
         };
         this.form.patchValue({
           email: this.user.email,
@@ -284,6 +285,7 @@ export class ProfileModifyComponent implements OnInit {
     /* Get form data */
     const modifyData = {
       id: this.user.id,
+      token: this.user.token,
       email: this.form.value.email,
       firstName: this.form.value.firstName,
       lastName: this.form.value.lastName,
@@ -292,6 +294,7 @@ export class ProfileModifyComponent implements OnInit {
       nationality: this.form.value.nationality,
       socialSecurityNumber: this.isForeigner ? "99" : this.form.value.socialSecurityNumber,
     };
+    console.log(modifyData);
 
     /* Submit form */
     this._userService.profileModify(modifyData).subscribe({

@@ -259,7 +259,7 @@ export class RegisterComponent {
       },
       error: (err) => {
         console.log(err);
-        this._snackbarService.openSnackbar(err.error.errorMessage);
+        this._snackbarService.openSnackbar(err.error.message);
       },
     });
   }

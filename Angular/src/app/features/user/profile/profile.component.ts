@@ -27,14 +27,13 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.user = {
-          firstName: response.firstName,
-          lastName: response.lastName,
-          id: response.id,
-          gender: response.gender,
-          nationality: response.nationality,
-          socialSecurityNumber: response.socialSecurityNumber,
-          birthDate: response.birthDate,
-          email: response.email
+          email: response.body.email,
+          firstName: response.body.person.firstName,
+          lastName: response.body.person.lastName,
+          birthDate: response.body.person.birthDate,
+          gender: response.body.person.gender,
+          nationality: response.body.person.nationality,
+          socialSecurityNumber: response.body.person.socialSecurityNumber,
         }
       },
       error: (err) => {

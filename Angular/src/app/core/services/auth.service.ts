@@ -59,7 +59,7 @@ export class AuthService {
    * @param newPassword New password to set
    */
   public changePassword(accountId: string, token: string, newPassword: string): Observable<any> {
-    return this._httpClient.put(this.url + "/change-password", {id: accountId, token: token, password: newPassword}, this.httpOptions);
+    return this._httpClient.put(this.url + "/change-password", {id: accountId, token: token, newPassword: newPassword}, this.httpOptions);
   }
   
   /**

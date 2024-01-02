@@ -5,18 +5,18 @@ package com.springboot.mygroots.utils;
  */
 public class ExtResponse<T> {
     private final T body;
-    private final String errorMessage;
+    private final String message;
 
     public ExtResponse(T body, String message) {
         this.body = body;
-        this.errorMessage = message;
+        this.message = message;
     }
 
     public T getBody() {
         return body;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 }

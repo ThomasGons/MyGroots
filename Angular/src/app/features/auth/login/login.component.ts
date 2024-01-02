@@ -37,13 +37,13 @@ export class LoginComponent {
     this._authService.login(email, password).subscribe({
       next: (response) => {
         console.log(response);
-        this._snackbarService.openSnackbar("Connexion réussie !");
-        this._storageService.saveUser(response)
+        this._snackbarService.openSnackbar(response.message);
+        this._storageService.saveUser(response.body)
         this._router.navigate(["/home"]);
       },
       error: (err) => {
         console.log(err);
-        this._snackbarService.openSnackbar(err.error.errorMessage);
+        this._snackbarService.openSnackbar(err.error.message);
         this.form.controls.email.setValue("");
         this.form.controls.password.setValue("");
       }

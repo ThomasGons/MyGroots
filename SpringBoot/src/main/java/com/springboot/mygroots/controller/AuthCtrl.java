@@ -89,7 +89,7 @@ public class AuthCtrl {
 	 * @return Message to indicated whether the logout has been carried out correctly
 	 */
 	@PostMapping(value="/logout")
-	public ExtResponseEntity<Map<String, String>> logout(@RequestBody Map<String, String> data){
+	public ExtResponseEntity<?> logout(@RequestBody Map<String, String> data){
 		try {
 			return authenticationService.logout(data.get("token"), data.get("id"));
 		}catch(Exception e) {

@@ -12,7 +12,7 @@ import { AuthService, SnackbarService } from '@app/core/services';
 export class ChangePasswordComponent {
 
   form = new FormGroup({
-    password: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
+    newPassword: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
   });
   hidePassword: boolean = true;
   
@@ -36,7 +36,8 @@ export class ChangePasswordComponent {
       return;
     }
     /* Get form data */
-    const newPassword = String(this.form.value.password);
+    const newPassword = String(this.form.value.newPassword);
+    console.log(newPassword);
     /* Submit form */
     this._authService.changePassword(this._id, this._token, newPassword).subscribe({
       next: (response) => {
@@ -46,7 +47,7 @@ export class ChangePasswordComponent {
       },
       error: (err) => {
         console.log(err);
-        this._snackbarService.openSnackbar(err.error.errorMessage);
+        this._snackbarService.openSnackbar(err.error.message);
         this._router.navigate(["/home"]);
       }
     });

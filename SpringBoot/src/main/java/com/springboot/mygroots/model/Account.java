@@ -95,16 +95,16 @@ public class Account implements Serializable {
     	this.password = Utils.encode(password);
     }
 
+    public List<Notif> getNotifs() {
+        return notifs;
+    }
+
     public void addNotif(Notif notif) {
         notifs.add(notif);
     }
 
     public void removeNotif(Notif notif) {
         notifs.remove(notif);
-    }
-
-    public List<Notif> getNotifications() {
-    	return notifs;
     }
     
     public String getToken() {

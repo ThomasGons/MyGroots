@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService, SnackbarService } from '@app/core/services';
 
 
@@ -18,7 +17,6 @@ export class ForgotPasswordComponent {
   constructor(
     private _authService: AuthService,
     private _snackbarService: SnackbarService,
-    private _router: Router,
   ) {}
 
   public onSubmit(): void {
@@ -33,15 +31,11 @@ export class ForgotPasswordComponent {
     this._authService.forgotPassword(email).subscribe({
       next: (response) => {
         console.log(response);
-        const id: string = response.id;
-        const token: string = response.token;
-        const firstName: string = response.firstName;
-        this._snackbarService.openSnackbar(firstName + ", vous allez modifier votre mot de passe...")
-        this._router.navigate(["auth/change-password", id, token]);
+        this._snackbarService.openSnackbar(response.message);
       },
       error: (err) => {
         console.log(err);
-        this._snackbarService.openSnackbar(err.error.errorMessage);
+        this._snackbarService.openSnackbar(err.error.message);
         this.form.controls.email.setValue("");
       }
     })

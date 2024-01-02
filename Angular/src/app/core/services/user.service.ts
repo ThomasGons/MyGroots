@@ -29,10 +29,18 @@ export class UserService {
 
   /**
    * 
-   * @param data 
+   * @param data
    */
   public profileModify(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/profile-modify", data, this.httpOptions);
   }
 
+  /**
+   * 
+   * @param token 
+   * @param id
+   */
+  public notifs(token: string, id: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs", {token: token, id: id}, this.httpOptions);
+  }
 }

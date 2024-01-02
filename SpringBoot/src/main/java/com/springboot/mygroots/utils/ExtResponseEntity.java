@@ -10,14 +10,14 @@ import org.springframework.http.ResponseEntity;
 public class ExtResponseEntity<T> extends ResponseEntity<ExtResponse<T>> {
 
     public ExtResponseEntity(T body, String message, HttpStatus status) {
-        super(new ExtResponse<>(body, message), status);
+        super(new ExtResponse<T>(body, message), status);
     }
 
     public ExtResponseEntity(String message, HttpStatus status) {
-        super(new ExtResponse<>(null, message), status);
+        super(new ExtResponse<T>(null, message), status);
     }
 
     public ExtResponseEntity(T body, HttpStatus status) {
-        super(new ExtResponse<>(body, null), status);
+        super(new ExtResponse<T>(body, null), status);
     }
 }
