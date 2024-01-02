@@ -35,7 +35,7 @@ public class AuthCtrl {
     
     @Autowired
     private FamilyTreeService familyTreeService;
-
+	
 	/**
 	 * Register a new user into the database. Creation of an account and a person. Potentially create a tree if his family tree does not exist.
 	 * @param data Table of informations
@@ -89,7 +89,7 @@ public class AuthCtrl {
 	 * @return Message to indicated whether the logout has been carried out correctly
 	 */
 	@PostMapping(value="/logout")
-	public ExtResponseEntity<String> logout(@RequestBody Map<String, String> data){
+	public ExtResponseEntity<Map<String, String>> logout(@RequestBody Map<String, String> data){
 		try {
 			return authenticationService.logout(data.get("token"), data.get("id"));
 		}catch(Exception e) {
@@ -128,7 +128,7 @@ public class AuthCtrl {
 		}
 		return new ExtResponseEntity<>("Une erreur s'est produite.", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
+	
 	/**
 	 * Account activation by email
 	 * @param accountId ID of the account to be activated

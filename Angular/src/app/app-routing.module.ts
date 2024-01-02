@@ -50,24 +50,21 @@ const routes: Routes = [
         title: environment.title + " - Modifier mot de passe",
       },
       {
-        path: "activate-account/:token",
+        path: "activate-account/:id",
         component: ActivateAccountComponent,
       }
     ]
   },
-  // TODO: this FamilyTreeComponent
   {
     path: "family-tree",
     canActivate: [authGuard],
     component: FamilyTreeComponent,
     title: environment.title + " - Arbre Familial",
   },
-  // TODO: this SearchComponent +  children routes (byid, byname)
   {
     path: "search",
     component: SearchComponent,
     title: environment.title + " - Recherche",
-  //   children: []
   },
   {
     path: "user",
@@ -86,6 +83,7 @@ const routes: Routes = [
       },
       {
         path: "profile-modify",
+        canActivate: [authGuard],
         component: ProfileModifyComponent,
         title: environment.title + " - Profil-modify",
       },

@@ -41,8 +41,9 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile")
     public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
-        String id = data.get("id");
-        Account a = accountService.getAccountById(id);
+        String accountId = data.get("id");
+        String token = data.get("token");
+        Account acc = accountService.AuthenticatedAccount(token, accountId);
         if (a == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
@@ -56,9 +57,9 @@ public class UserCtrl {
      */
     @GetMapping(value = "/notifications")
     public ExtResponseEntity<List<Notif>> getNotifications(@RequestBody Map<String, String> data) {
-        Account a = accountService.getAccountByEmail(data.get("email"));
-        if (a == null) {
-            return new ExtResponseEntity<>("Aucun compte correspondant a cet email !", HttpStatus.BAD_REQUEST);
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+        if (acc == null) {
+            return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
         }
         return new ExtResponseEntity<>(a.getNotifications(), HttpStatus.OK);
     }
@@ -70,31 +71,28 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile-modify")
     public ExtResponseEntity<?> modify(@RequestBody Map<String, String> data) {
-        String id = data.get("id");
-
-        Account a = accountService.getAccountById(id);
-        Person p = a.getPerson();
-
+        String accountId = data.get("id");
+        Account a = accountService.getAccountById(accountId);
         if (a == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
+        Person p = a.getPerson();
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne correspondante a ce compte !", HttpStatus.BAD_REQUEST);
         }
         String email = data.get("email");
-        String firstname = data.get("firstName");
-        String lastname = data.get("lastName");
+        String firstName = data.get("firstName");
+        String lastName = data.get("lastName");
         LocalDate birthDate = LocalDate.parse(data.get("birthDate"));
         String nationality = data.get("nationality");
-        String socialsecurity = data.get("socialSecurity");
-
+        String socialSecurityNumber = data.get("socialSecurityNumber");
 
         a.setEmail(email);
-        p.setFirstName(firstname);
-        p.setLastName(lastname);
+        p.setFirstName(firstName);
+        p.setLastName(lastName);
         p.setBirthDate(birthDate);
         p.setNationality(nationality);
-        p.setSocialSecurityNumber(socialsecurity);
+        p.setSocialSecurityNumber(socialSecurityNumber);
         p.setGender(Enumerations.Gender.valueOf(data.get("gender")));
 
         accountService.updateAccount(a);

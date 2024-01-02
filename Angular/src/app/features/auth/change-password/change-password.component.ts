@@ -15,6 +15,7 @@ export class ChangePasswordComponent {
     password: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
   });
   hidePassword: boolean = true;
+  
   private _id: string;
   private _token: string;
   
@@ -35,13 +36,9 @@ export class ChangePasswordComponent {
       return;
     }
     /* Get form data */
-    const changePasswordData = {
-      id: this._id,
-      token: this._token,
-      newPassword: this.form.value.password,
-    }
+    const newPassword = String(this.form.value.password);
     /* Submit form */
-    this._authService.changePassword(changePasswordData).subscribe({
+    this._authService.changePassword(this._id, this._token, newPassword).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar(response.message);

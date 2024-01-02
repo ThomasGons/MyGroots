@@ -1,4 +1,4 @@
-<div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(&quot;https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg&quot;); background-size: cover;">
+<div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg); background-size: cover;">
   <mat-card class="card justify-content-center container-fluid">
     <i class="bi bi-person-circle user-icon d-flex justify-content-center" style="font-size:80px;text-align: center"></i>
     <h2 style="text-align: center"><strong>{{user.firstName}} {{user.lastName}}</strong></h2>
@@ -51,7 +51,7 @@
       <mat-card-title><i class="bi bi-bank"></i> Numéro de sécurité social :</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <h2 style="text-align: center">{{ user.socialSecurity }}</h2>
+      <h2 style="text-align: center">{{ user.socialSecurityNumber }}</h2>
     </mat-card-content>
       <mat-card-content style="text-align: center;">
         <button mat-raised-button class="bg-green-light my-4 py-4" [routerLink]="['/user/profile-modify']" type="button">

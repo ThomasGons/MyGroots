@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import { UserService } from '@app/core/services/user.service';
-import { User } from '@app/core/models/user.model';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import { AuthService, SnackbarService, StorageService } from '@app/core/services';
-import { Gender } from '@app/core/models';
-import {Router} from "@angular/router";
-
+import { UserService } from '@app/core/services';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SnackbarService, StorageService } from '@app/core/services';
+import { User, Gender } from '@app/core/models';
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -13,56 +11,7 @@ import {Router} from "@angular/router";
   templateUrl: './profile-modify.component.html',
   styleUrls: ['./profile-modify.component.css']
 })
-
-
-export class ProfileModifyComponent implements OnInit{
-
-  // @ts-ignore
-  user: User;
-  change: boolean = false;
-  responseMessage: string = "";
-  isForeigner: boolean = false;
-
-  constructor(private _authService: AuthService,
-              private _snackbarService: SnackbarService,
-              private _router: Router,
-              private userService: UserService,
-              private storageService : StorageService,) { }
-
-  ngOnInit(): void {
-    // @ts-ignore
-    this.user = this.storageService.getUser();
-    this.userService.profile({id: this.user.id}).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.user={firstName: response.firstName,
-          lastName: response.lastName,
-          id: response.id,
-          gender: response.gender,
-          nationality: response.nationality,
-          socialSecurity: response.socialSecurityNumber,
-          birthDate: response.birthDate,
-          email: response.email};
-        this.form.patchValue({
-          email: this.user.email,
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          birthDate: this.user.birthDate,
-          gender: this.user.gender,
-          nationality: this.user.nationality,
-          socialSecurity:this.user.socialSecurity});
-        if (this.user.socialSecurity == "99"){
-          this.isForeigner = true;
-          this.form.controls.socialSecurity.disable();
-          this.form.controls.socialSecurity.setValue("99");
-        };
-      },
-      error: (err) => {
-        console.log(err);
-
-      }
-    });
-  }
+export class ProfileModifyComponent implements OnInit {
 
   form = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
@@ -71,15 +20,17 @@ export class ProfileModifyComponent implements OnInit{
     birthDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     gender: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     nationality: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    socialSecurity: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
+    socialSecurityNumber: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
   });
-
+  user: User = {};
+  change: boolean = false;
+  isForeigner: boolean = false;
+  previousSocialSecurityNumber: string = "";
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
     { value: Gender.FEMALE, viewValue: "Femme" },
   ]
-
   readonly nationalities: string[] = [
     "Afghanistan",
     "Afrique du Sud",
@@ -280,6 +231,50 @@ export class ProfileModifyComponent implements OnInit{
     "Zimbabwe",
   ];
 
+  constructor(
+    private _snackbarService: SnackbarService,
+    private _router: Router,
+    private _userService: UserService,
+    private _storageService : StorageService,
+  ) { }
+
+  ngOnInit(): void {
+    /* Get data */
+    this.user = this._storageService.getUser();
+    /* Send request */
+    this._userService.profile(String(this.user.token), String(this.user.id)).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.user = {
+          id: response.id,
+          email: response.email,
+          firstName: response.firstName,
+          lastName: response.lastName,
+          birthDate: response.birthDate,
+          gender: response.gender,
+          nationality: response.nationality,
+          socialSecurityNumber: response.socialSecurityNumber,
+        };
+        this.form.patchValue({
+          email: this.user.email,
+          firstName: this.user.firstName,
+          lastName: this.user.lastName,
+          birthDate: this.user.birthDate,
+          gender: this.user.gender,
+          nationality: this.user.nationality,
+          socialSecurityNumber: this.user.socialSecurityNumber,
+        });
+        if (this.user.socialSecurityNumber == "99"){
+          this.isForeigner = true;
+          this.form.controls.socialSecurityNumber.disable();
+        };
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   public onSubmit(): void {
     /* Validate the form */
     this.form.markAllAsTouched();
@@ -287,28 +282,30 @@ export class ProfileModifyComponent implements OnInit{
       return;
     }
     /* Get form data */
-    // const date = new Date(String(this.form.get("birthDate")?.value));
-    // const dateString = date.getFullYear().toString() + "-" + date.getMonth().toString() + "-" + date.getDate().toString();
     const modifyData = {
       id: this.user.id,
-      email: this.form.get("email")?.value,
-      firstName: this.form.get("firstName")?.value,
-      lastName: this.form.get("lastName")?.value,
-      birthDate: this.formatBirthDate(String(this.form.value.birthDate)), // ou dateString
-      gender: this.form.get("gender")?.value,
-      nationality: this.form.get("nationality")?.value,
-      socialSecurity: this.form.get("socialSecurity")?.value,
+      email: this.form.value.email,
+      firstName: this.form.value.firstName,
+      lastName: this.form.value.lastName,
+      birthDate: this.formatBirthDate(String(this.form.value.birthDate)),
+      gender: this.form.value.gender,
+      nationality: this.form.value.nationality,
+      socialSecurityNumber: this.isForeigner ? "99" : this.form.value.socialSecurityNumber,
     };
+
     /* Submit form */
-    this.userService.modify(modifyData).subscribe({
+    this._userService.profileModify(modifyData).subscribe({
       next: (response) => {
-        this.responseMessage = response.message;
-        this._snackbarService.openSnackbar(this.responseMessage);
+        console.log(response);
+        let authUserInStorage = this._storageService.getUser();
+        authUserInStorage.firstName = this.user.firstName;
+        this._storageService.saveUser(authUserInStorage);
+        this._snackbarService.openSnackbar(response.message);
         this._router.navigate(["/user/profile"]);
       },
       error: (err) => {
-        this.responseMessage = err.error.message;
-        this._snackbarService.openSnackbar(this.responseMessage);
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
       },
     });
   }
@@ -316,12 +313,15 @@ export class ProfileModifyComponent implements OnInit{
   public onToggleForeigner(): void {
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {
-      this.form.controls.socialSecurity.disable();
-      this.form.controls.socialSecurity.setValue("99");
+      if (this.form.value.socialSecurityNumber) {
+        this.previousSocialSecurityNumber = this.form.value.socialSecurityNumber;
+      }
+      this.form.patchValue({socialSecurityNumber: "99"});
+      this.form.controls.socialSecurityNumber.disable();
     }
     else {
-      this.form.controls.socialSecurity.enable();
-      this.form.controls.socialSecurity.setValue("");
+      this.form.controls.socialSecurityNumber.enable();
+      this.form.patchValue({socialSecurityNumber: this.previousSocialSecurityNumber});
     }
   }
 
@@ -333,7 +333,6 @@ export class ProfileModifyComponent implements OnInit{
     const formattedDate = year+"-"+month+"-"+day;
     return formattedDate;
   }
-
 
 }
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment.development'
-import {Gender, User} from '@app/core/models/user.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +18,20 @@ export class UserService {
     private _httpClient: HttpClient,
   ) {}
 
-  public profile(data: any): Observable<any> {
-    return this._httpClient.post(this.url + "/profile", data, this.httpOptions);
+  /**
+   * 
+   * @param token 
+   * @param id 
+   */
+  public profile(token: string, id: string): Observable<any> {
+    return this._httpClient.post(this.url + "/profile", {token: token, id: id}, this.httpOptions);
   }
 
-  public modify(data: any): Observable<any> {
+  /**
+   * 
+   * @param data 
+   */
+  public profileModify(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/profile-modify", data, this.httpOptions);
   }
 
