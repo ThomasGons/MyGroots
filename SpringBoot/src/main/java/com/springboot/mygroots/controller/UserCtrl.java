@@ -35,7 +35,7 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile")
     public ExtResponseEntity<Map<String, ?>> getProfile(@RequestBody Map<String, String> data) {
-        String accountId = data.get("id");
+        String accountId = data.get("accountId");
         String token = data.get("token");
         Account acc = accountService.AuthenticatedAccount(token, accountId);
         if (acc == null) {
@@ -91,7 +91,7 @@ public class UserCtrl {
      */
     @PostMapping(value = "/notifs")
     public ExtResponseEntity<List<Notif>> getNotifs(@RequestBody Map<String, String> data) {
-        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
         }
