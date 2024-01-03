@@ -1,7 +1,7 @@
 package com.springboot.mygroots.utils;
 
 public class Enumerations {
-    public enum visibility{
+    public enum Visibility{
         PUBLIC,
         PROTECTED,
         PRIVATE
