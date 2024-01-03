@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,9 +35,9 @@ public class SearchCtrl {
      * @param data map containing the id of the person
      * @return the person
      */
-    @GetMapping(value= "/id")
+    @PostMapping(value= "/id")
     public ExtResponseEntity<Person> searchById(@RequestBody Map<String, String> data) {
-        Person p = personService.getPersonById(data.get("id"));
+        Person p = personService.getPersonById(data.get("personId"));
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne correspondante a cet id !", HttpStatus.BAD_REQUEST);
         }
@@ -48,19 +49,22 @@ public class SearchCtrl {
      * @param data map containing the name, the last name and the birthdate of the person
      * @return list of persons corresponding to the search
      */
-    @GetMapping(value= "/name")
+    @PostMapping(value= "/name")
     public ExtResponseEntity<List<Person>> searchByPersonalData(@RequestBody Map<String, String> data) {
         String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
         String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
         LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
-        List<Person> p = personService.findAllByFirstNameAndLastNameAndBirthDate(
+        System.out.println("firstName: "+firstName);
+        System.out.println("lastName: "+lastName);
+        System.out.println("birthDate: "+birthDate);
+        List<Person> results = personService.findAllByFirstNameAndLastNameAndBirthDate(
                 firstName, lastName, birthDate
         );
-        if (p == null) {
-            return new ExtResponseEntity<>("Aucune personne correspondante a ce nom !", HttpStatus.BAD_REQUEST);
+        if (results == null) {
+            return new ExtResponseEntity<>("Aucune resultat  !", HttpStatus.BAD_REQUEST);
         }
 
-        p.removeIf(person -> person.getFirstName().equals("unknown") && person.getLastName().equals("unknown"));
-        return new ExtResponseEntity<>(p, HttpStatus.OK);
+        results.removeIf(person -> person.getFirstName().equals("unknown") && person.getLastName().equals("unknown"));
+        return new ExtResponseEntity<>(results, HttpStatus.OK);
     }
 }

@@ -4,7 +4,7 @@ import { environment } from '@environments/environment.development';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
-import { ProfileComponent, NotificationsComponent, ProfileModifyComponent} from './features/user';
+import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
 import { SearchComponent } from './features/search/search.component';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
 import { authGuard } from './core/guards/auth.guard';
@@ -70,16 +70,16 @@ const routes: Routes = [
     path: "user",
     children: [
       {
-        path: "profile",
-        canActivate: [authGuard],
-        component: ProfileComponent,
-        title: environment.title + " - Profil",
-      },
-      {
         path: "notifications",
         canActivate: [authGuard],
         component: NotificationsComponent,
         title: environment.title + " - Notifications",
+      },
+      {
+        path: "profile",
+        canActivate: [authGuard],
+        component: ProfileComponent,
+        title: environment.title + " - Profil",
       },
       {
         path: "profile-modify",

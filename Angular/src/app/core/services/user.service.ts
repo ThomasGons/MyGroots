@@ -19,28 +19,28 @@ export class UserService {
   ) {}
 
   /**
-   * 
-   * @param token 
-   * @param id 
+   * Send request to server to get a user profile informations, need to be authenticated with a token.
+   * @param token Authentication token
+   * @param accountId Id of the account
    */
-  public profile(token: string, id: string): Observable<any> {
-    return this._httpClient.post(this.url + "/profile", {token: token, id: id}, this.httpOptions);
+  public profile(token: string, accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/profile", {token: token, accountId: accountId}, this.httpOptions);
   }
 
   /**
-   * 
-   * @param data
+   * Send request to server to change user profile informations, need to be authenticated with a token.
+   * @param data Informations to change and authentication data
    */
   public profileModify(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/profile-modify", data, this.httpOptions);
   }
 
   /**
-   * 
-   * @param token 
-   * @param id
+   * Send request to server to get all notifications owned by the user, need to be authenticated with a token.
+   * @param token Authentication token
+   * @param accountId Id of the account
    */
-  public notifs(token: string, id: string): Observable<any> {
-    return this._httpClient.post(this.url + "/notifs", {token: token, id: id}, this.httpOptions);
+  public notifs(token: string, accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
   }
 }

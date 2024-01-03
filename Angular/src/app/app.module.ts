@@ -13,7 +13,7 @@ import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordCompo
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
 import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
-import { SearchComponent } from './features/search/search.component';
+import { SearchComponent, SearchResultComponent } from './features/search';
 
 
 @NgModule({
@@ -35,6 +35,7 @@ import { SearchComponent } from './features/search/search.component';
     ProfileModifyComponent,
     FamilyTreeComponent,
     SearchComponent,
+    SearchResultComponent,
   ],
   imports: [
     BrowserModule,

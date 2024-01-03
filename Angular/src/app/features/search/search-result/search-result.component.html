@@ -1,0 +1,17 @@
+<mat-expansion-panel class="rounded-0">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon [className]="this.user.gender == 'MALE' ? 'fg-blue-pale' : 'fg-pink'">account_circle</mat-icon>
+      <span class="pt-1 ps-2">{{ this.user.firstName }} {{ this.user.lastName }}</span>
+    </mat-panel-title>
+    <mat-panel-description>
+      <span>{{ this.user.birthDate }}</span>
+      <span class="ps-5">{{ this.user.nationality }}</span>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <!-- Hidden section when collapsed -->
+  <div class="d-flex flex-column px-2 pb-2">
+    <span class="fg-gray">{{ this.user.id }}</span>
+    <!-- Buttons to add person to user's tree -->
+  </div>
+</mat-expansion-panel>
