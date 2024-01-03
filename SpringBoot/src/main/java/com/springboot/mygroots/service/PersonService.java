@@ -7,16 +7,23 @@ import com.springboot.mygroots.repository.PersonRepository;
 import com.springboot.mygroots.utils.Enumerations.Gender;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class PersonService {
 	
     @Autowired
     private PersonRepository personRepository;
+    
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public void addPerson(Person person){
         personRepository.save(person);
@@ -33,11 +40,18 @@ public class PersonService {
     public Person getPersonById(String id){
     	return personRepository.findById(id).get();
     }
-    
-    public List<Person> findAllByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate){
-        return personRepository.findAllPersonByFirstNameAndLastNameAndBirthDate(firstName, lastName, birthDate);
-    }
 
+    public List<Person> findAllByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate){
+        Query query = new Query();
+        if (firstName != null && !firstName.isEmpty())
+            query.addCriteria(Criteria.where("firstName").is(firstName).regex(Pattern.compile("^" + firstName, Pattern.CASE_INSENSITIVE)));
+        if (lastName != null && !lastName.isEmpty())
+            query.addCriteria(Criteria.where("lastName").is(lastName).regex(Pattern.compile("^" + lastName, Pattern.CASE_INSENSITIVE)));
+        if (birthDate != null)
+            query.addCriteria(Criteria.where("birthDate").is(birthDate));
+        return mongoTemplate.find(query, Person.class);
+    }
+    
     public void removePerson(Person person){
         personRepository.delete(person);
     }

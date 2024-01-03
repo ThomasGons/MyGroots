@@ -52,7 +52,7 @@ public class FamilyTreeDTO {
             this.firstName = person.getFirstName();
             this.lastName = person.getLastName();
             this.birthDate = person.getBirthDate();
-            this.gender = person.getGender().toString();
+            this.gender = person.getGender().toString().toLowerCase();
             this.nationality = person.getNationality();
         }
 

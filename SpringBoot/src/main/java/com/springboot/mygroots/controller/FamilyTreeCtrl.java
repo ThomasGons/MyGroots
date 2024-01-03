@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,18 +46,19 @@ public class FamilyTreeCtrl {
      * @param data map containing the id of the owner
      * @return the root of the family tree
      */
-    @RequestMapping(value= "/")
+    @PostMapping(value= "/")
     public ExtResponseEntity<FamilyTreeDTO> root(@RequestBody Map<String, String> data) {
-        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
 		if ( acc != null) {
-            Person p = acc.getPerson();
-            if (p == null) {
-                return new ExtResponseEntity<>("Aucune personne correspondante à cet id !", HttpStatus.BAD_REQUEST);
-            }
-            FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
-            if (ft == null) {
-                return new ExtResponseEntity<>("Aucun arbre correspondant à cet id !", HttpStatus.BAD_REQUEST);
-            }
+//            Person p = acc.getPerson();
+//            if (p == null) {
+//                return new ExtResponseEntity<>("Aucune personne correspondante à cet id !", HttpStatus.BAD_REQUEST);
+//            }
+//            FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
+//            if (ft == null) {
+//                return new ExtResponseEntity<>("Aucun arbre correspondant à cet id !", HttpStatus.BAD_REQUEST);
+//            }
+			FamilyTree ft = acc.getFamilyTree();
             return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
         }
         return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
@@ -78,7 +80,7 @@ public class FamilyTreeCtrl {
      *                            the id of the owner whether the source_id is not the owner
      * @return list of persons
      */
-    @GetMapping(value="/nodes")
+    @PostMapping(value="/nodes")
     public ExtResponseEntity<List<Person>> search(@RequestBody Map<String, String> data) {
         String src_id = data.get("src_id");
         String relation = data.get("relation");
@@ -149,7 +151,7 @@ public class FamilyTreeCtrl {
     }
 
     /**
-     * Add a person to the family tree
+     * Remove a person from the family tree
      * @param data map containing the id of the owner person,
      *                            the id of the person to remove
      *

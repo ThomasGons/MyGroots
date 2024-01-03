@@ -54,9 +54,6 @@ public class SearchCtrl {
         String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
         String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
         LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
-        System.out.println("firstName: "+firstName);
-        System.out.println("lastName: "+lastName);
-        System.out.println("birthDate: "+birthDate);
         List<Person> results = personService.findAllByFirstNameAndLastNameAndBirthDate(
                 firstName, lastName, birthDate
         );
