@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Gender, Person, User } from '@app/core/models';
 import { StorageService, FamilyTreeService } from '@app/core/services';
 import FamilyTree from "@balkangraph/familytree.js";
+import { TreeAddNodeDialogComponent } from './tree-add-node-dialog/tree-add-node-dialog.component';
+import { TreeRemoveNodeDialogComponent } from './tree-remove-node-dialog/tree-remove-node-dialog.component';
 
 @Component({
   selector: 'app-family-tree',
@@ -38,19 +41,19 @@ export class FamilyTreeComponent implements OnInit {
     {value: "CHILD", viewValue: "Enfant"},
   ];
   
-
   treeData!: any;
   family!: FamilyTree;
   user!: User;
   selectedNodeData!: any;
   
   showSidePanel: boolean = false;
-  showAddForm: boolean = false;
-  showRemoveDialog: boolean = false;
+  showAddNodeForm: boolean = false;
+  showRemoveNodeForm: boolean = false;
 
   constructor(
     private _familytreeService: FamilyTreeService,
     private _storageService : StorageService,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -76,7 +79,7 @@ export class FamilyTreeComponent implements OnInit {
   //    custom panel => remove unwanted buttons
   //    CSS
 
-  public initTree(treeData: any): void {
+  private initTree(treeData: any): void {
     /* Load FamilyTreeJS api */
     const tree = document.getElementById("tree");
     if (tree) {
@@ -95,7 +98,7 @@ export class FamilyTreeComponent implements OnInit {
       /* Set custom events */
       
       this.family.onNodeClick((node: any) => {
-        console.log("onNodeCLick");
+        console.log("onNodeClick");
         console.log(node);
         const nodeData = node.node;
         if (!this.sidepanel.opened) {
@@ -110,35 +113,48 @@ export class FamilyTreeComponent implements OnInit {
   
   public toggleSidePanel(): void {
     if (this.sidepanel.opened) {
-      this.showAddForm = false;
-      this.showRemoveDialog = false;
+      this.showAddNodeForm = false;
+      this.showRemoveNodeForm = false;
     }
     this.sidepanel.toggle();
   }
 
-  public toggleAddForm(): void {
-    this.showAddForm = !this.showAddForm;
+  public openDialogAddNode(): void {
+    this.showAddNodeForm = !this.showAddNodeForm;
+    this.dialog.open(TreeAddNodeDialogComponent, {
+      data: {
+        type: "byName",
+        selectedNodeData: this.selectedNodeData,
+        nodes: this.treeData.nodes,
+      },
+      width: "600px",
+      height: "480px",
+    });
   }
 
-  public toggleRemoveDialog(): void {
-    this.showRemoveDialog = !this.showRemoveDialog;
+  public openDialogRemoveNode(): void {
+    this.showRemoveNodeForm = !this.showRemoveNodeForm;
+    this.dialog.open(TreeRemoveNodeDialogComponent, {
+      width: "500px",
+    });
   }
 
-  public getGender(gender: string): string {
 
+
+
+
+
+
+
+  protected getSelectedNodeGender(): string {
+    for (let gender of this.genders) {
+      if (gender.value == this.selectedNodeData?.gender) {
+        return gender.viewValue;
+      }
+    }
+    return "";
   }
 
-
-  public onSubmitAddByName(): void {
-    /* Check form */
-    /* Send request */
-  }
-
-  public onSubmitAddById(): void {
-
-  }
-
-  
   // public onSubmit(): void {
   //   this.form.markAllAsTouched();
   //   if (!this.form.valid) {

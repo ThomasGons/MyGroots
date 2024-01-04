@@ -8,6 +8,7 @@
 :root {
     --color-gray: #dedede;
     --color-gray-light: #EBECEC;
+    --color-gray-dark: #aaaaaa;
     --color-green: #6DB344;
     --color-green-light: #DAEAB5;
     --color-green-dark: #3C8632;
@@ -46,6 +47,9 @@
 }
 .fg-gray-light {
     color: var(--color-gray-light) !important;
+}
+.fg-gray-dark {
+    color: var(--color-gray-dark) !important;
 }
 .fg-green {
     color: var(--color-green) !important;

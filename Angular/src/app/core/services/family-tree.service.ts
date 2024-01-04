@@ -31,7 +31,7 @@ export class FamilyTreeService {
   public getFamilyTreeById(token: string, accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/", {token: token, accountId: accountId}, this.httpOptions);
   }
-
+  
   /**
    * Send request to server to get the tree of the person.
    * @param personId Id of the Person in database
