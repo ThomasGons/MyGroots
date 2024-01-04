@@ -6,6 +6,7 @@ import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
+import com.springboot.mygroots.utils.Enumerations.Gender;
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,16 +65,24 @@ public class UserCtrl {
             String firstname = data.get("firstName");
             String lastname = data.get("lastName");
             LocalDate birthDate = LocalDate.parse(data.get("birthDate"));
+            Gender gender = Gender.valueOf(data.get("gender"));
             String nationality = data.get("nationality");
             String socialSecurityNumber = data.get("socialSecurityNumber");
 
-            acc.setEmail(email);
-            p.setFirstName(firstname);
-            p.setLastName(lastname);
-            p.setBirthDate(birthDate);
-            p.setGender(Enumerations.Gender.valueOf(data.get("gender")));
-            p.setNationality(nationality);
-            p.setSocialSecurityNumber(socialSecurityNumber);
+            if (email != null)
+            	acc.setEmail(email);
+            if (firstname != null)
+            	p.setFirstName(firstname);
+            if (lastname != null)
+            	p.setLastName(lastname);
+    		if (birthDate != null)
+    			p.setBirthDate(birthDate);
+    		if (gender != null)
+    			p.setGender(gender);
+    		if (nationality != null)
+    			p.setNationality(nationality);
+    		if (socialSecurityNumber != null)
+    			p.setSocialSecurityNumber(socialSecurityNumber);
 
             accountService.updateAccount(acc);
             personService.updatePerson(p);

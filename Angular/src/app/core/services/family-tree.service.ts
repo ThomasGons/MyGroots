@@ -19,11 +19,32 @@ export class FamilyTreeService {
   ) {}
 
 
-  public getPersonByID(data: any): Observable<any> {
-    return this._httpClient.post(this.url + "/getPerson", data, this.httpOptions);
+  // public getPersonByID(data: any): Observable<any> {
+  //   return this._httpClient.post(this.url + "/getPerson", data, this.httpOptions);
+  // }
+
+  /**
+   * Send request to server to get the tree of the account connected, need authentication with a token
+   * @param token Authentication token
+   * @param accountId Id of the account
+   */
+  public getFamilyTreeById(token: string, accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/", {token: token, accountId: accountId}, this.httpOptions);
   }
 
-  public getFamilyTreeByID(data: any): Observable<any> {
-    return this._httpClient.post(this.url + "/", data, this.httpOptions);
+  /**
+   * Send request to server to get the tree of the person.
+   * @param personId Id of the Person in database
+   */
+  public getOtherFamilyTreeById(personId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/other", {personId: personId}, this.httpOptions);
+  }
+
+  public addNodeByName(data: any): Observable<any> {
+    return this._httpClient.put(this.url + "/node/name", data, this.httpOptions);
+  }
+
+  public addNodeById(data: any): Observable<any> {
+    return this._httpClient.put(this.url + "/node/id", data, this.httpOptions);
   }
 }

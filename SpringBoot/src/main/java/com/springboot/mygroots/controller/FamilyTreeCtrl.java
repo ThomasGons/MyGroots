@@ -50,14 +50,6 @@ public class FamilyTreeCtrl {
     public ExtResponseEntity<FamilyTreeDTO> root(@RequestBody Map<String, String> data) {
         Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
 		if ( acc != null) {
-//            Person p = acc.getPerson();
-//            if (p == null) {
-//                return new ExtResponseEntity<>("Aucune personne correspondante à cet id !", HttpStatus.BAD_REQUEST);
-//            }
-//            FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
-//            if (ft == null) {
-//                return new ExtResponseEntity<>("Aucun arbre correspondant à cet id !", HttpStatus.BAD_REQUEST);
-//            }
 			FamilyTree ft = acc.getFamilyTree();
             return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
         }
@@ -123,7 +115,7 @@ public class FamilyTreeCtrl {
      *
      * @return message to indicate whether the addition has been carried out correctly
      */
-    @PutMapping(value="/nodes")
+    @PutMapping(value="/nodes/")
     public ExtResponseEntity<?> addNode(@RequestBody Map<String, String> data) {
         String src_id = data.get("src_id");
         String dst_id = data.get("dst_id");

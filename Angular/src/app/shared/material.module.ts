@@ -21,6 +21,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatBottomSheetModule,
   ],
   exports: [
     MatSidenavModule,
@@ -69,6 +71,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatBottomSheetModule,
   ],
   providers: [], 
 })

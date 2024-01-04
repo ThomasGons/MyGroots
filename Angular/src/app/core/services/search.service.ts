@@ -29,11 +29,11 @@ export class SearchService {
   }
 
   /**
-   * Send request to server to get a Person by its id.
-   * @param personId Id of the Person in database
+   * Send request to server to get an Account.
+   * @param accountId Id of the Person in database
    */
-  public searchById(personId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/id", {personId: personId}, this.httpOptions);
+  public searchById(accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/id", {accountId: accountId}, this.httpOptions);
   }
 
 }

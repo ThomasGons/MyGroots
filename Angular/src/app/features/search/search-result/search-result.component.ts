@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { User } from '@app/core/models';
 
 @Component({
   selector: 'app-search-result',
@@ -8,5 +7,5 @@ import { User } from '@app/core/models';
 export class SearchResultComponent {
   
   @Input()
-  user!: User;
+  account!: any;
 }
