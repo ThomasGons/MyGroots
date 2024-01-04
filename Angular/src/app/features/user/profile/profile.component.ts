@@ -12,6 +12,7 @@ import { User } from '@app/core/models';
 export class ProfileComponent implements OnInit {
 
   user: User = {};
+  gender: string = "";
 
   constructor(
     private _snackbarService: SnackbarService,
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     /* Get data */
     this.user = this._storageService.getUser();
-    /* Send request */ 
+    /* Send request */
     this._userService.profile(String(this.user.token), String(this.user.id)).subscribe({
       next: (response) => {
         console.log(response);
@@ -34,7 +35,11 @@ export class ProfileComponent implements OnInit {
           gender: response.body.person.gender,
           nationality: response.body.person.nationality,
           socialSecurityNumber: response.body.person.socialSecurityNumber,
-        }
+        };
+        if (this.user.gender == 'MALE'){
+          this.gender = "Homme"
+        }else {
+          this.gender = "Femme"};
       },
       error: (err) => {
         console.log(err);

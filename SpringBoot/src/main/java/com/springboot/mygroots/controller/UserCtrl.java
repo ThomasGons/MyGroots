@@ -52,7 +52,7 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile-modify")
     public ExtResponseEntity<?> profileModify(@RequestBody Map<String, String> data) {
-        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
