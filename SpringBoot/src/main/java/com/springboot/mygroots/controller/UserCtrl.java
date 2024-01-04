@@ -4,6 +4,8 @@ import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Notif;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.AccountService;
+import com.springboot.mygroots.service.FamilyTreeService;
+import com.springboot.mygroots.service.NotifService;
 import com.springboot.mygroots.service.PersonService;
 import com.springboot.mygroots.utils.Enumerations;
 import com.springboot.mygroots.utils.ExtResponseEntity;
@@ -28,7 +30,10 @@ public class UserCtrl {
     AccountService accountService;
     @Autowired
     PersonService personService;
-
+    @Autowired
+    NotifService notifService;
+    @Autowired
+    FamilyTreeService familyTreeService;
     /**
      * Get the profile of a user
      * @param data map containing the id of the user
@@ -104,5 +109,80 @@ public class UserCtrl {
         };
         return new ExtResponseEntity<>(notifsDTO, HttpStatus.OK);
     }
+
+
+    /**
+     * Respond to a notification
+     * @param "response" : true if the user accepts the demand, false otherwise
+     * @param "notifId" : id of the notification
+     *
+     * @return
+     */
+    @PostMapping(value = "/notifs")
+    public ExtResponseEntity<?> respondNotif(@RequestBody Map<String, String> data) {
+
+        Boolean response = Boolean.parseBoolean(data.get("response"));
+        String id = data.get("notifId");
+
+        Notif notif = notifService.getNotifById(id);
+
+        if(notif == null){
+            return new ExtResponseEntity<>("Aucune notification correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        }
+
+        if(response){
+            notif.acceptDemand();
+        } else {
+            notif.declineDemand();
+        }
+
+        accountService.updateAccount(notif.getSource());
+        accountService.updateAccount(notif.getTarget());
+
+        familyTreeService.updateFamilyTree(notif.getTarget().getFamilyTree());
+        familyTreeService.updateFamilyTree(notif.getSource().getFamilyTree());
+
+        for(Notif n : notif.getTarget().getNotifs()){
+            notifService.updateNotif(n);
+        }
+        for(Notif n : notif.getSource().getNotifs()){
+            notifService.updateNotif(n);
+        }
+
+        notifService.removeNotif(notif);
+
+        return new ExtResponseEntity<>("OK", HttpStatus.OK);
+
+    }
+
+    /**
+     * Delete a notification
+     * @param "notifId" : id of the notification
+     *
+     */
+    @DeleteMapping(value = "/notifs")
+    public ExtResponseEntity<?> deleteNotif(@RequestBody Map<String, String> data) {
+
+        String id = data.get("notifId");
+
+        Notif notif = notifService.getNotifById(id);
+        if(notif == null){
+            return new ExtResponseEntity<>("Aucune notification correspondante a cet id !", HttpStatus.BAD_REQUEST);
+        }
+        notif.getTarget().removeNotif(notif);
+        accountService.updateAccount(notif.getTarget());
+        notifService.removeNotif(notif);
+
+        return new ExtResponseEntity<>("OK", HttpStatus.OK);
+
+    }
+
+
+
+
+
+
+
+
 
 }

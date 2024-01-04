@@ -43,18 +43,40 @@ public class Notif {
     public void acceptDemand(){
         source.addNotif(new Notif(target,member,source,NotifType.ALERT_DEMANDACCEPTED,relation));
         target.removeNotif(this);
+
+        Boolean isTreeEquivalant = source.getFamilyTree().isEquivalant(target.getFamilyTree());
+
         if(relation == Relation.FATHER){
             source.getFamilyTree().addFather(member,target.getPerson());
+            if(isTreeEquivalant){
+                target.getFamilyTree().addChild(member,source.getPerson());
+            }
         }
         else if(relation == Relation.MOTHER){
             source.getFamilyTree().addMother(member,target.getPerson());
+            if(isTreeEquivalant){
+                target.getFamilyTree().addChild(member,source.getPerson());
+            }
         }
         else if(relation == Relation.PARTNER){
             source.getFamilyTree().addPartner(member,target.getPerson());
+            if(isTreeEquivalant){
+                target.getFamilyTree().addPartner(member,source.getPerson());
+            }
         }
         else if(relation == Relation.CHILD){
             source.getFamilyTree().addChild(member,target.getPerson());
+            if(isTreeEquivalant){
+                if(target.getPerson().getGender() == Gender.MALE){
+                    target.getFamilyTree().addFather(member,source.getPerson());
+                }
+                else{
+                    target.getFamilyTree().addMother(member,source.getPerson());
+                }
+            }
         }
+
+
     }
 
     public void declineDemand(){
