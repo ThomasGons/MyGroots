@@ -38,10 +38,12 @@ export class NotificationsComponent {
   }
   refuser(id:string) {
     console.log(id);
+    this.ngOnInit();
   }
 
   accepter(id:string) {
     console.log(id);
+    this.ngOnInit();
   }
 
 }

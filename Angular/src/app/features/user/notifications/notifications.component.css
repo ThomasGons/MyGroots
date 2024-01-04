@@ -1,6 +1,6 @@
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 10px;
 }
 
@@ -13,11 +13,8 @@
   height: 100vh;
 }
 
-
-.card {
-  min-width: 320px;
-  width: 1000px;
-  height: max-content;
+.mat-card {
+  margin-bottom: 15px;
 }
 
 

@@ -44,11 +44,20 @@ export class UserService {
     return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
   }
 
-
+  /**
+   * Send request to server to get all notifications owned by the user, need to be authenticated with a token.
+   * @param token Authentication token
+   * @param accountId Id of the account
+   */
   public accepted(token: string, accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
   }
 
+  /**
+   * Send request to server to get all notifications owned by the user, need to be authenticated with a token.
+   * @param token Authentication token
+   * @param accountId Id of the account
+   */
   public refused(token: string, accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
   }

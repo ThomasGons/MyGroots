@@ -1,7 +1,7 @@
 <div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg); background-size: cover;">
 <div *ngIf="messages && messages.length; else noMessages">
-  <mat-card *ngFor="let message of messages">
-    <mat-card-content>
+  <mat-card *ngFor="let message of messages" style="margin-bottom: 15px;">
+    <mat-card-content style="text-align: center">
       {{ message.message }}
       <div *ngIf="message.type == 'DEMAND_ADDTOFAMILY'">
       <div class="button-group">
