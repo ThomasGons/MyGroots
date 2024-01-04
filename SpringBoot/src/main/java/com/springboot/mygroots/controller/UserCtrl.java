@@ -107,4 +107,14 @@ public class UserCtrl {
         return new ExtResponseEntity<>(acc.getNotifs(), HttpStatus.OK);
     }
 
+
+    @PostMapping(value = "/notifs/ui")
+    public void test(@RequestBody Map<String, String> data) {
+        Account acc = accountService.getAccountByEmail("pereiramatheo78@gmail.com");
+        acc.addNotif(new Notif(acc,acc.getPerson(),acc, Enumerations.NotifType.ALERT_DEMANDACCEPTED, Enumerations.Relation.CHILD));
+
+    }
+
+
+
 }

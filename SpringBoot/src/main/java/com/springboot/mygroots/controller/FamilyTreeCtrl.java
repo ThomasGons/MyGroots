@@ -121,7 +121,7 @@ public class FamilyTreeCtrl {
      *
      * @return message to indicate whether the addition has been carried out correctly
      */
-    @PutMapping(value="/nodes/id")
+    @PutMapping(value="/node/id")
     public ExtResponseEntity<?> addNodeByID(@RequestBody Map<String, String> data) {
         String owner_id = data.get("ownerId");
         String src_id = data.get("srcId");
@@ -165,7 +165,7 @@ public class FamilyTreeCtrl {
      *
      * @return message to indicate whether the addition has been carried out correctly
      */
-    @PutMapping(value="/nodes/id")
+    @PutMapping(value="/node/new-person")
     public ExtResponseEntity<?> addNodeNewPerson(@RequestBody Map<String, String> data) {
         String owner_id = data.get("ownerId");
         String src_id = data.get("srcId");
