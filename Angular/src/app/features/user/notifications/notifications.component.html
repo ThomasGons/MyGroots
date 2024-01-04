@@ -3,12 +3,17 @@
   <mat-card *ngFor="let message of messages" style="margin-bottom: 15px;">
     <mat-card-content style="text-align: center">
       {{ message.message }}
-      <div *ngIf="message.type == 'DEMAND_ADDTOFAMILY'">
+      <div *ngIf="message.type == 'DEMAND_ADDTOFAMILY'; else other">
       <div class="button-group">
         <button mat-button (click)="refuser(message.id)">Refuser</button>
         <button mat-button color="primary" (click)="accepter(message.id)">Accepter</button>
       </div>
       </div>
+      <ng-template #other>
+      <div class="button-group">
+        <button mat-button color="primary" (click)="accepter(message.id)">supprimer</button>
+      </div>
+      </ng-template>
     </mat-card-content>
   </mat-card>
 </div>
