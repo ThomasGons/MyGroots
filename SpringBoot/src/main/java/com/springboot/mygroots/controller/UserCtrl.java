@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile")
     public ExtResponseEntity<Map<String, ?>> getProfile(@RequestBody Map<String, String> data) {
-        String accountId = data.get("id");
+        String accountId = data.get("accountId");
         String token = data.get("token");
         Account acc = accountService.AuthenticatedAccount(token, accountId);
         if (acc == null) {
@@ -51,7 +52,7 @@ public class UserCtrl {
      */
     @PostMapping(value = "/profile-modify")
     public ExtResponseEntity<?> profileModify(@RequestBody Map<String, String> data) {
-        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
@@ -90,12 +91,18 @@ public class UserCtrl {
      * @return list of notifications
      */
     @PostMapping(value = "/notifs")
-    public ExtResponseEntity<List<Notif>> getNotifs(@RequestBody Map<String, String> data) {
-        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("id"));
+    public ExtResponseEntity<List<Map<String,String>>> getNotifs(@RequestBody Map<String, String> data) {
+        Account acc = accountService.AuthenticatedAccount(data.get("token"), data.get("accountId"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(acc.getNotifs(), HttpStatus.OK);
+        List<Map<String,String>> notifsDTO = new ArrayList<>();
+        for(Notif n : acc.getNotifs()){
+            notifsDTO.add(Map.of( "id", n.getId(),
+                    "type", n.getType().toString(),
+                    "message", n.getBody()));
+        };
+        return new ExtResponseEntity<>(notifsDTO, HttpStatus.OK);
     }
 
 }

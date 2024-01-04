@@ -1,1 +1,24 @@
-<p>notifications works!</p>
+<div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg); background-size: cover;">
+<div *ngIf="messages && messages.length; else noMessages">
+  <mat-card *ngFor="let message of messages">
+    <mat-card-content>
+      {{ message.message }}
+      <div *ngIf="message.type == 'DEMAND_ADDTOFAMILY'">
+      <div class="button-group">
+        <button mat-button (click)="refuser(message.id)">Refuser</button>
+        <button mat-button color="primary" (click)="accepter(message.id)">Accepter</button>
+      </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+  <ng-template #noMessages>
+    <div class="centered-text">
+    Vous n'avez aucune notification
+    </div>
+  </ng-template>
+
+
+</div>
+
+

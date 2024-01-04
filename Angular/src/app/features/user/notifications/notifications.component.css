@@ -1,0 +1,23 @@
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.centered-text {
+  font-size: 30px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.card {
+  min-width: 320px;
+  width: 1000px;
+  height: max-content;
+}
+
+

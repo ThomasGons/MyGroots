@@ -91,5 +91,5 @@ public class Notif {
     }
 
 
-
+    public String getId() {return id;}
 }

@@ -43,4 +43,13 @@ export class UserService {
   public notifs(token: string, accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
   }
+
+
+  public accepted(token: string, accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
+  }
+
+  public refused(token: string, accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
+  }
 }
