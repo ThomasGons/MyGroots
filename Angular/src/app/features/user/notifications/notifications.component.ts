@@ -36,13 +36,33 @@ export class NotificationsComponent {
       }
     });
   }
-  refuser(id:string) {
-    console.log(id);
-    this.ngOnInit();
+  delete(notifId:string) {
+    this._userService.delete(String(notifId)).subscribe({
+      next: (response) => {
+        console.log(response);
+        this._snackbarService.openSnackbar(response.message);
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
+      }
+    });
+
   }
 
-  accepter(id:string) {
-    console.log(id);
+  response(notifId:string, response:boolean) {
+    this._userService.response(String(response), String(notifId)).subscribe({
+      next: (response) => {
+        console.log(response);
+        this._snackbarService.openSnackbar(response.message);
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
+      }
+    });
     this.ngOnInit();
   }
 

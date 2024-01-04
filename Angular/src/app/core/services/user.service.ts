@@ -49,8 +49,8 @@ export class UserService {
    * @param token Authentication token
    * @param accountId Id of the account
    */
-  public accepted(token: string, accountId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
+  public response(response: string, notifId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs/response", {reponse: response, notifId: notifId}, this.httpOptions);
   }
 
   /**
@@ -58,7 +58,7 @@ export class UserService {
    * @param token Authentication token
    * @param accountId Id of the account
    */
-  public refused(token: string, accountId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/notifs", {token: token, accountId: accountId}, this.httpOptions);
+  public delete(notifId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/notifs/delete", {notifId: notifId}, this.httpOptions);
   }
 }

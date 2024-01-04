@@ -118,7 +118,7 @@ public class UserCtrl {
      *
      * @return
      */
-    @PostMapping(value = "/notifs")
+    @PostMapping(value = "/notifs/response")
     public ExtResponseEntity<?> respondNotif(@RequestBody Map<String, String> data) {
 
         Boolean response = Boolean.parseBoolean(data.get("response"));
@@ -130,24 +130,34 @@ public class UserCtrl {
             return new ExtResponseEntity<>("Aucune notification correspondante a cet id !", HttpStatus.BAD_REQUEST);
         }
 
+        Account acc1 = notif.getSource();
+        Account acc2 = notif.getTarget();
+
+        if(acc1 == null | acc2 == null){
+            return new ExtResponseEntity<>("Aucun compte trouvé !", HttpStatus.BAD_REQUEST);
+        }
+
+
         if(response){
             notif.acceptDemand();
         } else {
             notif.declineDemand();
         }
 
-        accountService.updateAccount(notif.getSource());
-        accountService.updateAccount(notif.getTarget());
-
-        familyTreeService.updateFamilyTree(notif.getTarget().getFamilyTree());
-        familyTreeService.updateFamilyTree(notif.getSource().getFamilyTree());
-
-        for(Notif n : notif.getTarget().getNotifs()){
+        for(Notif n : acc2.getNotifs()){
             notifService.updateNotif(n);
         }
-        for(Notif n : notif.getSource().getNotifs()){
+        for(Notif n : acc1.getNotifs()){
             notifService.updateNotif(n);
         }
+
+        accountService.updateAccount(acc1);
+        accountService.updateAccount(acc2);
+
+        System.out.println(acc2.getFamilyTree());
+
+        familyTreeService.updateFamilyTree(acc2.getFamilyTree());
+        familyTreeService.updateFamilyTree(acc1.getFamilyTree());
 
         notifService.removeNotif(notif);
 
@@ -160,7 +170,7 @@ public class UserCtrl {
      * @param "notifId" : id of the notification
      *
      */
-    @DeleteMapping(value = "/notifs")
+    @PostMapping(value = "/notifs/delete")
     public ExtResponseEntity<?> deleteNotif(@RequestBody Map<String, String> data) {
 
         String id = data.get("notifId");
@@ -177,6 +187,20 @@ public class UserCtrl {
 
     }
 
+
+    @GetMapping(value = "/notifs/suce")
+    public void testNotif() {
+        Account acc1 = accountService.getAccountByEmail("pereiramat@cy-tech.fr");
+        Account acc2 = accountService.getAccountByEmail("cototlucas@cy-tech.fr");
+
+        acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, Enumerations.NotifType.DEMAND_ADDTOFAMILY, Enumerations.Relation.FATHER));
+
+
+        for (Notif n:acc1.getNotifs()){
+            notifService.saveNotif(n);
+        }
+        accountService.updateAccount(acc1);
+    }
 
 
 
