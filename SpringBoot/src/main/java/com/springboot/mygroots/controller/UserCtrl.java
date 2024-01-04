@@ -144,12 +144,18 @@ public class UserCtrl {
             notif.declineDemand();
         }
 
-        for(Notif n : acc2.getNotifs()){
-            notifService.updateNotif(n);
+        if(!acc2.getNotifs().isEmpty()){
+            for(Notif n : acc2.getNotifs()){
+                notifService.updateNotif(n);
+            }
         }
-        for(Notif n : acc1.getNotifs()){
-            notifService.updateNotif(n);
+
+        if(!acc1.getNotifs().isEmpty()){
+            for(Notif n : acc1.getNotifs()){
+                notifService.updateNotif(n);
+            }
         }
+
 
         accountService.updateAccount(acc1);
         accountService.updateAccount(acc2);
@@ -190,8 +196,8 @@ public class UserCtrl {
 
     @GetMapping(value = "/notifs/suce")
     public void testNotif() {
-        Account acc1 = accountService.getAccountByEmail("pereiramat@cy-tech.fr");
-        Account acc2 = accountService.getAccountByEmail("cototlucas@cy-tech.fr");
+        Account acc1 = accountService.getAccountByEmail("pereiramatheo78@gmail.com");
+        Account acc2 = accountService.getAccountByEmail("raphael.causse2@gmail.com");
 
         acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, Enumerations.NotifType.DEMAND_ADDTOFAMILY, Enumerations.Relation.FATHER));
 

@@ -58,8 +58,10 @@ public class AuthCtrl {
 			FamilyTree ft = familyTreeService.getFamilyTreeByOwner(p);
 			if (ft == null) {
 				ft = new FamilyTree(data.get("lastName"), p);
-				familyTreeService.saveFamilyTree(ft); 
+				familyTreeService.saveFamilyTree(ft);
 			}
+			acc.setFamilyTree(ft);
+			accountService.updateAccount(acc);
 			return response;
 		} catch(Exception e) {
 			e.printStackTrace();
