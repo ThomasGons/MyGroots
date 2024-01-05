@@ -40,20 +40,14 @@ export class TreeAddNodeDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: {ownerId: string, selectedNodeId: any, selectedNodeData: any, nodes: any[], members: any[]},
   ) {
     const node = this.data.nodes[this.data.selectedNodeId];
-    if (node.fid == -1) {
-      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
-        this.availableRelations.push({value: "FATHER", viewValue: "Père"});
-      }
+    if (node.fid == -1 || (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown")) {
+      this.availableRelations.push({value: "FATHER", viewValue: "Père"});
     }
-    if (node.mid == -1) {
-      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
-        this.availableRelations.push({value: "MOTHER", viewValue: "Mère"});
-      }
+    if (node.mid == -1 || (this.data.members[node.mid].firstName != "unknown" && this.data.members[node.mid].lastName != "unknown")) {
+      this.availableRelations.push({value: "MOTHER", viewValue: "Mère"});
     }
-    if (node.pids[0] == -1) {
-      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
-        this.availableRelations.push({value: "PARTNER", viewValue: "Partenaire"});
-      }
+    if (node.pids[0] == -1 || (this.data.members[node.pids[0]].firstName != "unknown" && this.data.members[node.pids[0]].lastName != "unknown")) {
+      this.availableRelations.push({value: "PARTNER", viewValue: "Partenaire"});
     }
     this.availableRelations.push({value: "CHILD", viewValue: "Enfant"});
   }
