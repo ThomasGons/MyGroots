@@ -40,6 +40,6 @@ export class SearchService {
    * @param accountId Id of the Person in database
    */
   public searchCommun(accountId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/id", {accountId: accountId}, this.httpOptions);
+    return this._httpClient.post(this.url + "/common-members", {owner_acc_id: accountId}, this.httpOptions);
   }
 }

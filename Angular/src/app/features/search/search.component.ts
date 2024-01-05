@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from '@app/core/models';
+import { StorageService } from '@app/core/services';
 import { SearchService } from '@app/core/services/search.service';
 
 
@@ -21,9 +22,14 @@ export class SearchComponent {
   });
   showResults: boolean = false;
   searchResults: any[] = [];
+  user: User = {};
+  owner_acc_id: string = '';
+
+  private _snackbarService: any;
 
   constructor(
     private _searchService: SearchService,
+    private _storageService : StorageService,
   ) {}
 
   public onSubmitByName(): void {
@@ -75,6 +81,18 @@ export class SearchComponent {
   }
 
   public communSearch():void{
+    this.user = this._storageService.getUser();
+    this.owner_acc_id = String(this.user.id);
+    this._searchService.searchCommun(String(this.owner_acc_id)).subscribe({
+      next: (response) => {
+        console.log(response);
+        this._snackbarService.openSnackbar(response.message);
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
+      }
+    });
 
   }
 
