@@ -5,10 +5,7 @@ import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +81,7 @@ public class SearchCtrl {
     }
 
     @PostMapping(value="/common-members")
-    public ExtResponseEntity<Map<String, List<Person>>> getCommonMembers(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<Map<String, List<?>>> getCommonMembers(@RequestBody Map<String, String> data) {
         String owner_acc_id = data.get("owner_acc_id");
         Account acc = accountService.getAccountById(owner_acc_id);
         Map<String, List<Person>> commons = familyTreeService.getSimilarFamilyTreeByAllNodes(acc.getPerson());
@@ -92,10 +89,16 @@ public class SearchCtrl {
             return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ExtResponseEntity<>(Map.of(
-                "same", commons.get("same"),
-                "probably_same", commons.get("probably_same")),
-                HttpStatus.OK);
+        Map<String, List<?>> acc_commons = new HashMap<>();
+
+        List<Account> accs = new ArrayList<>();
+        for (Person p: commons.get("same")) {
+            accs.add(accountService.getAccountByPerson(p));
+        }
+        acc_commons.put("same", accs);
+        acc_commons.put("probably_same", commons.get("probably_same"));
+
+        return new ExtResponseEntity<>(acc_commons, HttpStatus.OK);
     }
 
 

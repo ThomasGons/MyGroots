@@ -14,7 +14,7 @@
       <div class="flex-grow-1">
         <mat-card class="mx-5 mt-lg-5">
           <!-- Tabs -->
-          <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.showResults = false">
+          <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.clearResults()">
             <!-- search by Name -->
             <mat-tab label="RECHERCHE PAR NOM">
               <mat-card-content class="px-4 py-4">
@@ -93,13 +93,26 @@
         <span class="h4" *ngIf="this.searchResults.length > 0">
           Résultats ({{ this.searchResults.length }})
         </span>
-        <span class="h4" *ngIf="this.searchResults.length <= 0">
+        <span class="h4" *ngIf="this.searchSame.length > 0">
+          Résultats ({{ this.searchSame.length }}) commun
+        </span>
+        <span class="h4" *ngIf="this.searchResults.length <= 0 && this.searchSame.length <= 0 && this.searchProbablySame.length <= 0">
           Aucun résultat (0)
         </span>
       </div>
       <!-- Liste des personnes -->
       <mat-accordion>
         <app-search-result *ngFor="let result of this.searchResults" [account]="result"></app-search-result>
+      </mat-accordion>
+      <mat-accordion>
+        <app-search-result *ngFor="let result of this.searchSame" [account]="result"></app-search-result>
+      </mat-accordion>
+
+      <span class="h4" *ngIf="this.searchProbablySame.length > 0">
+          Résultats ({{ this.searchProbablySame.length }}) probablement commun
+        </span>
+      <mat-accordion *ngIf="this.searchProbablySame.length > 0">
+        <app-search-result *ngFor="let result of this.searchProbablySame" [account]="result"></app-search-result>
       </mat-accordion>
     </div>
     <div class="my-4">

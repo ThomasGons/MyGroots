@@ -22,6 +22,8 @@ export class SearchComponent {
   });
   showResults: boolean = false;
   searchResults: any[] = [];
+  searchSame: any[] = [];
+  searchProbablySame: any[] = [];
   user: User = {};
   owner_acc_id: string = '';
 
@@ -80,13 +82,21 @@ export class SearchComponent {
     });
   }
 
+  public clearResults() {
+    this.showResults = false;
+    this.searchResults = [];
+    this.searchProbablySame = [];
+    this.searchSame = [];
+  }
+
   public communSearch():void{
     this.user = this._storageService.getUser();
     this.owner_acc_id = String(this.user.id);
     this._searchService.searchCommun(String(this.owner_acc_id)).subscribe({
       next: (response) => {
         console.log(response);
-        this.searchResults = response.body.same;
+        this.searchSame = response.body.same;
+        this.searchProbablySame = response.body.probably_same;
         console.log(this.searchResults);
         if (!this.showResults) {
           this.toggleResultsDisplay();
@@ -112,4 +122,6 @@ export class SearchComponent {
     const formattedDate = year+"-"+month+"-"+day;
     return formattedDate;
   }
+
+  protected readonly length = length;
 }

@@ -10,7 +10,7 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
   <!-- Hidden section when collapsed -->
-  <div class="d-flex flex-column px-2 pb-2">
+  <div class="d-flex flex-column px-2 pb-2" *ngIf="this.account.email != null">
     <span class="fg-gray">{{ this.account.id }}</span>
     <!-- Buttons to view tree of the account -->
   </div>

@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './search-result.component.html',
 })
 export class SearchResultComponent {
-  
+
   @Input()
   account!: any;
 }

@@ -46,6 +46,7 @@ public class Notif {
         for(Notif n : target.getNotifs()){
             if(n.getId().equals(this.getId())){
                 target.removeNotif(n);
+                break;
             }
         }
 
@@ -96,6 +97,7 @@ public class Notif {
         for(Notif n : target.getNotifs()){
             if(n.getId().equals(this.getId())){
                 target.removeNotif(n);
+                break;
             }
         }
     }

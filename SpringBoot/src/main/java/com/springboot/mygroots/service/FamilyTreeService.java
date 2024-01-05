@@ -64,6 +64,10 @@ public class FamilyTreeService {
         FamilyTree ft = getFamilyTreeByOwner(owner);
 
         List<FamilyTree> familyTrees = familyTreeRepository.findAll();
+        // remove the family tree of each member
+        for (Person p: ft.getMembers()) {
+            familyTrees.removeIf(familyTree -> familyTree.getOwner().getId().equals(p.getId()));
+        }
         Set<Person> same = new HashSet<>();
         Set<Person> probably_same = new HashSet<>();
         for (Person p: ft.getMembers()) {
@@ -81,11 +85,8 @@ public class FamilyTreeService {
         String p_lastName = p.getLastName();
         LocalDate p_birthDate = p.getBirthDate();
         for (FamilyTree ft: familyTrees) {
-            if (ft.getOwner().getId().equals(owner.getId())) {
-                continue;
-            }
             for (Person p2: ft.getMembers()) {
-                if (p2.getId().equals(p.getId())) {
+                if (p2.getId().equals(p_id) && p2.hasAccount()) {
                     same.add(ft.getOwner());
                     return;
                 }
