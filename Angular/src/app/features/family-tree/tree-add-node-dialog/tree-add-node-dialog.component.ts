@@ -40,13 +40,14 @@ export class TreeAddNodeDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: {ownerId: string, selectedNodeId: any, selectedNodeData: any, nodes: any[], members: any[]},
   ) {
     const node = this.data.nodes[this.data.selectedNodeId];
-    if (node.fid == -1 || (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown")) {
+
+    if (node.fid == -1 || (this.data.members[node.fid]?.firstName == "unknown" && this.data.members[node.fid]?.lastName == "unknown")) {
       this.availableRelations.push({value: "FATHER", viewValue: "Père"});
     }
-    if (node.mid == -1 || (this.data.members[node.mid].firstName != "unknown" && this.data.members[node.mid].lastName != "unknown")) {
+    if (node.mid == -1 || (this.data.members[node.mid]?.firstName != "unknown" && this.data.members[node.mid]?.lastName != "unknown")) {
       this.availableRelations.push({value: "MOTHER", viewValue: "Mère"});
     }
-    if (node.pids[0] == -1 || (this.data.members[node.pids[0]].firstName != "unknown" && this.data.members[node.pids[0]].lastName != "unknown")) {
+    if (node.pids[0] == -1) {
       this.availableRelations.push({value: "PARTNER", viewValue: "Partenaire"});
     }
     this.availableRelations.push({value: "CHILD", viewValue: "Enfant"});
@@ -63,7 +64,7 @@ export class TreeAddNodeDialogComponent {
       ownerId: this.data.ownerId, // accountID of owner of the tree
       srcId: this.data.members[this.data.selectedNodeId].id,   // personID of node selected to add a node to 
       relation: this.formAddByName.value.relation,
-      gender: this.formAddByName.value.gender,
+      gender: this.formAddByName.controls.gender.value,
       firstName: this.formAddByName.value.firstName,
       lastName: this.formAddByName.value.lastName,
       birthDate: this.formatBirthDate(String(this.formAddByName.value.birthDate)),
