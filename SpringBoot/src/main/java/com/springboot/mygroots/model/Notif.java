@@ -43,7 +43,11 @@ public class Notif {
 
     public void acceptDemand(){
         source.addNotif(new Notif(target,member,source,NotifType.ALERT_DEMANDACCEPTED,relation));
-        target.removeNotif(this);
+        for(Notif n : target.getNotifs()){
+            if(n.getId().equals(this.getId())){
+                target.removeNotif(n);
+            }
+        }
 
         Boolean isTreeEquivalant = source.getFamilyTree().isEquivalant(target.getFamilyTree());
 
@@ -89,7 +93,11 @@ public class Notif {
 
     public void declineDemand(){
         source.addNotif(new Notif(target,member,source,NotifType.ALERT_DEMANDDECLINED,relation));
-        target.removeNotif(this);
+        for(Notif n : target.getNotifs()){
+            if(n.getId().equals(this.getId())){
+                target.removeNotif(n);
+            }
+        }
     }
 
     public Account getSource() {
