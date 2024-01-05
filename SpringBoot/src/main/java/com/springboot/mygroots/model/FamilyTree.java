@@ -140,7 +140,7 @@ public class FamilyTree {
 
         if(verif // addedMember is not in the family tree
                 && member.getGender() != addedMember.getGender() // the partner added is not of the same gender
-                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a partner
+                && nodes.get(memberID).getPartnerID() == -1 ) // the member does not have a partner
         {
             System.out.println("add partner");
             this.addMember(addedMember);
@@ -171,6 +171,9 @@ public class FamilyTree {
                 });
             }
         }
+        else if(verif && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")){
+            members.set(nodes.get(memberID).getPartnerID(), addedMember);
+        }
     }
 
 
@@ -194,7 +197,7 @@ public class FamilyTree {
         }
 
         if(verif // addedMember is not in the family tree
-                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a father
+                && nodes.get(memberID).getFatherID() == -1 ) // the member does not have a father
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
@@ -207,6 +210,10 @@ public class FamilyTree {
                 this.addNode(addedMember, null, null, null);
             }
         }
+        else if(verif && Objects.equals(members.get(getNode(member).getFatherID()).getFirstName(), "unknown")){
+            members.set(nodes.get(memberID).getFatherID(), addedMember);
+        }
+
     }
 
     public void addMother(Person member, Person addedMember){
@@ -226,18 +233,20 @@ public class FamilyTree {
         }
 
         if(verif// addedMember is not in the family tree
-                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a mother
+                && nodes.get(memberID).getMotherID() == -1 ) // the member does not have a mother
         {
-            if(this.getNode(member).getFatherID()!= -1 ){ // if the member has a father
+            if (this.getNode(member).getFatherID() != -1) { // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father
 
-            }
-            else{
+            } else {
                 this.addMember(addedMember);
                 int motherID = getPersonID(addedMember);
                 this.getNode(member).setMotherID(motherID);
                 this.addNode(addedMember, null, null, null);
             }
+        }
+        else if(verif && Objects.equals(members.get(getNode(member).getMotherID()).getFirstName(), "unknown")){
+            members.set(nodes.get(memberID).getMotherID(), addedMember);
         }
     }
 
