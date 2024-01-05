@@ -22,7 +22,7 @@ public class FamilyTree {
     private List<TreeNode> nodes;
     @DBRef
     private final Person owner;
-    private Visibility visibility;
+    private Visibility visibility = Visibility.PUBLIC;
     private Person unknown = new Person("unknown","unknown",Gender.FEMALE);
 
     public FamilyTree(String familyName, Person owner) {
@@ -596,5 +596,7 @@ public class FamilyTree {
     }
 
     public List<TreeNode> getNodes() { return nodes; }
+
+
 
 }

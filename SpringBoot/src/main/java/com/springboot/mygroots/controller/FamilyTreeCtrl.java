@@ -73,6 +73,33 @@ public class FamilyTreeCtrl {
         return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
     }
 
+
+    @PostMapping(value= "/view/other")
+    public ExtResponseEntity<FamilyTreeDTO> getOtherTree(@RequestBody Map<String, String> data) {
+        Account acc = accountService.getAccountById(data.get("accountId"));
+        if ( acc != null) {
+            FamilyTree ft = acc.getFamilyTree();
+            if (ft == null) {
+                return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
+            }
+            switch (ft.getVisibility()) {
+                case PRIVATE -> {
+                    if (acc.getPerson() != ft.getOwner()) {
+                        return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
+                    }
+                }
+                case PROTECTED -> {
+                    if (!ft.getMembers().contains(acc.getPerson())) {
+                        return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
+                    }
+                }
+                case PUBLIC -> {}
+            }
+            return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
+        }
+        return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
+    }
+
     /**
      * Get the help for searchable relations
      * @return list of available relations
