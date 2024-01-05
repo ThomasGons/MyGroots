@@ -167,6 +167,10 @@ public class FamilyTreeCtrl {
 
 
         ft.addAccountToTree(owner, src, dst,relation);
+
+
+
+
         accountService.updateAccount(dst);
         accountService.updateAccount(owner);
         familyTreeService.updateFamilyTree(ft);

@@ -32,7 +32,7 @@ public class AccountService {
         //sendAccountActivationMail(account.getEmail(), account);
     }
 
-    public void updateAccount(Account account){
+    public void updateAccount(Account account){// Remove null notifs (deleted notifs
         notifRepository.saveAll(account.getNotifs());
         accountRepository.save(account);
     }
