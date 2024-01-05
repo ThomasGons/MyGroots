@@ -38,11 +38,11 @@
 
       <div class="d-flex flex-row justify-content-around">
         <!-- Action buttons -->
-        <button mat-raised-button mat-dialog-close (click)="this.openDialogAddNode()" class="bg-green-light rounded-2 my-2 ms-2 me-1" type="button">
+        <button mat-raised-button (click)="this.openDialogAddNode()" class="bg-green-light rounded-2 my-2 ms-2 me-1" type="button">
           <mat-icon>add</mat-icon>
           <span class="text-center">Ajouter un noeud</span>
         </button>
-        <button mat-raised-button mat-dialog-close (click)="this.openDialogRemoveNode()" class="bg-red-light rounded-2 my-2 ms-1 me-2" type="button">
+        <button mat-raised-button (click)="this.openDialogRemoveNode()" class="bg-red-light rounded-2 my-2 ms-1 me-2" type="button">
           <mat-icon>delete_forever</mat-icon>
           <span class="text-center">Supprimer le noeud</span>
         </button>
