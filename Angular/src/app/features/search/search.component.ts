@@ -56,7 +56,7 @@ export class SearchComponent {
     const accountId = !this.formById.value.accountId ? "" : this.formById.value.accountId;
     if (!accountId) {
       return;
-    } 
+    }
     console.log(accountId);
     /* Send form */
     this._searchService.searchById(accountId).subscribe({
@@ -72,6 +72,10 @@ export class SearchComponent {
         this.searchResults = []
       }
     });
+  }
+
+  public communSearch():void{
+
   }
 
   public toggleResultsDisplay(): void {

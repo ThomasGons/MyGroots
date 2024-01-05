@@ -5,13 +5,13 @@
       {{ message.message }}
       <div *ngIf="message.type == 'DEMAND_ADDTOFAMILY'; else other">
       <div class="button-group">
-        <button mat-button (click)="response(message.id, false)">Refuser</button>
-        <button mat-button color="primary" (click)="response(message.id, true)">Accepter</button>
+        <button mat-button color="red" (click)="response(message.id, false)">Refuser</button>
+        <button mat-button color="#1b7e16" (click)="response(message.id, true)">Accepter</button>
       </div>
       </div>
       <ng-template #other>
       <div class="button-group">
-        <button mat-button color="primary" (click)="delete(message.id)">supprimer</button>
+        <button mat-button color="red" (click)="delete(message.id)">supprimer</button>
       </div>
       </ng-template>
     </mat-card-content>

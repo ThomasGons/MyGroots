@@ -70,6 +70,18 @@
                 </form>
               </mat-card-content>
             </mat-tab>
+            <!-- commun search -->
+            <mat-tab label="RECHERCHE COMMUNUNE">
+              <mat-card-content class="px-4 py-4">
+
+                  <div class="d-flex flex-row-reverse">
+                    <button mat-raised-button style="justify-content: center;" class="bg-green-dark mt-2 py-4 rounded-1" (click)="communSearch()">
+                      <mat-icon class="text-white">search</mat-icon>
+                      <span class="text-white">Recherche</span>
+                    </button>
+                  </div>
+              </mat-card-content>
+            </mat-tab>
           </mat-tab-group>
         </mat-card>
       </div>
