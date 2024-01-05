@@ -86,7 +86,11 @@ export class SearchComponent {
     this._searchService.searchCommun(String(this.owner_acc_id)).subscribe({
       next: (response) => {
         console.log(response);
-        this._snackbarService.openSnackbar(response.message);
+        this.searchResults = response.body.same;
+        console.log(this.searchResults);
+        if (!this.showResults) {
+          this.toggleResultsDisplay();
+        }
       },
       error: (err) => {
         console.log(err);
