@@ -22,7 +22,7 @@
       <div *ngIf="!this.isLoggedIn()">
         <!-- If screen is smaller than medium size 'md' -->
         <div class="d-md-none">
-          <button mat-icon-button (click)="this.onToggleSidenav()">
+          <button mat-icon-button (click)="this.onToggleSidenav()" type="button">
             <mat-icon>menu</mat-icon>
           </button>
         </div>

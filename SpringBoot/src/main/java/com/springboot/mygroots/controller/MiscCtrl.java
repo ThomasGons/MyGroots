@@ -55,9 +55,13 @@ public class MiscCtrl {
 
 
         Person p1 = new Person("John", "Doe", Gender.MALE);
+        p1.setBirthDate(LocalDate.of(1970, 1, 18));
         Person p2 = new Person("Jane", "Doe", Gender.FEMALE);
+        p2.setBirthDate(LocalDate.of(1972, 8, 13));
         Person p3 = new Person("Jo", "Doe", Gender.MALE);
+        p3.setBirthDate(LocalDate.of(1995, 5, 5));
         Person p4 = new Person("Joe", "Doe", Gender.FEMALE);
+        p4.setBirthDate(LocalDate.of(1997, 12, 24));
         personService.addPerson(p1);
         personService.addPerson(p2);
         personService.addPerson(p3);
@@ -79,8 +83,5 @@ public class MiscCtrl {
         Account a1 = accountService.getAccountByEmail("john@doe.com");
         a1.setFamilyTree(ft1);
         accountService.updateAccount(a1);
-
-        ft1.removeMemberFromTree(p2);
-        familyTreeService.updateFamilyTree(ft1);
     }
 }

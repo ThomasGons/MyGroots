@@ -1,0 +1,31 @@
+<div class="container-fluid h-100 m-0 p-0 overflow-hidden">
+  <mat-card class="h-100">
+    <mat-card-header>
+      <div class="w-100 d-flex justify-content-between align-item-center pb-3">
+        <div class="d-flex flex-column">
+          <span class="h4 text-center text-black pt-2 m-0 mt-1">Supprimer le noeud</span>
+          <span class="fg-gray-dark pt-2">{{ data.selectedNodeData.firstName }} {{ data.selectedNodeData.lastName }}</span>
+        </div>
+        <button mat-icon-button class="mt-2" (click)="this.dialogRef.close(false)" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>    
+    </mat-card-header> 
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="py-2">
+        <span>{{ data.message }}</span>
+      </div>
+      <div class="d-flex flex-row justify-content-evenly pt-4 py-2">
+        <button mat-raised-button (click)="this.dialogRef.close(true)" class="bg-green-light rounded-2 py-2" type="button">
+          <mat-icon>done</mat-icon>
+          <span>{{ data.buttonText?.confirm }}</span>
+        </button>
+        <button mat-raised-button (click)="this.dialogRef.close(false)" class="bg-red-light rounded-2 py-2" type="button">
+          <mat-icon>close</mat-icon>
+          <span>{{ data.buttonText?.cancel }}</span>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

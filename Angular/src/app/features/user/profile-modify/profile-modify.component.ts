@@ -294,8 +294,6 @@ export class ProfileModifyComponent implements OnInit {
       nationality: this.form.value.nationality,
       socialSecurityNumber: this.isForeigner ? "99" : this.form.value.socialSecurityNumber,
     };
-    console.log(modifyData);
-
     /* Submit form */
     this._userService.profileModify(modifyData).subscribe({
       next: (response) => {

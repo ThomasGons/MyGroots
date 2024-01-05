@@ -1,0 +1,129 @@
+<div class="container-fluid h-100 m-0 p-0 overflow-hidden">
+  <mat-card>
+    <mat-card-header>
+      <div class="w-100 d-flex justify-content-between align-item-center pb-3">
+        <div class="d-flex flex-column">
+          <span class="h4 text-center text-black pt-2 m-0 mt-1">Ajouter un noeud</span>
+          <span class="fg-gray-dark pt-2">à {{ data.selectedNodeData.firstName }} {{ data.selectedNodeData.lastName }}</span>
+        </div>
+        <button mat-icon-button class="mt-2" (click)="this.dialogRef.close()" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>    
+    </mat-card-header> 
+    <mat-divider></mat-divider>
+
+    <!-- Tabs -->
+    <mat-tab-group color="primary" class="w-100" animationDuration="500ms">
+      <!-- Tab Add by Name -->
+      <mat-tab label="Par Nom">
+        <div class="p-4">
+          <form [formGroup]="this.formAddByName" (ngSubmit)="this.onSubmitAddByName()" class="d-flex flex-column">
+            <div class="d-flex flex-row">
+              <!-- relation -->
+              <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
+                <mat-label>Relation</mat-label>
+                <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byName')" formControlName="relation" required>
+                  <!-- TODO: check for existing nodes -->
+                  <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.formAddByName.controls.relation.touched && this.formAddByName.controls.relation.invalid">
+                  <span *ngIf="this.formAddByName.controls.relation.hasError('required')">Veuillez saisir une relation.</span>
+                </mat-error>
+              </mat-form-field>
+              <!-- gender -->
+              <mat-form-field appearance="outline" class="flex-grow-1 ps-1 pb-1">
+                <mat-label>Genre</mat-label>
+                <!-- TODO: set -->
+                <mat-select matNativeControl formControlName="gender" required>
+                  <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.formAddByName.controls.gender.touched && this.formAddByName.controls.gender.invalid">
+                  <span *ngIf="this.formAddByName.controls.gender.hasError('required')">Veuillez saisir un genre.</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="d-flex flex-row flex-grow-1">
+              <!-- firstName -->
+              <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
+                <mat-label>Prénom</mat-label>
+                <input matInput formControlName="firstName" type="text">
+                <mat-error *ngIf="this.formAddByName.controls.firstName.touched && this.formAddByName.controls.firstName.invalid">
+                  <span *ngIf="this.formAddByName.controls.firstName.hasError('required')">Veuillez saisir un prénom.</span>
+                </mat-error>
+              </mat-form-field>
+              <!-- lastName -->
+              <mat-form-field appearance="outline" class="flex-grow-1 ps-1 pb-1">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="lastName" type="text">
+                <mat-error *ngIf="this.formAddByName.controls.lastName.touched && this.formAddByName.controls.lastName.invalid">
+                  <span *ngIf="this.formAddByName.controls.lastName.hasError('required')">Veuillez saisir un nom.</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- birthDate -->
+            <mat-form-field appearance="outline">
+              <mat-label>Date de naissance</mat-label>
+              <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="MM/DD/YYYY">
+              <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
+              <mat-datepicker #birthDate></mat-datepicker>
+              <mat-error *ngIf="this.formAddByName.controls.birthDate.touched && this.formAddByName.controls.birthDate.invalid">
+                <span *ngIf="this.formAddByName.controls.birthDate.hasError('required')">Veuillez saisir une date de naissance.</span>
+              </mat-error>
+            </mat-form-field>
+            <!-- submit -->
+            <div class="d-flex flex-row-reverse">
+              <button mat-raised-button class="rounded-2 bg-green-light py-2" [disabled]="!this.formAddByName.valid" type="submit">
+                <mat-icon>done</mat-icon>
+                <span>Validez</span>
+              </button>
+              <button mat-button (click)="this.formAddByName.reset()" class="rounded-2 py-2 mx-2" type="button">
+                <mat-icon>clear</mat-icon>
+                <span>Annuler</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <!-- Tab Add by Id -->
+      <mat-tab label="Par Identifiant">
+        <div class="p-4">
+          <form [formGroup]="this.formAddById" (ngSubmit)="this.onSubmitAddByName()" class="d-flex flex-column">
+            <!-- relation -->
+            <mat-form-field appearance="outline">
+              <mat-label>Relation</mat-label>
+              <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byId')" formControlName="relation" required>
+                <!-- TODO: check for existing nodes -->
+                <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="this.formAddByName.controls.relation.touched && this.formAddByName.controls.relation.invalid">
+                <span *ngIf="this.formAddByName.controls.relation.hasError('required')">Veuillez saisir une relation.</span>
+              </mat-error>
+            </mat-form-field>
+            <!-- accountId -->
+            <mat-form-field appearance="outline" class="">
+              <mat-label>Numéro d'identification</mat-label>
+              <input matInput formControlName="accountId" type="text">
+              <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
+              <mat-error *ngIf="this.formAddById.controls.accountId.touched && this.formAddById.controls.accountId.invalid">
+                <span *ngIf="this.formAddById.controls.accountId.hasError('required')">Veuillez saisir un identifiant.</span>
+              </mat-error>
+            </mat-form-field>
+            <!-- submit -->
+            <div class="d-flex flex-row-reverse">
+              <button mat-raised-button class="mt-4 rounded-2 bg-green-light py-2" [disabled]="!this.formAddByName.valid" type="submit">
+                <mat-icon>done</mat-icon>
+                <span>Validez</span>
+              </button>
+              <button mat-button (click)="this.formAddByName.reset()" class="mt-4 rounded-2 py-2 mx-2" type="button">
+                <mat-icon>clear</mat-icon>
+                <span>Annuler</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

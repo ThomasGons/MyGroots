@@ -2,6 +2,7 @@ package com.springboot.mygroots.dto;
 
 import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.model.Person;
+import com.springboot.mygroots.utils.Enumerations.Visibility;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,15 +10,16 @@ import java.util.Map;
 
 public class FamilyTreeDTO {
     private Map<String, String> nodeBindings = Map.of(
-            "field0", "firstName",
-            "field1", "lastName",
-            "field2", "birthDate",
-            "field3", "gender",
-            "field4", "nationality"
+            "field_0", "firstName",
+            "field_1", "lastName",
+            "field_2", "birthDate",
+            "field_3", "gender",
+            "field_4", "nationality"
     );
 
     private List<TreeNodeFront> nodes;
     private List<Person> members;
+    private Visibility visibility;
 
     public FamilyTreeDTO(FamilyTree tree) {
         this.nodes = new java.util.ArrayList<>();
@@ -28,6 +30,7 @@ public class FamilyTreeDTO {
             nodes.add(new TreeNodeFront(person, node));
         }
         this.members = members;
+        this.visibility = tree.getVisibility();
     }
 
     public static class TreeNodeFront {
@@ -42,8 +45,6 @@ public class FamilyTreeDTO {
         private String gender;
         private String nationality;
 
-
-
         public TreeNodeFront(Person person, FamilyTree.TreeNode node) {
             this.id = node.getID();
             this.pids = new int[]{node.getPartnerID()};
@@ -52,7 +53,7 @@ public class FamilyTreeDTO {
             this.firstName = person.getFirstName();
             this.lastName = person.getLastName();
             this.birthDate = person.getBirthDate();
-            this.gender = person.getGender().toString();
+            this.gender = person.getGender().toString().toLowerCase();
             this.nationality = person.getNationality();
         }
 
@@ -91,6 +92,7 @@ public class FamilyTreeDTO {
         public String getNationality() {
             return nationality;
         }
+        
     }
 
     public Map<String, String> getNodeBindings() {

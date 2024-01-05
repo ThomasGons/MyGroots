@@ -14,6 +14,11 @@ export class ProfileComponent implements OnInit {
   user: User = {};
   gender: string = "";
 
+  readonly genders: any = [
+    { value: "MALE", viewValue: "Homme" },
+    { value: "FEMALE", viewValue: "Femme" },
+  ]
+
   constructor(
     private _snackbarService: SnackbarService,
     private _userService: UserService,
@@ -46,6 +51,15 @@ export class ProfileComponent implements OnInit {
         this._snackbarService.openSnackbar(err.error.message);
       }
     });
+  }
+
+  protected getGender(): string {
+    for (let gender of this.genders) {
+      if (gender.value == this.user?.gender) {
+        return gender.viewValue;
+      }
+    }
+    return "";
   }
 
 }

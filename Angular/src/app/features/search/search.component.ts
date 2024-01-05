@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Gender, User } from '@app/core/models';
-import { SnackbarService } from '@app/core/services';
+import { User } from '@app/core/models';
 import { SearchService } from '@app/core/services/search.service';
 
 
@@ -18,14 +17,13 @@ export class SearchComponent {
     birthDate: new FormControl(""),
   });
   formById = new FormGroup({
-    personId: new FormControl(""),
+    accountId: new FormControl(""),
   });
   showResults: boolean = false;
-  searchResults: User[] = [];
+  searchResults: any[] = [];
 
   constructor(
     private _searchService: SearchService,
-    private _snackbarService: SnackbarService,
   ) {}
 
   public onSubmitByName(): void {
@@ -55,13 +53,13 @@ export class SearchComponent {
 
   public onSubmitById(): void {
     /* Get form data */
-    const personId = !this.formById.value.personId ? "" : this.formById.value.personId;
-    if (!personId) {
+    const accountId = !this.formById.value.accountId ? "" : this.formById.value.accountId;
+    if (!accountId) {
       return;
     } 
-    console.log(personId);
+    console.log(accountId);
     /* Send form */
-    this._searchService.searchById(personId).subscribe({
+    this._searchService.searchById(accountId).subscribe({
       next: (response) => {
         console.log(response);
         this.searchResults = [response.body];

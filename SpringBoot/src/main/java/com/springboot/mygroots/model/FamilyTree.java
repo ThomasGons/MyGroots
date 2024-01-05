@@ -3,12 +3,9 @@ package com.springboot.mygroots.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.springboot.mygroots.utils.Enumerations.*;
 
-import java.beans.Visibility;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

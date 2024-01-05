@@ -1,9 +1,52 @@
-<script src="https://balkan.app/js/FamilyTree.js"></script>
-<div style="width:100%; height:500px;" id="tree"></div>
+<!-- <script src="https://balkan.app/js/FamilyTree.js"></script> -->
+<div class="container-fluid h-100 m-0 p-0">
+  <mat-sidenav-container hasBackdrop="true">
+    <mat-sidenav-content>
+      <!-- Arbre -->
+      <div class="flex-grow-1 bg-gray-light" id="tree"></div>
+    </mat-sidenav-content>
+    <!-- Sidepanel -->
+    <mat-sidenav #sidepanel mode="side" position="end">
+      <!-- Node informations -->
+      <mat-card class="rounded-0 pb-2">
+        <mat-card-header class="pb-2">
+          <div class="w-100 d-flex justify-content-between">
+            <span class="h4 text-center pt-2 m-0 mt-1">
+              {{ this.selectedNodePersonData?.firstName }} {{ this.selectedNodePersonData?.lastName }}
+            </span>
+            <button mat-icon-button (click)="this.toggleSidePanel()" type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="d-flex flex-md-row flex-column pt-3">
+          <div class="d-flex flex-column flex-grow-1 rounded p-2 mb-1">
+            <span class="pb-1"><b>Genre</b></span>
+            <span>{{ this.getSelectedNodeGender() }}</span>
+          </div>
+          <div class="d-flex flex-column flex-grow-1 rounded p-2 mb-1">
+            <span class="pb-1"><b>Date de naissance</b></span>
+            <span>{{ this.selectedNodePersonData?.birthDate }}</span>
+          </div>
+          <div class="d-flex flex-column flex-grow-1 rounded p-2">
+            <span class="pb-1"><b>Nationalité</b></span>
+            <span>{{ this.selectedNodePersonData?.nationality }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-
-
-
-
-
-
+      <div class="d-flex flex-row justify-content-around">
+        <!-- Action buttons -->
+        <button mat-raised-button mat-dialog-close (click)="this.openDialogAddNode()" class="bg-green-light rounded-2 my-2 ms-2 me-1" type="button">
+          <mat-icon>add</mat-icon>
+          <span class="text-center">Ajouter un noeud</span>
+        </button>
+        <button mat-raised-button mat-dialog-close (click)="this.openDialogRemoveNode()" class="bg-red-light rounded-2 my-2 ms-1 me-2" type="button">
+          <mat-icon>delete_forever</mat-icon>
+          <span class="text-center">Supprimer le noeud</span>
+        </button>
+      </div>
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>

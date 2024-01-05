@@ -6,14 +6,16 @@
 
 /** Color palette **/
 :root {
-    --color-gray: #BBBBBB;
+    --color-gray: #dedede;
     --color-gray-light: #EBECEC;
+    --color-gray-dark: #aaaaaa;
     --color-green: #6DB344;
     --color-green-light: #DAEAB5;
     --color-green-dark: #3C8632;
     --color-blue-sky: #ECF9FB;
     --color-blue-pale: #0181A1;
     --color-pink: #DD2762;
+    --color-red-light: #ff6a7b;
     --color-brown: #750000;
 }
 
@@ -36,6 +38,9 @@
 .bg-blue-sky {
     background-color: var(--color-blue-sky) !important;
 }
+.bg-red-light {
+    background-color: var(--color-red-light) !important;
+}
 .bg-brown {
     background-color: var(--color-brown) !important;
 }
@@ -46,6 +51,9 @@
 }
 .fg-gray-light {
     color: var(--color-gray-light) !important;
+}
+.fg-gray-dark {
+    color: var(--color-gray-dark) !important;
 }
 .fg-green {
     color: var(--color-green) !important;

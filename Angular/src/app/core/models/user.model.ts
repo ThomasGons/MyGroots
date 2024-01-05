@@ -14,3 +14,9 @@ export enum Gender {
     MALE = "MALE",
     FEMALE = "FEMALE"
 }
+
+export class Person {
+  firstName?: string;
+  lastName?: string;
+  gender?: Gender;
+}

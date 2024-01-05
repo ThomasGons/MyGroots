@@ -1,8 +1,10 @@
 package com.springboot.mygroots.controller;
 
+import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.PersonService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
 
 /**
@@ -29,42 +32,50 @@ public class SearchCtrl {
 
     @Autowired
     PersonService personService;
+    
+    @Autowired
+    AccountService accountService;
 
     /**
-     * Search a person by his id
+     * Search an account by his id
      * @param data map containing the id of the person
      * @return the person
      */
     @PostMapping(value= "/id")
-    public ExtResponseEntity<Person> searchById(@RequestBody Map<String, String> data) {
-        Person p = personService.getPersonById(data.get("personId"));
-        if (p == null) {
-            return new ExtResponseEntity<>("Aucune personne correspondante a cet id !", HttpStatus.BAD_REQUEST);
+    public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
+        Account acc = accountService.getAccountById(data.get("accountId"));
+        if (acc == null) {
+            return new ExtResponseEntity<>("Aucun compte correspondant pour cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(p, HttpStatus.OK);
+        return new ExtResponseEntity<>(acc, HttpStatus.OK);
     }
 
     /**
-     * Search a person by his name or his last name or his birthdate
+     * Search an account by his name or his last name or his birthdate
      * @param data map containing the name, the last name and the birthdate of the person
-     * @return list of persons corresponding to the search
+     * @return list of accounts corresponding to the search
      */
     @PostMapping(value= "/name")
-    public ExtResponseEntity<List<Person>> searchByPersonalData(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<List<Account>> searchByPersonalData(@RequestBody Map<String, String> data) {
         String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
         String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
         LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
-        System.out.println("firstName: "+firstName);
-        System.out.println("lastName: "+lastName);
-        System.out.println("birthDate: "+birthDate);
-        List<Person> results = personService.findAllByFirstNameAndLastNameAndBirthDate(
+        List<Person> persResults = personService.findAllByFirstNameAndLastNameAndBirthDate(
                 firstName, lastName, birthDate
         );
-        if (results == null) {
-            return new ExtResponseEntity<>("Aucune resultat  !", HttpStatus.BAD_REQUEST);
+        if (persResults == null) {
+            return new ExtResponseEntity<>("Aucune resultat !", HttpStatus.BAD_REQUEST);
         }
-
-        results.removeIf(person -> person.getFirstName().equals("unknown") && person.getLastName().equals("unknown"));
+        persResults.removeIf(person ->
+        	person.getFirstName().equals("unknown") || person.getLastName().equals("unknown") 
+        );
+        List<Account> results = new ArrayList<>();
+        for (Person p: persResults) {
+        	Account a = accountService.getAccountByPerson(p);
+        	if (a != null) {
+        		results.add(a);        		
+        	}
+        }
         return new ExtResponseEntity<>(results, HttpStatus.OK);
     }
 }
