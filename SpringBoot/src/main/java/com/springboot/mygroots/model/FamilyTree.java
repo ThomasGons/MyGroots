@@ -462,7 +462,7 @@ public class FamilyTree {
             System.out.println("remove");
             int removedID = getPersonID(person);
             nodes.remove(node);
-            members.remove(person);
+            members.remove(getPersonID(person));
 
             for (TreeNode extNode : this.getNodes()) {
                 if (extNode.getID() > removedID) {
