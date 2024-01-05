@@ -1,5 +1,7 @@
 package com.springboot.mygroots.controller;
 
+import com.springboot.mygroots.dto.AccountDTO;
+import com.springboot.mygroots.model.FamilyTree;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
@@ -11,7 +13,6 @@ import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,12 +44,12 @@ public class SearchCtrl {
      * @return the person
      */
     @PostMapping(value= "/id")
-    public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<AccountDTO> searchById(@RequestBody Map<String, String> data) {
         Account acc = accountService.getAccountById(data.get("accountId"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant pour cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(acc, HttpStatus.OK);
+        return new ExtResponseEntity<>(new AccountDTO(acc), HttpStatus.OK);
     }
 
     /**
@@ -57,7 +58,7 @@ public class SearchCtrl {
      * @return list of accounts corresponding to the search
      */
     @PostMapping(value= "/name")
-    public ExtResponseEntity<List<Account>> searchByPersonalData(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<List<AccountDTO>> searchByPersonalData(@RequestBody Map<String, String> data) {
         String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
         String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
         LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
@@ -70,18 +71,18 @@ public class SearchCtrl {
         persResults.removeIf(person ->
         	person.getFirstName().equals("unknown") || person.getLastName().equals("unknown") 
         );
-        List<Account> results = new ArrayList<>();
+        List<AccountDTO> results = new ArrayList<>();
         for (Person p: persResults) {
         	Account a = accountService.getAccountByPerson(p);
         	if (a != null) {
-        		results.add(a);        		
+        		results.add(new AccountDTO(a));
         	}
         }
         return new ExtResponseEntity<>(results, HttpStatus.OK);
     }
 
     @PostMapping(value="/common-members")
-    public ExtResponseEntity<List<Account>> getCommonMembers(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<Map<String, List<AccountDTO>>> getCommonMembers(@RequestBody Map<String, String> data) {
         String owner_acc_id = data.get("src_acc_id");
         String target_id = data.get("target_id");
         Account acc = accountService.getAccountById(owner_acc_id);
@@ -91,11 +92,21 @@ public class SearchCtrl {
             return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
 
-        List<Account> accs = new ArrayList<>();
+        List<AccountDTO> same = new ArrayList<>();
         for (Person p: commons.get("same")) {
-            accs.add(accountService.getAccountByPerson(p));
+            Account a = accountService.getAccountByPerson(p);
+            AccountDTO accDTO = new AccountDTO(a);
+            same.add(accDTO);
         }
-
+        List<AccountDTO> probably_same = new ArrayList<>();
+        for (Person p: commons.get("probably_same")) {
+            AccountDTO accDTO = new AccountDTO(null, null, null, p);
+            probably_same.add(accDTO);
+        }
+        Map<String, List<AccountDTO>> accs = Map.of(
+                "same", same,
+                "probably_same", probably_same
+        );
         return new ExtResponseEntity<>(accs, HttpStatus.OK);
     }
 
