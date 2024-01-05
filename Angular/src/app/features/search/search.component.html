@@ -77,12 +77,12 @@
                   <!-- accountId -->
                   <mat-form-field appearance="outline" class="flex-grow-1 py-2">
                     <mat-label>Numéro d'identification</mat-label>
-                    <input matInput formControlName="accountId" type="text">
+                    <input matInput formControlName="target_id" type="text">
                     <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
                   </mat-form-field>
                   <!-- Submit -->
                   <div class="d-flex flex-row-reverse">
-                    <button mat-raised-button style="justify-content: center;" class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formByCommunId.valid" type="submit">
+                    <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formByCommunId.valid" type="submit">
                       <mat-icon class="text-white">search</mat-icon>
                       <span class="text-white">Recherche</span>
                     </button>

@@ -29,7 +29,7 @@ export class FamilyTreeComponent implements OnInit {
     relation: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     accountId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
-  
+
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
     { value: Gender.FEMALE, viewValue: "Femme" },
@@ -40,13 +40,13 @@ export class FamilyTreeComponent implements OnInit {
     {value: "PARTNER", viewValue: "Partenaire"},
     {value: "CHILD", viewValue: "Enfant"},
   ];
-  
+
   treeData!: any;
   family!: FamilyTree;
   user!: User;
   selectedNodeId!: number;
   selectedNodePersonData!: any;
-  
+
   showSidePanel: boolean = false;
 
   constructor(
@@ -71,7 +71,7 @@ export class FamilyTreeComponent implements OnInit {
     });
   }
 
-  // TODO: 
+  // TODO:
   //    custom research button -> requests (type of relation...) => display result in a div
 
   private initTree(treeData: any): void {
@@ -101,7 +101,7 @@ export class FamilyTreeComponent implements OnInit {
       });
     }
   }
-  
+
   protected toggleSidePanel(): void {
     this.sidepanel.toggle();
   }
@@ -110,7 +110,7 @@ export class FamilyTreeComponent implements OnInit {
     const dialogRef = this.dialog.open(TreeAddNodeDialogComponent, {
       data: {
         ownerId: this.user.id,  // accountID of owner of the tree
-        selectedNodeId: this.selectedNodeId, 
+        selectedNodeId: this.selectedNodeId,
         selectedNodeData: this.selectedNodePersonData,
         nodes: this.treeData.nodes,
         members: this.treeData.members,
@@ -130,7 +130,7 @@ export class FamilyTreeComponent implements OnInit {
             this.toggleSidePanel();
             this.ngOnInit();
           },
-          error: (err) => { 
+          error: (err) => {
             console.log(err);
             this._snackbarService.openSnackbar(err.error.message);
             this.toggleSidePanel();

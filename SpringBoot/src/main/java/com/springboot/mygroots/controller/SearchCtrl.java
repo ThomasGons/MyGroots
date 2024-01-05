@@ -81,22 +81,22 @@ public class SearchCtrl {
     }
 
     @PostMapping(value="/common-members")
-    public ExtResponseEntity<Map<String, List<?>>> getCommonMembers(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<List<Account>> getCommonMembers(@RequestBody Map<String, String> data) {
         String owner_acc_id = data.get("src_acc_id");
         String target_id = data.get("target_id");
         Account acc = accountService.getAccountById(owner_acc_id);
         Map<String, List<Person>> commons = familyTreeService.getSimilarNodes(acc.getPerson(), target_id);
+
         if (commons.isEmpty()) {
             return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
 
-        Map<String, List<?>> acc_commons = new HashMap<>();
         List<Account> accs = new ArrayList<>();
         for (Person p: commons.get("same")) {
             accs.add(accountService.getAccountByPerson(p));
         }
-        acc_commons.put("same", accs);
-        return new ExtResponseEntity<>(acc_commons, HttpStatus.OK);
+
+        return new ExtResponseEntity<>(accs, HttpStatus.OK);
     }
 
 

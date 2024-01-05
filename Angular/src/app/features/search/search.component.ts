@@ -93,7 +93,7 @@ export class SearchComponent {
   }
 
   public communSearch():void{
-
+    /* Get form data */
     const target_id = !this.formByCommunId.value.target_id ? "" : this.formByCommunId.value.target_id;
     if (!target_id) {
       return;

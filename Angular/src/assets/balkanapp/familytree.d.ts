@@ -1,5 +1,3 @@
-export default FamilyTree
-
 declare class FamilyTree extends FamilyTreeBase {
     nodes: { [key in any]: FamilyTree.node };
     isVisible: boolean;
@@ -2560,4 +2558,7 @@ declare namespace FamilyTree {
         nodeTreeMenuButton: string,
         nodeTreeMenuCloseButton: string
     }
+
 }
+export default FamilyTree
+
