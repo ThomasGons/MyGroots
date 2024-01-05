@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './features/page-not-found/page-not-found.
 import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
 import { FamilyTreeComponent, TreeAddNodeDialogComponent, TreeRemoveNodeDialogComponent, ViewOtherFamilyTreeComponent } from './features/family-tree';
 import { SearchComponent, SearchResultComponent } from './features/search';
+import { TreeSearchNodeDialogComponent } from './features/family-tree/tree-search-node-dialog/tree-search-node-dialog.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { SearchComponent, SearchResultComponent } from './features/search';
     TreeAddNodeDialogComponent,
     TreeRemoveNodeDialogComponent,
     ViewOtherFamilyTreeComponent,
+    TreeSearchNodeDialogComponent,
   ],
   imports: [
     BrowserModule,

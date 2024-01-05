@@ -12,7 +12,12 @@
   fill: var(--color-pink);
 }
 
-/* 
+.button-group {
+  display: flex;
+  justify-content: center;
+}
+
+/*
 :host ::ng-deep .bft-edit-form-header .bft-edit-form.node.male,
 :host ::ng-deep .bft-edit-form.node.male .bft-img-button{
   background-color: #FFCA28;
