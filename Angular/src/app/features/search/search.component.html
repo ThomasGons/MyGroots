@@ -115,8 +115,8 @@
       <mat-accordion>
         <app-search-result *ngFor="let result of this.searchSame" [account]="result"></app-search-result>
       </mat-accordion>
-
-      <span class="h4" *ngIf="this.searchProbablySame.length > 0">
+      <!-- Liste des personnes probablement communes -->
+      <span class="h4 pt-4 pb-2" *ngIf="this.searchProbablySame.length > 0">
           Résultats ({{ this.searchProbablySame.length }}) probablement commun
         </span>
       <mat-accordion *ngIf="this.searchProbablySame.length > 0">

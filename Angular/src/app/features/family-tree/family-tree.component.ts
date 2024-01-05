@@ -7,6 +7,7 @@ import { StorageService, FamilyTreeService, SnackbarService } from '@app/core/se
 import FamilyTree from "@balkangraph/familytree.js";
 import { TreeAddNodeDialogComponent } from './tree-add-node-dialog/tree-add-node-dialog.component';
 import { TreeRemoveNodeDialogComponent } from './tree-remove-node-dialog/tree-remove-node-dialog.component';
+import { TreeSearchNodeDialogComponent } from './tree-search-node-dialog/tree-search-node-dialog.component';
 
 @Component({
   selector: 'app-family-tree',
@@ -204,6 +205,12 @@ export class FamilyTreeComponent implements OnInit {
       }
     }
     return "";
+  }
+
+  public openSearch():void{
+    const dialogRef = this.dialog.open(TreeSearchNodeDialogComponent, {
+      width: "600px",
+    });
   }
 
 }
