@@ -38,6 +38,7 @@ public class UserCtrl {
     NotifService notifService;
     @Autowired
     FamilyTreeService familyTreeService;
+    
     /**
      * Get the profile of a user
      * @param data map containing the id of the user
@@ -79,30 +80,24 @@ public class UserCtrl {
             String socialSecurityNumber = data.get("socialSecurityNumber");
             Visibility treeVisibility = Visibility.valueOf(data.get("treeVisibility"));
 
-            if (email != null)
-            	acc.setEmail(email);
-            if (firstname != null)
-            	p.setFirstName(firstname);
-            if (lastname != null)
-            	p.setLastName(lastname);
-    		if (birthDate != null)
-    			p.setBirthDate(birthDate);
-    		if (gender != null)
-    			p.setGender(gender);
-    		if (nationality != null)
-    			p.setNationality(nationality);
-    		if (socialSecurityNumber != null)
-    			p.setSocialSecurityNumber(socialSecurityNumber);
-    		if (treeVisibility != null)
-    			acc.getFamilyTree().setVisibility(treeVisibility);
-
-            accountService.updateAccount(acc);
-            personService.updatePerson(p);
-            return new ExtResponseEntity<>("Modification reussie !", HttpStatus.OK);
+        	acc.setEmail(email);
+        	p.setFirstName(firstname);
+        	p.setLastName(lastname);
+			p.setBirthDate(birthDate);
+			p.setGender(gender);
+			p.setNationality(nationality);
+			p.setSocialSecurityNumber(socialSecurityNumber);
+			acc.getFamilyTree().setVisibility(treeVisibility);
+			
+			familyTreeService.updateFamilyTree(acc.getFamilyTree());
+			personService.updatePerson(p);
+    		accountService.updateAccount(acc);
+    		
+            return new ExtResponseEntity<>("Modification des données réussie !", HttpStatus.OK);
         } catch (Exception e) {
         	e.printStackTrace();
         }
-        return new ExtResponseEntity<>("Echec de la modifications des données !", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ExtResponseEntity<>("Echec de la modification des données !", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -174,8 +169,7 @@ public class UserCtrl {
 
         notifService.removeNotif(notif);
 
-        return new ExtResponseEntity<>("OK", HttpStatus.OK);
-
+        return new ExtResponseEntity<>("Réponse envoyée !", HttpStatus.OK);
     }
 
     /**
@@ -196,26 +190,7 @@ public class UserCtrl {
         accountService.updateAccount(notif.getTarget());
         notifService.removeNotif(notif);
 
-        return new ExtResponseEntity<>("OK", HttpStatus.OK);
-
+        return new ExtResponseEntity<>("Notification supprimée !", HttpStatus.OK);
     }
-
-
-    @GetMapping(value = "/notifs/suce")
-    public void testNotif() {
-        Account acc1 = accountService.getAccountByEmail("pereiramatheo78@gmail.com");
-        Account acc2 = accountService.getAccountByEmail("cototlucas@cy-tech.fr");
-
-        acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, NotifType.DEMAND_ADDTOFAMILY, Relation.FATHER));
-
-        acc1.getNotifs().removeIf(Objects::isNull);
-        for (Notif n:acc1.getNotifs()){
-            notifService.saveNotif(n);
-        }
-        accountService.updateAccount(acc1);
-    }
-
-
-
 
 }

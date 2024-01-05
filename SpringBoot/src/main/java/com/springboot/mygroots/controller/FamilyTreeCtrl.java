@@ -191,20 +191,15 @@ public class FamilyTreeCtrl {
             return new ExtResponseEntity<>("Ce propriétaire n'a pas d'arbre! ???? wtf pourquoi", HttpStatus.BAD_REQUEST);
         }
 
-        Person dp = dst.getPerson();
-
         owner.getNotifs().removeIf(Objects::isNull);
         dst.getNotifs().removeIf(Objects::isNull);
 
         ft.addAccountToTree(owner, src, dst,relation);
 
-
-
-
         accountService.updateAccount(dst);
         accountService.updateAccount(owner);
         familyTreeService.updateFamilyTree(ft);
-        return new ExtResponseEntity<>("Ajout réussi!", HttpStatus.OK);
+        return new ExtResponseEntity<>("Notifications d'ajout envoyé à "+dst.getPerson().getFirstName()+" "+dst.getPerson().getLastName()+".", HttpStatus.OK);
     }
 
     /**

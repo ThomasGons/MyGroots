@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '@app/core/services/user.service';
 import { SnackbarService, StorageService } from '@app/core/services';
-import { User } from '@app/core/models';
+import { Gender, User } from '@app/core/models';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { User } from '@app/core/models';
 export class ProfileComponent implements OnInit {
 
   user: User = {};
-  gender: string = "";
+  treeVisibility: string = "";
 
   readonly genders: any = [
     { value: "MALE", viewValue: "Homme" },
@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.user = {
+          id: this.user.id,
           email: response.body.email,
           firstName: response.body.person.firstName,
           lastName: response.body.person.lastName,
@@ -41,10 +42,7 @@ export class ProfileComponent implements OnInit {
           nationality: response.body.person.nationality,
           socialSecurityNumber: response.body.person.socialSecurityNumber,
         };
-        if (this.user.gender == 'MALE'){
-          this.gender = "Homme"
-        }else {
-          this.gender = "Femme"};
+        this.treeVisibility = response.body.treeVisibility;
       },
       error: (err) => {
         console.log(err);

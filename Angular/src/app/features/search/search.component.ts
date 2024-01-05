@@ -114,6 +114,11 @@ export class SearchComponent {
     this.showResults = !this.showResults;
   }
 
+  public clearResults() {
+    this.showResults = false;
+    this.searchResults = [];
+  }
+
   private formatBirthDate(inputDate: string): string {
     const dateObject = new Date(inputDate);
     const year = dateObject.getFullYear();

@@ -22,6 +22,12 @@ export enum Relation {
   CHILD = "CHILD",
 }
 
+export enum Visibility {
+  PUBLIC = "PUBLIC",
+  PROTECTED = "PROTECTED",
+  PRIVATE = "PRIVATE",
+}
+
 export class Person {
   firstName?: string;
   lastName?: string;

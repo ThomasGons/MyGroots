@@ -72,11 +72,7 @@ export class FamilyTreeComponent implements OnInit {
   }
 
   // TODO: 
-  //    bind events to Add{nodes} buttons => API > Methods
-  //    disable addWife when wife pids[0] != -1
-  //    common members research
   //    custom research button -> requests (type of relation...) => display result in a div
-  //    CSS
 
   private initTree(treeData: any): void {
     /* Load FamilyTreeJS api */

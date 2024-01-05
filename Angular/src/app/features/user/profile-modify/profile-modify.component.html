@@ -1,13 +1,24 @@
 <div class="container-fluid h-100 py-5 d-flex justify-content-center"  style="background-image: url(https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg); background-size: cover;">
   <mat-card class="auth-card p-2 shadow">
     <mat-card-header>
-      <mat-card-title class="pb-4">
+      <mat-card-title class="pb-5">
         <p class="h3 m-0 text-center">Modifier vos informations personnelles</p>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <!-- Form -->
       <form [formGroup]="this.form" (ngSubmit)="this.onSubmit()" class="d-flex flex-column">
+        <!-- treeVisibility -->
+        <mat-form-field appearance="outline" class="py-2">
+          <mat-label>Visibilité de l'arbre familial</mat-label>
+          <mat-select matNativeControl formControlName="treeVisibility" required>
+            <mat-option *ngFor="let v of this.visibilities" [value]="v.value">{{ v.viewValue }}</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>lock</mat-icon>
+          <mat-error *ngIf="this.form.controls.treeVisibility.touched && this.form.controls.treeVisibility.invalid">
+            <span *ngIf="this.form.controls.treeVisibility.hasError('required')">Veuillez saisir un visibilité pour l'arbre.</span>
+          </mat-error>
+        </mat-form-field>
         <!-- email -->
         <mat-form-field appearance="outline" class="py-2">
           <mat-label>Email</mat-label>

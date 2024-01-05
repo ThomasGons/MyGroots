@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import { UserService } from '@app/core/services';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService, StorageService } from '@app/core/services';
-import { User, Gender } from '@app/core/models';
+import { User, Gender, Visibility } from '@app/core/models';
 import { Router } from "@angular/router";
 
 
 @Component({
   selector: 'app-profile-modify',
   templateUrl: './profile-modify.component.html',
-  styleUrls: ['./profile-modify.component.css']
 })
 export class ProfileModifyComponent implements OnInit {
 
@@ -21,15 +20,21 @@ export class ProfileModifyComponent implements OnInit {
     gender: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     nationality: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     socialSecurityNumber: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(13), Validators.maxLength(13), /* Validators.pattern(""/[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})/") */ ] }),
+    treeVisibility: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
   user: User = {};
-  change: boolean = false;
+  treeVisibility: string = "";
   isForeigner: boolean = false;
   previousSocialSecurityNumber: string = "";
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
     { value: Gender.FEMALE, viewValue: "Femme" },
+  ]
+  readonly visibilities: any = [
+    { value: Visibility.PUBLIC, viewValue: "public" },
+    { value: Visibility.PROTECTED, viewValue: "protégée" },
+    { value: Visibility.PRIVATE, viewValue: "privée" },
   ]
   readonly nationalities: string[] = [
     "Afghanistan",
@@ -256,6 +261,7 @@ export class ProfileModifyComponent implements OnInit {
           nationality: response.body.person.nationality,
           socialSecurityNumber: response.body.person.socialSecurityNumber,
         };
+        this.treeVisibility = response.body.treeVisibility;
         this.form.patchValue({
           email: this.user.email,
           firstName: this.user.firstName,
@@ -264,6 +270,7 @@ export class ProfileModifyComponent implements OnInit {
           gender: this.user.gender,
           nationality: this.user.nationality,
           socialSecurityNumber: this.user.socialSecurityNumber,
+          treeVisibility: this.treeVisibility,
         });
         if (this.user.socialSecurityNumber == "99"){
           this.isForeigner = true;
@@ -293,6 +300,7 @@ export class ProfileModifyComponent implements OnInit {
       gender: this.form.value.gender,
       nationality: this.form.value.nationality,
       socialSecurityNumber: this.isForeigner ? "99" : this.form.value.socialSecurityNumber,
+      treeVisibility: this.form.value.treeVisibility,
     };
     /* Submit form */
     this._userService.profileModify(modifyData).subscribe({

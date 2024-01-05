@@ -1,7 +1,5 @@
 package com.springboot.mygroots.service;
 
-import com.springboot.mygroots.utils.Utils;
-import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.PersonRepository;
 import com.springboot.mygroots.utils.Enumerations.Gender;
