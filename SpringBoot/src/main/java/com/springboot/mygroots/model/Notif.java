@@ -30,15 +30,29 @@ public class Notif {
         this.member = member;
         this.type = type;
         this.relation = relation;
+        String relationFR = this.tradRelation(relation);
         if(type == NotifType.DEMAND_ADDTOFAMILY){
-            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " wants to add you to his family as " + relation + " of " + member.getFirstName() + " " + member.getLastName();
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " veut vous ajouter dans son arbre familial en tant que " + relationFR + " de " + member.getFirstName() + " " + member.getLastName();
         }
         else if(type == NotifType.ALERT_DEMANDACCEPTED){
-            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " accepted your demand";
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " a accepté votre demande";
         }
         else if(type == NotifType.ALERT_DEMANDDECLINED){
-            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " declined your demand";
+            this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " a refusé votre demande";
         }
+    }
+    
+    public String tradRelation(Relation relation) {
+    	switch (relation) {
+    		case FATHER:
+    			return "père";
+    		case MOTHER:
+    			return "mère";
+    		case CHILD:
+    			return "enfant";
+    		default:
+    			return "partenaire";
+    	}
     }
 
     public void acceptDemand(){
