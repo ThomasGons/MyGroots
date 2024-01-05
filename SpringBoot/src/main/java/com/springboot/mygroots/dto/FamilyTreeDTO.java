@@ -45,6 +45,8 @@ public class FamilyTreeDTO {
         private LocalDate birthDate;
         private String gender;
         private String nationality;
+        
+        private boolean hasAccount;
 
         public TreeNodeFront(Person person, FamilyTree.TreeNode node) {
             this.id = node.getID();
@@ -56,6 +58,7 @@ public class FamilyTreeDTO {
             this.birthDate = person.getBirthDate();
             this.gender = person.getGender().toString().toLowerCase();
             this.nationality = person.getNationality();
+            this.hasAccount = person.hasAccount();
         }
 
         public int getId() {
@@ -94,6 +97,10 @@ public class FamilyTreeDTO {
             return nationality;
         }
         
+        public boolean getHasAccount() {
+        	return hasAccount;
+        }
+        
     }
 
     public Map<String, String> getNodeBindings() {
@@ -106,6 +113,10 @@ public class FamilyTreeDTO {
 
     public List<Person> getMembers() {
         return members;
+    }
+    
+    public Visibility getVisibility() {
+    	return this.visibility;
     }
 
 }

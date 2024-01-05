@@ -1,6 +1,7 @@
 package com.springboot.mygroots.controller;
 
 import com.springboot.mygroots.service.AccountService;
+import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 
 import java.time.LocalDate;
@@ -35,6 +36,9 @@ public class SearchCtrl {
     
     @Autowired
     AccountService accountService;
+    
+    @Autowired
+    FamilyTreeService familyTreeService;
 
     /**
      * Search an account by his id
@@ -77,5 +81,23 @@ public class SearchCtrl {
         	}
         }
         return new ExtResponseEntity<>(results, HttpStatus.OK);
+    }
+    
+    @PostMapping(value="/common-members")
+    public ExtResponseEntity<Map<String, List<Person>>> getCommonMembers(@RequestBody Map<String, String> data) {
+        String owner_acc_id = data.get("owner_acc_id");
+        Account acc = accountService.getAccountById(owner_acc_id);
+        Map<String, List<Person>> commons = familyTreeService.getSimilarFamilyTreeByAllNodes(acc.getPerson());
+        if (commons.isEmpty()) {
+            return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+        }
+        // remove all duplicates
+        List<Person> same_uniques = commons.get("same").stream().distinct().toList();
+        List<Person> probably_same_uniques = commons.get("probably_same").stream().distinct().toList();
+
+        return new ExtResponseEntity<>(Map.of(
+                "same", same_uniques,
+                "probably_same", probably_same_uniques),
+            HttpStatus.OK);
     }
 }

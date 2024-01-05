@@ -7,8 +7,10 @@ import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.NotifService;
 import com.springboot.mygroots.service.PersonService;
-import com.springboot.mygroots.utils.Enumerations;
 import com.springboot.mygroots.utils.Enumerations.Gender;
+import com.springboot.mygroots.utils.Enumerations.NotifType;
+import com.springboot.mygroots.utils.Enumerations.Relation;
+import com.springboot.mygroots.utils.Enumerations.Visibility;
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +51,7 @@ public class UserCtrl {
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(Map.of("email", acc.getEmail(), "person", acc.getPerson()), HttpStatus.OK);
+        return new ExtResponseEntity<>(Map.of("email", acc.getEmail(), "person", acc.getPerson(), "treeVisibility", acc.getFamilyTree().getVisibility()), HttpStatus.OK);
     }
     
     /**
@@ -75,6 +77,7 @@ public class UserCtrl {
             Gender gender = Gender.valueOf(data.get("gender"));
             String nationality = data.get("nationality");
             String socialSecurityNumber = data.get("socialSecurityNumber");
+            Visibility treeVisibility = Visibility.valueOf(data.get("treeVisibility"));
 
             if (email != null)
             	acc.setEmail(email);
@@ -90,6 +93,8 @@ public class UserCtrl {
     			p.setNationality(nationality);
     		if (socialSecurityNumber != null)
     			p.setSocialSecurityNumber(socialSecurityNumber);
+    		if (treeVisibility != null)
+    			acc.getFamilyTree().setVisibility(treeVisibility);
 
             accountService.updateAccount(acc);
             personService.updatePerson(p);
@@ -201,7 +206,7 @@ public class UserCtrl {
         Account acc1 = accountService.getAccountByEmail("pereiramatheo78@gmail.com");
         Account acc2 = accountService.getAccountByEmail("cototlucas@cy-tech.fr");
 
-        acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, Enumerations.NotifType.DEMAND_ADDTOFAMILY, Enumerations.Relation.FATHER));
+        acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, NotifType.DEMAND_ADDTOFAMILY, Relation.FATHER));
 
         acc1.getNotifs().removeIf(Objects::isNull);
         for (Notif n:acc1.getNotifs()){

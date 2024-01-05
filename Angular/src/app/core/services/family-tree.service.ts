@@ -27,13 +27,13 @@ export class FamilyTreeService {
     return this._httpClient.post(this.url + "/", {token: token, accountId: accountId}, this.httpOptions);
   }
   
-  // /**
-  //  * Send request to server to get the tree of the person.
-  //  * @param personId Id of the Person in database
-  //  */
-  // public getOtherFamilyTreeById(personId: string): Observable<any> {
-  //   return this._httpClient.post(this.url + "/other", {personId: personId}, this.httpOptions);
-  // }
+  /**
+   * Send request to server to get the tree of the person.
+   * @param accountId Id of the account
+   */
+  public getOtherFamilyTreeById(accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/view/other", {accountId: accountId}, this.httpOptions);
+  }
 
   /**
    * Send request to server to add a node by names and other informations.
@@ -51,6 +51,10 @@ export class FamilyTreeService {
     return this._httpClient.put(this.url + "/node/add/id", data, this.httpOptions);
   }
 
+  /**
+   * Send request to server to delete a node
+   * @param data 
+   */
   public deleteNode(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/node/delete", data, this.httpOptions);
   }

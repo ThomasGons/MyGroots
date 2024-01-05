@@ -23,9 +23,8 @@
               <!-- relation -->
               <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
                 <mat-label>Relation</mat-label>
-                <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byName')" formControlName="relation" required>
-                  <!-- TODO: check for existing nodes -->
-                  <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
+                <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender()" formControlName="relation" required>
+                  <mat-option *ngFor="let relation of this.availableRelations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="this.formAddByName.controls.relation.touched && this.formAddByName.controls.relation.invalid">
                   <span *ngIf="this.formAddByName.controls.relation.hasError('required')">Veuillez saisir une relation.</span>
@@ -77,7 +76,7 @@
                 <mat-icon>done</mat-icon>
                 <span>Validez</span>
               </button>
-              <button mat-button (click)="this.formAddByName.reset()" class="rounded-2 py-2 mx-2" type="button">
+              <button mat-button (click)="this.cancelForm('name')" class="rounded-2 py-2 mx-2" type="button">
                 <mat-icon>clear</mat-icon>
                 <span>Annuler</span>
               </button>
@@ -93,16 +92,16 @@
             <!-- relation -->
             <mat-form-field appearance="outline">
               <mat-label>Relation</mat-label>
-              <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byId')" formControlName="relation" required>
+              <mat-select matNativeControl formControlName="relation" required>
                 <!-- TODO: check for existing nodes -->
-                <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
+                <mat-option *ngFor="let relation of this.availableRelations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
               </mat-select>
               <mat-error *ngIf="this.formAddByName.controls.relation.touched && this.formAddByName.controls.relation.invalid">
                 <span *ngIf="this.formAddByName.controls.relation.hasError('required')">Veuillez saisir une relation.</span>
               </mat-error>
             </mat-form-field>
             <!-- accountId -->
-            <mat-form-field appearance="outline" class="">
+            <mat-form-field appearance="outline">
               <mat-label>Numéro d'identification</mat-label>
               <input matInput formControlName="accountId" type="text">
               <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
@@ -116,7 +115,7 @@
                 <mat-icon>done</mat-icon>
                 <span>Validez</span>
               </button>
-              <button mat-button (click)="this.formAddByName.reset()" class="mt-4 rounded-2 py-2 mx-2" type="button">
+              <button mat-button (click)="this.cancelForm('id')" class="mt-4 rounded-2 py-2 mx-2" type="button">
                 <mat-icon>clear</mat-icon>
                 <span>Annuler</span>
               </button>

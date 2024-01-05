@@ -6,8 +6,10 @@ import com.springboot.mygroots.repository.FamilyTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class FamilyTreeService {
@@ -58,5 +60,38 @@ public class FamilyTreeService {
                 "grandchildren", "cousins", "uncles_aunts",
                 "nephews_nieces"
         );
+    }
+
+    public Map<String, List<Person>> getSimilarFamilyTreeByAllNodes(Person owner) {
+        FamilyTree ft = getFamilyTreeByOwner(owner);
+
+        List<FamilyTree> familyTrees = familyTreeRepository.findAll();
+        List<Person> same = new ArrayList<>();
+        List<Person> probably_same = new ArrayList<>();
+        for (Person p: ft.getMembers()) {
+            getSimilarFamilyTreeByNode(p, familyTrees, same, probably_same);
+        }
+        return Map.of(
+                "same", same,
+                "probably_same", probably_same
+        );
+    }
+
+    private void getSimilarFamilyTreeByNode(Person p, List<FamilyTree> familyTrees, List<Person> same, List<Person> probably_same) {
+        for (FamilyTree ft: familyTrees) {
+            if (ft.getOwner().getId().equals(p.getId())) {
+                continue;
+            }
+            for (Person p2: ft.getMembers()) {
+                if (p2.getId().equals(p.getId())) {
+                	same.add(p2);
+                	break;
+                }
+                if (p2.getFirstName().equals(p.getFirstName()) || p2.getLastName().equals(p.getLastName())) {
+                    probably_same.add(p2);
+                    break;
+                }
+            }
+        }
     }
 }

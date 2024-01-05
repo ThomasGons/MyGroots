@@ -32,6 +32,7 @@ public class FamilyTree {
         this.nodes = new ArrayList<>();
         this.addMember(owner);
         this.addNode(owner, null, null, null);
+        this.visibility = Visibility.PUBLIC;
     }
 
     private void addNode(Person person, Person partner, Person mother, Person father) {

@@ -15,6 +15,13 @@ export enum Gender {
     FEMALE = "FEMALE"
 }
 
+export enum Relation {
+  FATHER = "FATHER",
+  MOTHER = "MOTHER",
+  PARTNER = "PARTNER",
+  CHILD = "CHILD",
+}
+
 export class Person {
   firstName?: string;
   lastName?: string;

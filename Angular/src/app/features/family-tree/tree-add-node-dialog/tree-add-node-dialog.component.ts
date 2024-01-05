@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Gender } from '@app/core/models';
+import { Gender, Relation } from '@app/core/models';
 
 
 @Component({
@@ -22,22 +22,41 @@ export class TreeAddNodeDialogComponent {
     relation: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     accountId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
+  availableRelations: any[] = [];
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
     { value: Gender.FEMALE, viewValue: "Femme" },
   ];
   readonly relations: any = [
-    {value: "FATHER", viewValue: "Père"},
-    {value: "MOTHER", viewValue: "Mère"},
-    {value: "PARTNER", viewValue: "Partenaire"},
-    {value: "CHILD", viewValue: "Enfant"},
+    {value: Relation.FATHER, viewValue: "Père"},
+    {value: Relation.MOTHER, viewValue: "Mère"},
+    {value: Relation.PARTNER, viewValue: "Partenaire"},
+    {value: Relation.CHILD, viewValue: "Enfant"},
   ];
 
   constructor(
     public dialogRef: MatDialogRef<TreeAddNodeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {ownerId: string, selectedNodeId: any, selectedNodeData: any, nodes: any[], members: any[]},
-  ) {}
+  ) {
+    const node = this.data.nodes[this.data.selectedNodeId];
+    if (node.fid == -1) {
+      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
+        this.availableRelations.push({value: "FATHER", viewValue: "Père"});
+      }
+    }
+    if (node.mid == -1) {
+      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
+        this.availableRelations.push({value: "MOTHER", viewValue: "Mère"});
+      }
+    }
+    if (node.pids[0] == -1) {
+      if (this.data.members[node.fid].firstName == "unknown" && this.data.members[node.fid].lastName == "unknown") {
+        this.availableRelations.push({value: "PARTNER", viewValue: "Partenaire"});
+      }
+    }
+    this.availableRelations.push({value: "CHILD", viewValue: "Enfant"});
+  }
   
   public onSubmitAddByName(): void {
     /* Validate form */
@@ -87,17 +106,44 @@ export class TreeAddNodeDialogComponent {
   }
 
 
-  public matchingRelationAndGender(type: string): void {
-    if (type == "byName") {
-      const relation = this.formAddByName.value.relation;
-      console.log(relation);
+  protected matchingRelationAndGender(): void {
+    const relation = this.formAddByName.value.relation;
+    if (relation == Relation.FATHER) {
+      /* Check for unknown. */
+      this.formAddByName.patchValue({gender: Gender.MALE});
+      this.formAddByName.controls.gender.disable();
     }
-    if (type == "byId") {
-      const relation = this.formAddById.value.relation;
-      console.log(relation);
+    else if (relation == Relation.MOTHER) {
+      this.formAddByName.patchValue({gender: Gender.FEMALE});
+      this.formAddByName.controls.gender.disable();
+    }
+    else if (relation == Relation.PARTNER) {
+      const gender = this.data.selectedNodeData.gender;
+      if (gender == Gender.MALE) {
+        this.formAddByName.patchValue({gender: Gender.FEMALE});
+      this.formAddByName.controls.gender.disable();
+
+      }
+      else if (gender == Gender.FEMALE) {
+        this.formAddByName.patchValue({gender: Gender.MALE});
+        this.formAddByName.controls.gender.disable();
+      }
+    }
+    else {
+      this.formAddByName.controls.gender.enable();
+      this.formAddByName.patchValue({gender: ""});
     }
   }
 
+  protected cancelForm(type: string): void {
+    if (type == "name") {
+      this.formAddByName.controls.gender.enable();
+      this.formAddByName.reset();
+    }
+    if (type == "id") {
+      this.formAddById.reset();
+    }
+  }
 
   private formatBirthDate(inputDate: string): string {
     /* Format the input date to YYYY-MM-DD string */

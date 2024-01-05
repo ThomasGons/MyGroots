@@ -106,11 +106,11 @@ export class FamilyTreeComponent implements OnInit {
     }
   }
   
-  public toggleSidePanel(): void {
+  protected toggleSidePanel(): void {
     this.sidepanel.toggle();
   }
 
-  public openDialogAddNode(): void {
+  protected openDialogAddNode(): void {
     const dialogRef = this.dialog.open(TreeAddNodeDialogComponent, {
       data: {
         ownerId: this.user.id,  // accountID of owner of the tree
@@ -160,7 +160,7 @@ export class FamilyTreeComponent implements OnInit {
     });
   }
 
-  public openDialogRemoveNode(): void {
+  protected openDialogRemoveNode(): void {
     if (this.selectedNodeId == 0) {
       this._snackbarService.openSnackbar("Vous ne pouvez pas vous supprimer en tant que racine de l'arbre !");
       return;
@@ -178,15 +178,27 @@ export class FamilyTreeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      console.log(confirmed);
       if (confirmed) {
+        /* Get data */
+        const deleteData = {
+          token: this.user.token,
+          accountId: this.user.id,
+          personId: this.treeData.members[this.selectedNodeId].id,
+        }
         /* Send request to remove node */
-
+        this._familytreeService.deleteNode(deleteData).subscribe({
+          next: (response) => {
+            console.log(response);
+            this._snackbarService.openSnackbar(response.message);
+          },
+          error: (err) => {
+            console.log(err);
+            this._snackbarService.openSnackbar(err.error.message);
+          }
+        });
       }
     });
   }
-
-
 
   protected getSelectedNodeGender(): string {
     for (let gender of this.genders) {
