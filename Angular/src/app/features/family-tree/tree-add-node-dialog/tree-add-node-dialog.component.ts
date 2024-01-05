@@ -60,19 +60,21 @@ export class TreeAddNodeDialogComponent {
       type: "name",
       formData: formData,
     }
+    console.log(result);
     this.dialogRef.close(result);
   }
 
   public onSubmitAddById(): void {
     /* Validate form */
-    this.formAddByName.markAllAsTouched();
-    if (!this.formAddByName.valid) {
+    this.formAddById.markAllAsTouched();
+    if (!this.formAddById.valid) {
       return;
     }
     /* Get form data */
     const formData = {
       ownerId: this.data.ownerId, // accountID of owner of the tree
       srcId: this.data.members[this.data.selectedNodeId].id,   // personID of node selected to add a node to
+      relation: this.formAddById.value.relation,
       accountId: this.formAddById.value.accountId,
     }
     /* Return data to parent component */
@@ -80,6 +82,7 @@ export class TreeAddNodeDialogComponent {
       type: "id",
       formData: formData,
     }
+    console.log(result);
     this.dialogRef.close(result);
   }
 
@@ -94,6 +97,7 @@ export class TreeAddNodeDialogComponent {
       console.log(relation);
     }
   }
+
 
   private formatBirthDate(inputDate: string): string {
     /* Format the input date to YYYY-MM-DD string */

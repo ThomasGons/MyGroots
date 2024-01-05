@@ -140,8 +140,8 @@ public class FamilyTreeCtrl {
     @PutMapping(value="/node/add/id")
     public ExtResponseEntity<?> addNodeByID(@RequestBody Map<String, String> data) {
         String owner_id = data.get("ownerId");//ownerId account of the owner of the tree
-        String src_id = data.get("srcId");//srcId account of the person who wants to add someone to his tree
-        String dst_id = data.get("");//accountId account of the person to add to the tree
+        String src_id = data.get("srcId"); //srcId id of the person who wants to add someone to his tree
+        String dst_id = data.get("accountId"); //accountId account of the person to add to the tree
         Relation relation = Relation.valueOf(data.get("relation"));
         System.out.println("ça ajoute un compte à l'arbre");
         Account owner = accountService.getAccountById(owner_id);
