@@ -35,5 +35,11 @@ export class SearchService {
   public searchById(accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/id", {accountId: accountId}, this.httpOptions);
   }
-
+  /**
+   * Send request to server to get an Account.
+   * @param accountId Id of the Person in database
+   */
+  public searchCommun(accountId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/id", {accountId: accountId}, this.httpOptions);
+  }
 }
