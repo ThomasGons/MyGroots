@@ -20,12 +20,15 @@ export class SearchComponent {
   formById = new FormGroup({
     accountId: new FormControl(""),
   });
+  formByCommunId = new FormGroup({
+    target_id: new FormControl(""),
+  });
   showResults: boolean = false;
   searchResults: any[] = [];
   searchSame: any[] = [];
   searchProbablySame: any[] = [];
   user: User = {};
-  owner_acc_id: string = '';
+  src_acc_id: string = '';
 
   private _snackbarService: any;
 
@@ -82,7 +85,7 @@ export class SearchComponent {
     });
   }
 
-  public clearResults() {
+  public clearResults(): void {
     this.showResults = false;
     this.searchResults = [];
     this.searchProbablySame = [];
@@ -90,9 +93,16 @@ export class SearchComponent {
   }
 
   public communSearch():void{
+
+    const target_id = !this.formByCommunId.value.target_id ? "" : this.formByCommunId.value.target_id;
+    if (!target_id) {
+      return;
+    }
+    console.log(target_id);
+
     this.user = this._storageService.getUser();
-    this.owner_acc_id = String(this.user.id);
-    this._searchService.searchCommun(String(this.owner_acc_id)).subscribe({
+    this.src_acc_id = String(this.user.id);
+    this._searchService.searchCommun(String(this.src_acc_id), String(target_id)).subscribe({
       next: (response) => {
         console.log(response);
         this.searchSame = response.body.same;
@@ -114,10 +124,6 @@ export class SearchComponent {
     this.showResults = !this.showResults;
   }
 
-  public clearResults() {
-    this.showResults = false;
-    this.searchResults = [];
-  }
 
   private formatBirthDate(inputDate: string): string {
     const dateObject = new Date(inputDate);
