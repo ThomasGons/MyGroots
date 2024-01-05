@@ -6,10 +6,8 @@ import com.springboot.mygroots.repository.FamilyTreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class FamilyTreeService {
@@ -66,32 +64,42 @@ public class FamilyTreeService {
         FamilyTree ft = getFamilyTreeByOwner(owner);
 
         List<FamilyTree> familyTrees = familyTreeRepository.findAll();
-        List<Person> same = new ArrayList<>();
-        List<Person> probably_same = new ArrayList<>();
+        Set<Person> same = new HashSet<>();
+        Set<Person> probably_same = new HashSet<>();
         for (Person p: ft.getMembers()) {
-            getSimilarFamilyTreeByNode(p, familyTrees, same, probably_same);
+            getSimilarFamilyTreeByNode(p, owner, familyTrees, same, probably_same);
         }
         return Map.of(
-                "same", same,
-                "probably_same", probably_same
+                "same", same.stream().toList(),
+                "probably_same", probably_same.stream().toList()
         );
     }
 
-    private void getSimilarFamilyTreeByNode(Person p, List<FamilyTree> familyTrees, List<Person> same, List<Person> probably_same) {
+    private void getSimilarFamilyTreeByNode(Person p, Person owner, List<FamilyTree> familyTrees, Set<Person> same, Set<Person> probably_same) {
+        String p_id = p.getId();
+        String p_firstName = p.getFirstName();
+        String p_lastName = p.getLastName();
+        LocalDate p_birthDate = p.getBirthDate();
         for (FamilyTree ft: familyTrees) {
-            if (ft.getOwner().getId().equals(p.getId())) {
+            if (ft.getOwner().getId().equals(owner.getId())) {
                 continue;
             }
             for (Person p2: ft.getMembers()) {
                 if (p2.getId().equals(p.getId())) {
-                	same.add(p2);
-                	break;
+                    same.add(ft.getOwner());
+                    return;
                 }
-                if (p2.getFirstName().equals(p.getFirstName()) || p2.getLastName().equals(p.getLastName())) {
-                    probably_same.add(p2);
-                    break;
+                else if (p2.getFirstName().equals(p_firstName) &&
+                        p2.getLastName().equals(p_lastName) &&
+                        p2.getBirthDate().equals(p_birthDate) &&
+                        !p2.hasAccount()) {
+
+                    probably_same.add(ft.getOwner());
+                    return;
                 }
             }
         }
     }
+
+
 }
