@@ -6,7 +6,8 @@ import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
-import com.springboot.mygroots.utils.Enumerations;
+import com.springboot.mygroots.utils.Enumerations.Gender;
+import com.springboot.mygroots.utils.Enumerations.Relation;
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -126,7 +127,7 @@ public class FamilyTreeCtrl {
         String owner_id = data.get("ownerId");
         String src_id = data.get("srcId");
         String dst_id = data.get("accountId");
-        Enumerations.Relation relation = Enumerations.Relation.valueOf(data.get("relation"));
+        Relation relation = Relation.valueOf(data.get("relation"));
 
         Account owner = accountService.getAccountById(owner_id);
         Account src = accountService.getAccountById(src_id);
@@ -165,24 +166,24 @@ public class FamilyTreeCtrl {
      *
      * @return message to indicate whether the addition has been carried out correctly
      */
-    @PutMapping(value="/node/new-person")
+    @PutMapping(value="/node/name")
     public ExtResponseEntity<?> addNodeNewPerson(@RequestBody Map<String, String> data) {
         String owner_id = data.get("ownerId");
         String src_id = data.get("srcId");
         String personName = data.get("firstName");
         String personLastName = data.get("lastName");
         LocalDate personBirthDate = LocalDate.parse(data.get("birthDate"));
-        Enumerations.Gender personGender = Enumerations.Gender.valueOf("gender");
-        Enumerations.Relation relation = Enumerations.Relation.valueOf(data.get("relation"));
+        Gender personGender = Gender.valueOf(data.get("gender"));
+        Relation relation = Relation.valueOf(data.get("relation"));
 
         Account owner = accountService.getAccountById(owner_id);
-        Account src = accountService.getAccountById(src_id);
+        Person src = personService.getPersonById(src_id);
 
         if (owner == null) {
-            return new ExtResponseEntity<>("Aucun account (propriétaire de l'arbre) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+            return new ExtResponseEntity<>("Aucun compte (propriétaire de l'arbre) ne correspond à cet id !", HttpStatus.BAD_REQUEST);
         }
         if(src == null) {
-            return new ExtResponseEntity<>("Aucun account (source) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+            return new ExtResponseEntity<>("Aucune personne (source) ne correspond à cet id !", HttpStatus.BAD_REQUEST);
         }
 
         FamilyTree ft = owner.getFamilyTree();
@@ -190,15 +191,14 @@ public class FamilyTreeCtrl {
             return new ExtResponseEntity<>("Ce propriétaire n'a pas d'arbre! ???? wtf pourquoi", HttpStatus.BAD_REQUEST);
         }
 
-        Person sp = src.getPerson();
-        Person dp = new Person(personName, personLastName, personGender);
-        dp.setBirthDate(personBirthDate);
-        personService.addPerson(dp);
+        Person newPers = new Person(personName, personLastName, personGender);
+        newPers.setBirthDate(personBirthDate);
+        personService.addPerson(newPers);
 
 
-        ft.addMemberToTree(sp, dp, relation);
+        ft.addMemberToTree(src, newPers, relation);
         familyTreeService.updateFamilyTree(ft);
-        return new ExtResponseEntity<>("Ajout réussi!", HttpStatus.OK);
+        return new ExtResponseEntity<>("Ajout du noeud réussi!", HttpStatus.OK);
     }
 
 
