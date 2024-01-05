@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Controller for the user
@@ -102,6 +103,7 @@ public class UserCtrl {
             return new ExtResponseEntity<>("Aucun compte correspondant a cet id ou est authentifié !", HttpStatus.BAD_REQUEST);
         }
         List<Map<String,String>> notifsDTO = new ArrayList<>();
+        acc.getNotifs().removeIf(Objects::isNull);
         for(Notif n : acc.getNotifs()){
             notifsDTO.add(Map.of( "id", n.getId(),
                     "type", n.getType().toString(),
@@ -137,6 +139,7 @@ public class UserCtrl {
             return new ExtResponseEntity<>("Aucun compte trouvé !", HttpStatus.BAD_REQUEST);
         }
 
+        System.out.println(response);
 
         if(response){
             notif.acceptDemand();
@@ -144,21 +147,11 @@ public class UserCtrl {
             notif.declineDemand();
         }
 
-        if(!acc2.getNotifs().isEmpty()){
-            for(Notif n : acc2.getNotifs()){
-                notifService.updateNotif(n);
-            }
-        }
+        acc1.getNotifs().removeIf(Objects::isNull);
+        acc2.getNotifs().removeIf(Objects::isNull);
 
-        if(!acc1.getNotifs().isEmpty()){
-            for(Notif n : acc1.getNotifs()){
-                notifService.updateNotif(n);
-            }
-        }
-
-
-        accountService.updateAccount(acc1);
         accountService.updateAccount(acc2);
+        accountService.updateAccount(acc1);
 
         System.out.println(acc2.getFamilyTree());
 
@@ -197,20 +190,16 @@ public class UserCtrl {
     @GetMapping(value = "/notifs/suce")
     public void testNotif() {
         Account acc1 = accountService.getAccountByEmail("pereiramatheo78@gmail.com");
-        Account acc2 = accountService.getAccountByEmail("raphael.causse2@gmail.com");
+        Account acc2 = accountService.getAccountByEmail("cototlucas@cy-tech.fr");
 
         acc1.addNotif(new Notif(acc2, acc2.getPerson(), acc1, Enumerations.NotifType.DEMAND_ADDTOFAMILY, Enumerations.Relation.FATHER));
 
-
+        acc1.getNotifs().removeIf(Objects::isNull);
         for (Notif n:acc1.getNotifs()){
             notifService.saveNotif(n);
         }
         accountService.updateAccount(acc1);
     }
-
-
-
-
 
 
 

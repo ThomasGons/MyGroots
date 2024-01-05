@@ -29,6 +29,7 @@ public class Notif {
         this.target = target;
         this.member = member;
         this.type = type;
+        this.relation = relation;
         if(type == NotifType.DEMAND_ADDTOFAMILY){
             this.body = source.getPerson().getFirstName() + " " + source.getPerson().getLastName() + " wants to add you to his family as " + relation + " of " + member.getFirstName() + " " + member.getLastName();
         }
@@ -48,30 +49,37 @@ public class Notif {
 
         if(relation == Relation.FATHER){
             source.getFamilyTree().addFather(member,target.getPerson());
+            System.out.println("ça rentre dans la fonction father");
             if(isTreeEquivalant){
-                target.getFamilyTree().addChild(member,source.getPerson());
+                target.getFamilyTree().addChild(target.getPerson(),source.getPerson());
             }
         }
         else if(relation == Relation.MOTHER){
             source.getFamilyTree().addMother(member,target.getPerson());
+            System.out.println("ça rentre dans la fonction mother");
             if(isTreeEquivalant){
-                target.getFamilyTree().addChild(member,source.getPerson());
+                target.getFamilyTree().addChild(target.getPerson(),source.getPerson());
             }
         }
         else if(relation == Relation.PARTNER){
+            System.out.println("ça rentre dans la fonction partner");
+
             source.getFamilyTree().addPartner(member,target.getPerson());
+
+
             if(isTreeEquivalant){
-                target.getFamilyTree().addPartner(member,source.getPerson());
+                target.getFamilyTree().addPartner(target.getPerson(),source.getPerson());
             }
         }
         else if(relation == Relation.CHILD){
             source.getFamilyTree().addChild(member,target.getPerson());
+            System.out.println("ça rentre dans la fonction child");
             if(isTreeEquivalant){
-                if(target.getPerson().getGender() == Gender.MALE){
-                    target.getFamilyTree().addFather(member,source.getPerson());
+                if(source.getPerson().getGender() == Gender.MALE){
+                    target.getFamilyTree().addFather(target.getPerson(),source.getPerson());
                 }
                 else{
-                    target.getFamilyTree().addMother(member,source.getPerson());
+                    target.getFamilyTree().addMother(target.getPerson(),source.getPerson());
                 }
             }
         }

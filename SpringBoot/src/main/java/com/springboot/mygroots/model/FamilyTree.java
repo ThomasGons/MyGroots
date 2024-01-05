@@ -103,11 +103,21 @@ public class FamilyTree {
 
     public void addPartner(Person member, Person addedMember) {
         int memberID = getPersonID(member);
-        if(this.getMembers().contains(member) // member is in the family tree
-                && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
+        boolean verif = false;
+        for(Person p: this.getMembers()){
+            if(p.getId().equals(member.getId())){
+                verif = true;
+            }
+            if(p.getId().equals(addedMember.getId())){
+                verif = false;
+            }
+        }
+
+        if(verif // addedMember is not in the family tree
                 && member.getGender() != addedMember.getGender() // the partner added is not of the same gender
-                && nodes.get(memberID).getPartnerID() == -1  || Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")) // the member does not have a partner
+                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a partner
         {
+            System.out.println("add partner");
             this.addMember(addedMember);
             int partnerID = getPersonID(addedMember);
             this.getNode(member).setPartnerIDs(partnerID);
@@ -140,13 +150,26 @@ public class FamilyTree {
 
 
     public void addFather(Person member, Person addedMember){
-        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isBefore(member.getBirthDate())){ // if the father is born before the member
+        int memberID = getPersonID(member);
+
+
+        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isAfter(member.getBirthDate())){
+            System.out.println("father is born before the member");
             return;
         }
 
-        if(this.getMembers().contains(member) // member is in the family tree
-                && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && getNode(member).getFatherID() == -1  || Objects.equals(members.get(getNode(member).getFatherID()).getFirstName(), "unknown")) // the member does not have a father
+        boolean verif = false;
+        for(Person p: this.getMembers()){
+            if(p.getId().equals(member.getId())){
+                verif = true;
+            }
+            if(p.getId().equals(addedMember.getId())){
+                verif = false;
+            }
+        }
+
+        if(verif // addedMember is not in the family tree
+                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a father
         {
             if(this.getNode(member).getMotherID()!= -1){ // if the member has a mother
                 this.addPartner(this.getMembers().get(this.getNode(member).getMotherID()), addedMember); // add the father as the partner of the mother
@@ -162,13 +185,23 @@ public class FamilyTree {
     }
 
     public void addMother(Person member, Person addedMember){
-        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isAfter(member.getBirthDate())){ // if the mother is born after the member
+        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isAfter(member.getBirthDate())){
             return;
         }
         int memberID = getPersonID(member);
-        if(this.getMembers().contains(member) // member is in the family tree
-                && !this.getMembers().contains(addedMember) // addedMember is not in the family tree
-                && (getNode(member).getMotherID() == -1 || Objects.equals(members.get(getNode(member).getMotherID()).getFirstName(), "unknown"))) // the member does not have a mother
+
+        Boolean verif = false;
+        for(Person p: this.getMembers()){
+            if(p.getId().equals(member.getId())){
+                verif = true;
+            }
+            if(p.getId().equals(addedMember.getId())){
+                verif = false;
+            }
+        }
+
+        if(verif// addedMember is not in the family tree
+                && (nodes.get(memberID).getPartnerID() == -1 || (nodes.get(memberID).getPartnerID() != -1 && Objects.equals(members.get(getNode(member).getPartnerID()).getFirstName(), "unknown")))) // the member does not have a mother
         {
             if(this.getNode(member).getFatherID()!= -1 ){ // if the member has a father
                 this.addPartner(this.getMembers().get(this.getNode(member).getFatherID()), addedMember); // add the mother as the partner of the father
@@ -184,15 +217,25 @@ public class FamilyTree {
     }
 
     public void addChild(Person member, Person addedMember){
-        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isAfter(member.getBirthDate())){
+        if(addedMember.getBirthDate() !=null && member.getBirthDate()!=null && addedMember.getBirthDate().isBefore(member.getBirthDate())){
             return;
         }
-        int memberID = getPersonID(member);
-        if(this.getMembers().contains(member) // member is in the family tree
-                && !this.getMembers().contains(addedMember)) // addedMember is not in the family tree
+
+        Boolean verif = false;
+        for(Person p: this.getMembers()){
+            if(p.getId().equals(member.getId())){
+                verif = true;
+            }
+            if(p.getId().equals(addedMember.getId())){
+                verif = false;
+            }
+        }
+
+
+        if(verif) // addedMember is not in the family tree
         {
             this.addMember(addedMember);
-            int childID = getPersonID(addedMember);
+
             if(member.getGender()== Gender.MALE){
                 if(this.getNode(member).getPartnerID() == -1){
                     this.addNode(addedMember, null, null, member);
@@ -380,7 +423,7 @@ public class FamilyTree {
     public void removeMemberFromTree(Person person) {
         TreeNode node = this.getNode(person);
         if (this.getChildren(person).isEmpty() && node.getPartnerID() == -1) {
-            int removedID = members.indexOf(person);
+            int removedID = getPersonID(person);
             for (TreeNode extNode : this.getNodes()) {
                 if (extNode.getID() > removedID) {
                     extNode.setID(extNode.ID - 1);
@@ -398,7 +441,7 @@ public class FamilyTree {
             members.remove(person);
         }
         else{
-            members.set(members.indexOf(person), unknown);
+            members.set(getPersonID(person), unknown);
         }
 
 
@@ -413,7 +456,7 @@ public class FamilyTree {
         if (person == null) {
             return -1;
         }
-        int ID = members.indexOf(person);
+        int ID = findIndexInMemberList(person);
         if (ID == -1) {
             return members.size() - 1;
         }
@@ -429,8 +472,14 @@ public class FamilyTree {
     }
 
     public TreeNode getNode(Person person) {
-        int ID = getPersonID(person);
-        return nodes.stream().filter(node -> node.getID() == ID).findFirst().orElse(null);
+        int personId = getPersonID(person);
+        for(TreeNode node : nodes) {
+            if(Integer.valueOf(node.getID()).equals(personId)) {
+
+                return node;
+            }
+        }
+        return null;
     }
 
     public List<TreeNode> getChildrenNodes(Person person) {
@@ -454,6 +503,15 @@ public class FamilyTree {
 
     public Person getOwner() {
         return owner;
+    }
+
+    public int findIndexInMemberList(Person person) {
+        for(int i = 0; i < members.size(); i++) {
+            if(members.get(i).getId().equals(person.getId())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 

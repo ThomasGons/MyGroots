@@ -33,6 +33,7 @@ public class AccountService {
     }
 
     public void updateAccount(Account account){
+        notifRepository.saveAll(account.getNotifs());
         accountRepository.save(account);
     }
 

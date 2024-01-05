@@ -50,7 +50,7 @@ export class UserService {
    * @param accountId Id of the account
    */
   public response(response: string, notifId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/notifs/response", {reponse: response, notifId: notifId}, this.httpOptions);
+    return this._httpClient.post(this.url + "/notifs/response", {response: response, notifId: notifId}, this.httpOptions);
   }
 
   /**
