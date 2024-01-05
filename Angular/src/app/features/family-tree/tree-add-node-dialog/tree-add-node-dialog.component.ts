@@ -71,6 +71,7 @@ export class TreeAddNodeDialogComponent {
       srcId: this.data.members[this.data.selectedNodeId].id,   // personID of node selected to add a node to
       accountId: this.formAddById.value.accountId,
     }
+    /* Return data to parent component */
     this.dialogRef.close({type: "id", formData: formData});
   }
 

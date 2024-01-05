@@ -127,7 +127,7 @@ export class FamilyTreeComponent implements OnInit {
       /* Send request to add node by name */
       const type = result.type;
       if (type == "name") {
-        this._familytreeService.addNodeByName(result.data).subscribe({
+        this._familytreeService.addNodeByName(result.formData).subscribe({
           next: (response) => {
             console.log(response);
             this._snackbarService.openSnackbar(response.message);
@@ -143,7 +143,7 @@ export class FamilyTreeComponent implements OnInit {
       }
       /* Send request to add node by id */
       if (type == "id") {
-        this._familytreeService.addNodeById(result.data).subscribe({
+        this._familytreeService.addNodeById(result.formData).subscribe({
           next: (response) => {
             console.log(response);
             this._snackbarService.openSnackbar(response.message);
