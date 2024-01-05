@@ -73,16 +73,18 @@ public class FamilyTreeService {
 
         // get all the members that have the same id in the two family trees
         for (Person p: src_members) {
+            if (Objects.equals(p.getId(), src.getId())) {continue;}
             for (Person p2: target_members) {
-                if (p.getId().equals(p2.getId())) {
-                    same.add(p);
-                } else if (p.getFirstName().equals(p2.getFirstName()) &&
-                        p.getLastName().equals(p2.getLastName()) &&
-                        p.getBirthDate().equals(p2.getBirthDate()) &&
-                        !p.hasAccount() || !p2.hasAccount()) {
-                    probably_same.add(p);
+                if (Objects.equals(p2.getId(), target_id)) {break;}
+                    if (p.getId().equals(p2.getId())) {
+                        same.add(p);
+                    } else if (p.getFirstName().equals(p2.getFirstName()) &&
+                            p.getLastName().equals(p2.getLastName()) &&
+                            p.getBirthDate().equals(p2.getBirthDate()) &&
+                            !p.hasAccount() || !p2.hasAccount()) {
+                        probably_same.add(p);
+                    }
                 }
-            }
         }
 
         return Map.of(
