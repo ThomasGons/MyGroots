@@ -66,13 +66,15 @@ public class SearchCtrl {
         if (persResults == null) {
             return new ExtResponseEntity<>("Aucune resultat !", HttpStatus.BAD_REQUEST);
         }
-        
         persResults.removeIf(person ->
-        	person.getAccount().equals(null) || person.getFirstName().equals("unknown") || person.getLastName().equals("unknown") 
+        	person.getFirstName().equals("unknown") || person.getLastName().equals("unknown") 
         );
         List<Account> results = new ArrayList<>();
         for (Person p: persResults) {
-        	results.add(p.getAccount());
+        	Account a = accountService.getAccountByPerson(p);
+        	if (a != null) {
+        		results.add(a);        		
+        	}
         }
         return new ExtResponseEntity<>(results, HttpStatus.OK);
     }

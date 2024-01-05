@@ -1,10 +1,10 @@
-<mat-dialog-content class="container-fluid h-100 m-0 p-0 overflow-hidden">
-  <mat-card class="h-100">
+<div class="container-fluid h-100 m-0 p-0 overflow-hidden">
+  <mat-card>
     <mat-card-header>
       <div class="w-100 d-flex justify-content-between align-item-center pb-3">
         <div class="d-flex flex-column">
           <span class="h4 text-center text-black pt-2 m-0 mt-1">Ajouter un noeud</span>
-          <span class="fg-gray-dark">à {{ data.selectedNodeData.firstName }} {{ data.selectedNodeData.lastName }}</span>
+          <span class="fg-gray-dark pt-2">à {{ data.selectedNodeData.firstName }} {{ data.selectedNodeData.lastName }}</span>
         </div>
         <button mat-icon-button class="mt-2" (click)="this.dialogRef.close()" type="button">
           <mat-icon>close</mat-icon>
@@ -17,13 +17,13 @@
     <mat-tab-group color="primary" class="w-100" animationDuration="500ms">
       <!-- Tab Add by Name -->
       <mat-tab label="Par Nom">
-        <mat-card-content>
+        <div class="p-4">
           <form [formGroup]="this.formAddByName" (ngSubmit)="this.onSubmitAddByName()" class="d-flex flex-column">
             <div class="d-flex flex-row">
               <!-- relation -->
               <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
                 <mat-label>Relation</mat-label>
-                <mat-select matNativeControl (change)="this.matchingRelationAndGender('byName')" formControlName="relation" required>
+                <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byName')" formControlName="relation" required>
                   <!-- TODO: check for existing nodes -->
                   <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
                 </mat-select>
@@ -73,23 +73,27 @@
             </mat-form-field>
             <!-- submit -->
             <div class="d-flex flex-row-reverse">
-              <button mat-raised-button class="rounded-2 bg-green-light py-4" [disabled]="!this.formAddByName.valid" type="submit">
+              <button mat-raised-button class="rounded-2 bg-green-light py-2" [disabled]="!this.formAddByName.valid" type="submit">
                 <mat-icon>done</mat-icon>
                 <span>Validez</span>
               </button>
+              <button mat-button (click)="this.formAddByName.reset()" class="rounded-2 py-2 mx-2" type="button">
+                <mat-icon>clear</mat-icon>
+                <span>Annuler</span>
+              </button>
             </div>
           </form>
-        </mat-card-content>
+        </div>
       </mat-tab>
 
       <!-- Tab Add by Id -->
       <mat-tab label="Par Identifiant">
-        <mat-card-content class="pt-4">
+        <div class="p-4">
           <form [formGroup]="this.formAddById" (ngSubmit)="this.onSubmitAddByName()" class="d-flex flex-column">
             <!-- relation -->
             <mat-form-field appearance="outline">
               <mat-label>Relation</mat-label>
-              <mat-select matNativeControl formControlName="relation" required>
+              <mat-select matNativeControl (selectionChange)="this.matchingRelationAndGender('byId')" formControlName="relation" required>
                 <!-- TODO: check for existing nodes -->
                 <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
               </mat-select>
@@ -98,7 +102,7 @@
               </mat-error>
             </mat-form-field>
             <!-- accountId -->
-            <mat-form-field appearance="outline" class="mb-4- pb-4">
+            <mat-form-field appearance="outline" class="">
               <mat-label>Numéro d'identification</mat-label>
               <input matInput formControlName="accountId" type="text">
               <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
@@ -107,15 +111,19 @@
               </mat-error>
             </mat-form-field>
             <!-- submit -->
-            <div class="d-flex flex-row-reverse mt-2">
-              <button mat-raised-button class="mt-5 rounded-2 bg-green-light py-4" [disabled]="!this.formAddByName.valid" type="submit">
+            <div class="d-flex flex-row-reverse">
+              <button mat-raised-button class="mt-4 rounded-2 bg-green-light py-2" [disabled]="!this.formAddByName.valid" type="submit">
                 <mat-icon>done</mat-icon>
                 <span>Validez</span>
               </button>
+              <button mat-button (click)="this.formAddByName.reset()" class="mt-4 rounded-2 py-2 mx-2" type="button">
+                <mat-icon>clear</mat-icon>
+                <span>Annuler</span>
+              </button>
             </div>
           </form>
-        </mat-card-content>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
-</mat-dialog-content>
+</div>

@@ -12,10 +12,8 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
-import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
+import { FamilyTreeComponent, TreeAddNodeDialogComponent, TreeRemoveNodeDialogComponent, ViewOtherFamilyTreeComponent } from './features/family-tree';
 import { SearchComponent, SearchResultComponent } from './features/search';
-import { TreeAddNodeDialogComponent } from './features/family-tree/tree-add-node-dialog/tree-add-node-dialog.component';
-import { TreeRemoveNodeDialogComponent } from './features/family-tree/tree-remove-node-dialog/tree-remove-node-dialog.component';
 
 
 @NgModule({
@@ -40,6 +38,7 @@ import { TreeRemoveNodeDialogComponent } from './features/family-tree/tree-remov
     SearchResultComponent,
     TreeAddNodeDialogComponent,
     TreeRemoveNodeDialogComponent,
+    ViewOtherFamilyTreeComponent,
   ],
   imports: [
     BrowserModule,

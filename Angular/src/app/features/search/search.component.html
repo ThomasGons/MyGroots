@@ -1,6 +1,6 @@
 <div class="container-fluid h-100 m-0 p-0" style="background: linear-gradient(var(--color-green-dark), var(--color-green-light));">
   <div class="h-100 d-flex flex-column flex-grow-1">
-    <div class="d-flex flex-lg-row flex-column justify-content-center flex-grow-1">
+    <div class="d-flex flex-lg-row flex-column">
       <!-- Div de texte -->
       <div class="d-flex flex-column justify-content-center align-self-center pt-5 pb-2">
         <p class="h2 mb-4 text-center text-white">
@@ -11,66 +11,68 @@
         </p>
       </div>
       <!-- Div de recheche -->
-      <mat-card class="mx-5 mt-lg-5 flex-grow-1">
-        <!-- Tabs -->
-        <mat-tab-group color="primary" animationDuration="500ms" >
-          <!-- search by Name -->
-          <mat-tab label="RECHERCHE PAR NOM">
-            <mat-card-content class="px-4 py-4">
-              <!-- formByName -->
-              <form [formGroup]="this.formByName" (ngSubmit)="this.onSubmitByName()" class="d-flex flex-column">
-                <div class="d-flex flex-md-row flex-column">
-                  <!-- firstName -->
-                  <mat-form-field appearance="outline" class="flex-grow-1 py-2 pe-md-2">
-                    <mat-label>Prénom</mat-label>
-                    <input matInput formControlName="firstName" type="text">
+      <div class="w-50 flex-grow-1">
+        <mat-card class="mx-5 mt-lg-5">
+          <!-- Tabs -->
+          <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.showResults = false">
+            <!-- search by Name -->
+            <mat-tab label="RECHERCHE PAR NOM">
+              <mat-card-content class="px-4 py-4">
+                <!-- formByName -->
+                <form [formGroup]="this.formByName" (ngSubmit)="this.onSubmitByName()" class="d-flex flex-column">
+                  <div class="d-flex flex-md-row flex-column">
+                    <!-- firstName -->
+                    <mat-form-field appearance="outline" class="flex-grow-1 py-2 pe-md-2">
+                      <mat-label>Prénom</mat-label>
+                      <input matInput formControlName="firstName" type="text">
+                    </mat-form-field>
+                    <!-- lastName -->
+                    <mat-form-field appearance="outline" class="flex-grow-1 py-2 ps-md-2">
+                      <mat-label>Nom</mat-label>
+                      <input matInput formControlName="lastName" type="text">
+                    </mat-form-field>
+                  </div>
+                  <!-- birthDate -->
+                  <mat-form-field appearance="outline" class="py-2">
+                    <mat-label>Date de naissance</mat-label>
+                    <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="MM/DD/YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
+                    <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
-                  <!-- lastName -->
-                  <mat-form-field appearance="outline" class="flex-grow-1 py-2 ps-md-2">
-                    <mat-label>Nom</mat-label>
-                    <input matInput formControlName="lastName" type="text">
+                  <!-- Submit -->
+                  <div class="d-flex flex-row-reverse">
+                    <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formByName.valid" type="submit">
+                      <mat-icon class="text-white">search</mat-icon>
+                      <span class="text-white">Recherche</span>
+                    </button>
+                  </div>
+                </form>
+              </mat-card-content>
+            </mat-tab>
+            <!-- search by Id -->
+            <mat-tab label="RECHERCHE PAR ID">
+              <mat-card-content class="px-4 py-4">
+                <!-- formById -->
+                <form [formGroup]="this.formById" (ngSubmit)="this.onSubmitById()" class="d-flex flex-column">
+                  <!-- accountId -->
+                  <mat-form-field appearance="outline" class="flex-grow-1 py-2">
+                    <mat-label>Numéro d'identification</mat-label>
+                    <input matInput formControlName="accountId" type="text">
+                    <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
                   </mat-form-field>
-                </div>
-                <!-- birthDate -->
-                <mat-form-field appearance="outline" class="py-2">
-                  <mat-label>Date de naissance</mat-label>
-                  <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="MM/DD/YYYY">
-                  <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
-                  <mat-datepicker #birthDate></mat-datepicker>
-                </mat-form-field>
-                <!-- Submit -->
-                <div class="d-flex">
-                  <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formByName.valid" type="submit">
+                  <!-- Submit -->
+                  <div class="d-flex flex-row-reverse">
+                    <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formById.valid" type="submit">
                     <mat-icon class="text-white">search</mat-icon>
                     <span class="text-white">Recherche</span>
-                  </button>
-                </div>
-              </form>
-            </mat-card-content>
-          </mat-tab>
-          <!-- search by Id -->
-          <mat-tab label="RECHERCHE PAR ID">
-            <mat-card-content class="px-4 py-4">
-              <!-- formById -->
-              <form [formGroup]="this.formById" (ngSubmit)="this.onSubmitById()" class="d-flex flex-column">
-                <!-- accountId -->
-                <mat-form-field appearance="outline" class="flex-grow-1 py-2">
-                  <mat-label>Numéro d'identification</mat-label>
-                  <input matInput formControlName="accountId" type="text">
-                  <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
-                </mat-form-field>
-                <!-- Submit -->
-                <div class="d-flex">
-                  <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formById.valid" type="submit">
-                  <mat-icon class="text-white">search</mat-icon>
-                  <span class="text-white">Recherche</span>
-                  </button>
-                </div>
-              </form>
-            </mat-card-content>
-          </mat-tab>
-        </mat-tab-group>
-      </mat-card>
+                    </button>
+                  </div>
+                </form>
+              </mat-card-content>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
+      </div>
     </div>
     <!-- Div de resultat -->
     <div class="d-flex flex-column flex-grow-1 bg-white rounded-2 mx-5 mt-2 px-4 pb-4" *ngIf="this.showResults">

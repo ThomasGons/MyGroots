@@ -35,7 +35,7 @@ export class TreeAddNodeDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<TreeAddNodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {type: string, selectedNodeData: any, nodes: any[]},
+    @Inject(MAT_DIALOG_DATA) public data: {selectedNodeData: any, nodes: any[]},
   ) {}
   
   public onSubmitAddByName(): void {
@@ -49,32 +49,12 @@ export class TreeAddNodeDialogComponent {
   public matchingRelationAndGender(type: string): void {
     if (type == "byName") {
       const relation = this.formAddByName.value.relation;
-      switch (relation) {
-        case "FATHER":
-          if (!this.formAddByName.controls.gender.disabled) {
-            this.formAddByName.controls.gender.patchValue("MALE");
-            this.formAddByName.controls.gender.disable();
-          }
-          this.formAddByName.controls.gender.enable();
-          this.formAddByName.controls.gender.patchValue("");
-          break;
-        case "MOTHER":
-          if (!this.formAddByName.controls.gender.disabled) {
-            this.formAddByName.controls.gender.patchValue("FEMALE");
-            this.formAddByName.controls.gender.disable();
-          }
-          this.formAddByName.controls.gender.enable();
-          this.formAddByName.controls.gender.patchValue("");
-
-          break;
-        default: break;
-      }
+      console.log(relation);
     }
     if (type == "byId") {
       const relation = this.formAddById.value.relation;
-
+      console.log(relation);
     }
-    
   }
 
 }

@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Gender, Person, User } from '@app/core/models';
-import { StorageService, FamilyTreeService } from '@app/core/services';
+import { StorageService, FamilyTreeService, SnackbarService } from '@app/core/services';
 import FamilyTree from "@balkangraph/familytree.js";
 import { TreeAddNodeDialogComponent } from './tree-add-node-dialog/tree-add-node-dialog.component';
 import { TreeRemoveNodeDialogComponent } from './tree-remove-node-dialog/tree-remove-node-dialog.component';
@@ -44,15 +44,15 @@ export class FamilyTreeComponent implements OnInit {
   treeData!: any;
   family!: FamilyTree;
   user!: User;
-  selectedNodeData!: any;
+  selectedNodeId!: number;
+  selectedNodePersonData!: any;
   
   showSidePanel: boolean = false;
-  showAddNodeForm: boolean = false;
-  showRemoveNodeForm: boolean = false;
 
   constructor(
     private _familytreeService: FamilyTreeService,
     private _storageService : StorageService,
+    private _snackbarService: SnackbarService,
     public dialog: MatDialog,
   ) { }
 
@@ -76,7 +76,6 @@ export class FamilyTreeComponent implements OnInit {
   //    disable addWife when wife pids[0] != -1
   //    common members research
   //    custom research button -> requests (type of relation...) => display result in a div
-  //    custom panel => remove unwanted buttons
   //    CSS
 
   private initTree(treeData: any): void {
@@ -87,119 +86,75 @@ export class FamilyTreeComponent implements OnInit {
       this.family = new FamilyTree(tree, {
         roots: [0],
         nodeBinding: treeData.nodeBindings,
-        nodeMouseClick: FamilyTree.action.none,
+        nodeMouseClick: FamilyTree.action.none
       });
       this.family.load(treeData.nodes);
 
       /* Set custom properties */
-
       FamilyTree.SEARCH_PLACEHOLDER = "Rechercher dans l'arbre";
 
-      /* Set custom events */
-      
+      /* Set custom events functions */
       this.family.onNodeClick((node: any) => {
-        console.log("onNodeClick");
         console.log(node);
-        const nodeData = node.node;
+        this.selectedNodeId = node.node.id;
+        this.family.center(this.selectedNodeId);
         if (!this.sidepanel.opened) {
           this.toggleSidePanel();
         }
-        this.selectedNodeData = this.treeData.members[nodeData.id];
-        console.log(this.selectedNodeData);
+        this.selectedNodePersonData = this.treeData.members[this.selectedNodeId];
       });
-      
     }
   }
   
   public toggleSidePanel(): void {
-    if (this.sidepanel.opened) {
-      this.showAddNodeForm = false;
-      this.showRemoveNodeForm = false;
-    }
     this.sidepanel.toggle();
   }
 
   public openDialogAddNode(): void {
-    this.showAddNodeForm = !this.showAddNodeForm;
-    this.dialog.open(TreeAddNodeDialogComponent, {
+    const dialogRef = this.dialog.open(TreeAddNodeDialogComponent, {
       data: {
-        type: "byName",
-        selectedNodeData: this.selectedNodeData,
+        selectedNodeData: this.selectedNodePersonData,
         nodes: this.treeData.nodes,
       },
       width: "600px",
-      height: "480px",
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result);
     });
   }
 
   public openDialogRemoveNode(): void {
-    this.showRemoveNodeForm = !this.showRemoveNodeForm;
-    this.dialog.open(TreeRemoveNodeDialogComponent, {
+    if (this.selectedNodeId == 0) {
+      this._snackbarService.openSnackbar("Vous ne pouvez pas vous supprimer en tant que racine de l'arbre !");
+      return;
+    }
+    const dialogRef = this.dialog.open(TreeRemoveNodeDialogComponent, {
+      data: {
+        selectedNodeData: this.selectedNodePersonData,
+        message: "Etes-vous sur de vouloir supprimer ce noeud de l'arbre ?",
+        buttonText: {
+          confirm: "Confirmer",
+          cancel: "Annuler"
+        }
+      },
       width: "500px",
     });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      console.log(confirmed);
+    });
   }
-
-
-
-
-
 
 
 
   protected getSelectedNodeGender(): string {
     for (let gender of this.genders) {
-      if (gender.value == this.selectedNodeData?.gender) {
+      if (gender.value == this.selectedNodePersonData?.gender) {
         return gender.viewValue;
       }
     }
     return "";
   }
 
-  // public onSubmit(): void {
-  //   this.form.markAllAsTouched();
-  //   if (!this.form.valid) {
-  //     return;
-  //   }
-  // }
-  
-  // public personOnClick(): void {
-  //   this._familytreeServices.getPersonByID(this.Pid).subscribe({
-  //     next: (response) => {
-  //       console.log(response);
-  //       this.nodes = response.body.nodes;
-  //       console.log(this.nodes);
-
-  //       const tree = document.getElementById('tree');
-  //       if (tree) {
-  //         this.family = new FamilyTree(tree, {
-  //           nodeBinding: {
-  //             field_0: "firstName",
-  //             field_1: "lastName",
-  //             field_2: "birthDate",
-  //             field_4: "nationality",
-  //           },
-  //           nodeTreeMenu: true,
-  //           nodeMenu: {
-  //             details: { text: 'Details' },
-  //           },
-  //           
-  //           roots: [0],
-  //         });
-
-  //         this.family.load(this.nodes);
-
-  //         this.family.onNodeClick((node) => {
-  //           var ID = node.node.id;
-  //           console.log("Id de la personne", ID);
-  //           this.isselect = true;
-  //           // @ts-ignore
-  //           this.Pid=ID;
-  //         });
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  
-  //     }
-  //   });
 }

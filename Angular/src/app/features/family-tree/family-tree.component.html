@@ -12,7 +12,7 @@
         <mat-card-header class="pb-2">
           <div class="w-100 d-flex justify-content-between">
             <span class="h4 text-center pt-2 m-0 mt-1">
-              {{ this.selectedNodeData?.firstName }} {{ this.selectedNodeData?.lastName }}
+              {{ this.selectedNodePersonData?.firstName }} {{ this.selectedNodePersonData?.lastName }}
             </span>
             <button mat-icon-button (click)="this.toggleSidePanel()" type="button">
               <mat-icon>close</mat-icon>
@@ -27,22 +27,22 @@
           </div>
           <div class="d-flex flex-column flex-grow-1 rounded p-2 mb-1">
             <span class="pb-1"><b>Date de naissance</b></span>
-            <span>{{ this.selectedNodeData?.birthDate }}</span>
+            <span>{{ this.selectedNodePersonData?.birthDate }}</span>
           </div>
           <div class="d-flex flex-column flex-grow-1 rounded p-2">
             <span class="pb-1"><b>Nationalité</b></span>
-            <span>{{ this.selectedNodeData?.nationality }}</span>
+            <span>{{ this.selectedNodePersonData?.nationality }}</span>
           </div>
         </mat-card-content>
       </mat-card>
 
       <div class="d-flex flex-row justify-content-around">
         <!-- Action buttons -->
-        <button mat-raised-button mat-dialog-close (click)="this.openDialogAddNode()" class="bg-green-light my-2 ms-2 me-1" type="button">
+        <button mat-raised-button mat-dialog-close (click)="this.openDialogAddNode()" class="bg-green-light rounded-2 my-2 ms-2 me-1" type="button">
           <mat-icon>add</mat-icon>
           <span class="text-center">Ajouter un noeud</span>
         </button>
-        <button mat-raised-button mat-dialog-close (click)="this.openDialogRemoveNode()" class="bg-green-light my-2 ms-1 me-2" type="button">
+        <button mat-raised-button mat-dialog-close (click)="this.openDialogRemoveNode()" class="bg-red-light rounded-2 my-2 ms-1 me-2" type="button">
           <mat-icon>delete_forever</mat-icon>
           <span class="text-center">Supprimer le noeud</span>
         </button>

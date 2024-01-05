@@ -6,7 +6,7 @@ import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordCompo
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
 import { SearchComponent } from './features/search/search.component';
-import { FamilyTreeComponent } from './features/family-tree/family-tree.component';
+import { FamilyTreeComponent,ViewOtherFamilyTreeComponent } from './features/family-tree';
 import { authGuard } from './core/guards/auth.guard';
 
 
@@ -57,9 +57,18 @@ const routes: Routes = [
   },
   {
     path: "family-tree",
-    canActivate: [authGuard],
-    component: FamilyTreeComponent,
     title: environment.title + " - Arbre Familial",
+    children: [
+      {
+        path: "user",
+        canActivate: [authGuard],
+        component: FamilyTreeComponent,
+      },
+      {
+        path: "view-other",
+        component: ViewOtherFamilyTreeComponent,
+      }
+    ]
   },
   {
     path: "search",
