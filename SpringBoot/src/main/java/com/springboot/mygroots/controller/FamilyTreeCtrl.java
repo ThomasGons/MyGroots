@@ -259,16 +259,15 @@ public class FamilyTreeCtrl {
      */
     @PostMapping(value="/node/delete")
     public ExtResponseEntity<?> removeNode(@RequestBody Map<String, String> data) {
-        String owner_id = data.get("owner_id");
-        Person owner = personService.getPersonById(owner_id);
+        Account owner = accountService.AuthenticatedAccount(data.get("token"),data.get("accountId"));
         if (owner == null) {
             return new ExtResponseEntity<>("Aucune personne (propriétaire) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
-        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(owner);
+        FamilyTree ft = owner.getFamilyTree();
         if (ft == null) {
             return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
-        String r_id = data.get("r_id");
+        String r_id = data.get("personId");
         Person p = personService.getPersonById(r_id);
         if (p == null) {
             return new ExtResponseEntity<>("Aucune personne (destination) ne correspond à cet id!", HttpStatus.BAD_REQUEST);
