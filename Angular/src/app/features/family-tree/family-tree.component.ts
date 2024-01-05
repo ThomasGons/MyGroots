@@ -113,14 +113,28 @@ export class FamilyTreeComponent implements OnInit {
   public openDialogAddNode(): void {
     const dialogRef = this.dialog.open(TreeAddNodeDialogComponent, {
       data: {
+        ownerId: this.user.id,  // accountID of owner of the tree
+        selectedNodeId: this.selectedNodeId, 
         selectedNodeData: this.selectedNodePersonData,
         nodes: this.treeData.nodes,
+        members: this.treeData.members,
       },
       width: "600px",
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log(result);
+      /* Send request */
+      this._familytreeService.addNodeByName(result).subscribe({
+        next: (response) => {
+          console.log(response);
+          this._snackbarService.openSnackbar(response.message);
+        },
+        error: (err) => { 
+          console.log(err);
+          this._snackbarService.openSnackbar(err.error.message);
+        }
+      });
     });
   }
 

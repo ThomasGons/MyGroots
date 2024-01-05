@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Gender } from '@app/core/models';
 
 
 @Component({
@@ -23,8 +24,8 @@ export class TreeAddNodeDialogComponent {
   });
 
   readonly genders: any = [
-    { value: "MALE", viewValue: "Homme" },
-    { value: "MALE", viewValue: "Femme" },
+    { value: Gender.MALE, viewValue: "Homme" },
+    { value: Gender.FEMALE, viewValue: "Femme" },
   ];
   readonly relations: any = [
     {value: "FATHER", viewValue: "Père"},
@@ -35,16 +36,33 @@ export class TreeAddNodeDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<TreeAddNodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {selectedNodeData: any, nodes: any[]},
+    @Inject(MAT_DIALOG_DATA) public data: {ownerId: string, selectedNodeId: any, selectedNodeData: any, nodes: any[], members: any[]},
   ) {}
   
   public onSubmitAddByName(): void {
-    console.log(this.formAddByName.value)
+    /* Validate form */
+    this.formAddByName.markAllAsTouched();
+    if (!this.formAddByName.valid) {
+      return;
+    }
+    /* Get form data */
+    const formData = {
+      ownerId: this.data.ownerId, // accountID of owner of the tree
+      srcId: this.data.members[this.data.selectedNodeId].id,   // personID of node selected to add a node to 
+      relation: this.formAddByName.value.relation,
+      gender: this.formAddByName.value.gender,
+      firstName: this.formAddByName.value.firstName,
+      lastName: this.formAddByName.value.lastName,
+      birthDate: this.formatBirthDate(String(this.formAddByName.value.birthDate)),
+    }
+    /* Return data to parent component */
+    this.dialogRef.close(formData);
   }
 
   public onSubmitAddById(): void {
     console.log(this.formAddById.value)
   }
+
 
   public matchingRelationAndGender(type: string): void {
     if (type == "byName") {
@@ -55,6 +73,16 @@ export class TreeAddNodeDialogComponent {
       const relation = this.formAddById.value.relation;
       console.log(relation);
     }
+  }
+
+  private formatBirthDate(inputDate: string): string {
+    /* Format the input date to YYYY-MM-DD string */
+    const dateObject = new Date(inputDate);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
+    const formattedDate = year+"-"+month+"-"+day;
+    return formattedDate;
   }
 
 }
