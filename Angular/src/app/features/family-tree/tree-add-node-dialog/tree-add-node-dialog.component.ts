@@ -56,7 +56,11 @@ export class TreeAddNodeDialogComponent {
       birthDate: this.formatBirthDate(String(this.formAddByName.value.birthDate)),
     }
     /* Return data to parent component */
-    this.dialogRef.close({type: "name", formData: formData});
+    const result = {
+      type: "name",
+      formData: formData,
+    }
+    this.dialogRef.close(result);
   }
 
   public onSubmitAddById(): void {
@@ -72,7 +76,11 @@ export class TreeAddNodeDialogComponent {
       accountId: this.formAddById.value.accountId,
     }
     /* Return data to parent component */
-    this.dialogRef.close({type: "id", formData: formData});
+    const result = {
+      type: "id",
+      formData: formData,
+    }
+    this.dialogRef.close(result);
   }
 
 
