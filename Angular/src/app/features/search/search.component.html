@@ -14,7 +14,7 @@
       <div class="flex-grow-1">
         <mat-card class="mx-5 mt-lg-5">
           <!-- Tabs -->
-          <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.showResults = false">
+          <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.clearResults()">
             <!-- search by Name -->
             <mat-tab label="RECHERCHE PAR NOM">
               <mat-card-content class="px-4 py-4">
@@ -50,7 +50,7 @@
               </mat-card-content>
             </mat-tab>
             <!-- search by Id -->
-            <mat-tab label="RECHERCHE PAR ID">
+            <mat-tab label="RECHERCHE PAR IDENTIFIANT">
               <mat-card-content class="px-4 py-4">
                 <!-- formById -->
                 <form [formGroup]="this.formById" (ngSubmit)="this.onSubmitById()" class="d-flex flex-column">
