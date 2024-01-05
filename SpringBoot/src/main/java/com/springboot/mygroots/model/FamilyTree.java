@@ -456,7 +456,10 @@ public class FamilyTree {
     //remove a member from the family tree and replace it by temporary member "unknown"
     public void removeMemberFromTree(Person person) {
         TreeNode node = this.getNode(person);
-        if (this.getChildren(person).isEmpty() && node.getPartnerID() == -1) {
+        System.out.println(node.getID());
+
+        if ( getChildren(members.get(getPersonID(person))).isEmpty()  && node.getPartnerID() == -1) {
+            System.out.println("remove");
             int removedID = getPersonID(person);
             for (TreeNode extNode : this.getNodes()) {
                 if (extNode.getID() > removedID) {
@@ -476,6 +479,7 @@ public class FamilyTree {
         }
         else{
             members.set(getPersonID(person), unknown);
+            System.out.println("unknown");
         }
 
 

@@ -112,12 +112,15 @@ export class FamilyTreeComponent implements OnInit {
       if (!this.family.getNode(node.mid) && !this.family.getNode(node.fid)) {
         break;
       }
-      else if(this.family.getNode(node.mid)) {
-        node = this.family.getNode(node.mid);
-      }
-      else if(this.family.getNode(node.fid)) {
+      if(this.family.getNode(node.fid)) {
         node = this.family.getNode(node.fid);
       }
+
+      if(this.family.getNode(node.mid)) {
+        node = this.family.getNode(node.mid);
+      }
+
+
     }
     return node;
   }
