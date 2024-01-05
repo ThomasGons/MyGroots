@@ -14,7 +14,8 @@ public class FamilyTreeDTO {
             "field_1", "lastName",
             "field_2", "birthDate",
             "field_3", "gender",
-            "field_4", "nationality"
+            "field_4", "nationality",
+            "field_5", "hasAccount"
     );
 
     private List<TreeNodeFront> nodes;
@@ -106,4 +107,5 @@ public class FamilyTreeDTO {
     public List<Person> getMembers() {
         return members;
     }
+
 }

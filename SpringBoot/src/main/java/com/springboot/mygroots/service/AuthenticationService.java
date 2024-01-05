@@ -47,6 +47,7 @@ public class AuthenticationService {
         		return new ExtResponseEntity<>("Compte déja existant avec l'email "+email+".", HttpStatus.BAD_REQUEST);
     		}
 			Person pers = personService.setPerson(firstName, lastName, birthDate, gender, nationality, socialSecurityNumber);
+			pers.setAccount();
 			personService.addPerson(pers);
 			// Temporary password
 			String passwordtmp = firstName.toLowerCase();

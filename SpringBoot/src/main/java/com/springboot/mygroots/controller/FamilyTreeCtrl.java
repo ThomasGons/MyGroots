@@ -139,13 +139,13 @@ public class FamilyTreeCtrl {
      */
     @PutMapping(value="/node/add/id")
     public ExtResponseEntity<?> addNodeByID(@RequestBody Map<String, String> data) {
-        String owner_id = data.get("ownerId");
-        String src_id = data.get("srcId");
-        String dst_id = data.get("accountId");
+        String owner_id = data.get("ownerId");//ownerId account of the owner of the tree
+        String src_id = data.get("srcId");//srcId account of the person who wants to add someone to his tree
+        String dst_id = data.get("");//accountId account of the person to add to the tree
         Relation relation = Relation.valueOf(data.get("relation"));
-
+        System.out.println("ça ajoute un compte à l'arbre");
         Account owner = accountService.getAccountById(owner_id);
-        Account src = accountService.getAccountById(src_id);
+        Person src = personService.getPersonById(src_id);
         Account dst = accountService.getAccountById(dst_id);
 
         if (owner == null) {
@@ -163,11 +163,12 @@ public class FamilyTreeCtrl {
             return new ExtResponseEntity<>("Ce propriétaire n'a pas d'arbre! ???? wtf pourquoi", HttpStatus.BAD_REQUEST);
         }
 
-        Person sp = src.getPerson();
         Person dp = dst.getPerson();
 
 
-        ft.addMemberToTree(sp, dp, relation);
+        ft.addAccountToTree(owner, src, dst,relation);
+        accountService.updateAccount(dst);
+        accountService.updateAccount(owner);
         familyTreeService.updateFamilyTree(ft);
         return new ExtResponseEntity<>("Ajout réussi!", HttpStatus.OK);
     }
@@ -211,7 +212,7 @@ public class FamilyTreeCtrl {
         personService.addPerson(newPers);
 
 
-        ft.addMemberToTree(src, newPers, relation);
+        ft.addPersonToTree(src, newPers, relation);
         familyTreeService.updateFamilyTree(ft);
         return new ExtResponseEntity<>("Ajout du noeud réussi!", HttpStatus.OK);
     }

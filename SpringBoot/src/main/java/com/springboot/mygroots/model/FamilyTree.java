@@ -52,14 +52,25 @@ public class FamilyTree {
         nodes.add(node);
     }
 
-    public void addMemberToTree(Person member, Person addedMember, Relation relation) {
+    public void addPersonToTree(Person member, Person addedMember, Relation relation) {
         if(member == null || addedMember == null || relation == null) {
+            System.out.println("member or addedMember or relation is null");
             return;
         }
 
-        if(addedMember.getAccount()==null){// if the added member is not registered yet add him directly to the family tree
-            if(this.getMembers().contains(member)
-                    && !this.getMembers().contains(addedMember)) {
+            System.out.println("add member without account");
+
+            boolean verif = false;
+            for(Person p: this.getMembers()){
+                if(p.getId().equals(member.getId())){
+                    verif = true;
+                }
+                if(p.getId().equals(addedMember.getId())){
+                    verif = false;
+                }
+            }
+
+            if(verif) {
 
                 if (relation == Relation.FATHER) {
                     this.addFather(member, addedMember);
@@ -73,28 +84,44 @@ public class FamilyTree {
                 else if (relation == Relation.PARTNER) {
                     this.addPartner(member, addedMember);
                 }
-            }
-        }
-        else { // if the added member is already registered send him a notification
-            if(this.getMembers().contains(member)
-                    && !this.getMembers().contains(addedMember)) {
-                if (relation == Relation.FATHER) {
-                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
-                }
-                else if (relation == Relation.MOTHER) {
-                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
-                }
-                else if (relation == Relation.CHILD) {
-                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
-                }
-                else if (relation == Relation.PARTNER) {
-                    addedMember.getAccount().addNotif(new Notif(member.getAccount(), addedMember, addedMember.getAccount(), NotifType.DEMAND_ADDTOFAMILY, relation));
-                }
-            }
-
         }
 
+    }
 
+    public void addAccountToTree(Account owner,Person member, Account addedMember, Relation relation) {
+        if(member == null || addedMember == null || relation == null || owner == null) {
+            System.out.println("member or addedMember or relation is null");
+            return;
+        }
+
+        System.out.println("add member with account");
+
+        boolean verif = false;
+        for(Person p: this.getMembers()){
+            if(p.getId().equals(member.getId())){
+                verif = true;
+            }
+            if(p.getId().equals(addedMember.getPerson().getId())){
+                verif = false;
+            }
+        }
+
+        if(verif) {
+
+            if (relation == Relation.FATHER) {
+                addedMember.addNotif(new Notif(owner, member, addedMember, NotifType.DEMAND_ADDTOFAMILY, relation));
+            }
+            else if (relation == Relation.MOTHER) {
+                addedMember.addNotif(new Notif(owner, member, addedMember, NotifType.DEMAND_ADDTOFAMILY, relation));
+            }
+            else if (relation == Relation.CHILD) {
+                addedMember.addNotif(new Notif(owner, member, addedMember, NotifType.DEMAND_ADDTOFAMILY, relation));
+            }
+            else if (relation == Relation.PARTNER) {
+                addedMember.addNotif(new Notif(owner, member, addedMember, NotifType.DEMAND_ADDTOFAMILY, relation));
+            }
+
+        }
 
     }
 

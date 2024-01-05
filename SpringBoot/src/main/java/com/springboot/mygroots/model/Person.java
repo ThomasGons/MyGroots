@@ -11,9 +11,8 @@ import java.time.LocalDate;
 public class Person {
     @Id
     private String id;
-    @DBRef@Nullable
-    private Account account;
-    
+
+    private Boolean hasAccount = false;
     private String firstName;
     private String lastName; 
     private LocalDate birthDate;
@@ -89,14 +88,13 @@ public class Person {
 		this.socialSecurityNumber = socialSecurityNumber;
 	}
 
-    public void setAccount(Account account) {
-    	this.account = account;
-
+    public void setAccount() {
+    	this.hasAccount = true;
+    }
+    public Boolean hasAccount(){
+        return this.hasAccount;
     }
 
-    public Account getAccount() {
-    	return account;
-    }
 }
 
 
