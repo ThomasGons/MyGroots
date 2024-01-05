@@ -43,7 +43,11 @@ public class Notif {
 
     public void acceptDemand(){
         source.addNotif(new Notif(target,member,source,NotifType.ALERT_DEMANDACCEPTED,relation));
-        target.removeNotif(this);
+        for(Notif n : target.getNotifs()){
+            if(n.getId().equals(this.getId())){
+                target.removeNotif(n);
+            }
+        }
 
         Boolean isTreeEquivalant = source.getFamilyTree().isEquivalant(target.getFamilyTree());
 
@@ -51,14 +55,14 @@ public class Notif {
             source.getFamilyTree().addFather(member,target.getPerson());
             System.out.println("ça rentre dans la fonction father");
             if(isTreeEquivalant){
-                target.getFamilyTree().addChild(target.getPerson(),source.getPerson());
+                target.getFamilyTree().addChild(target.getPerson(),member);
             }
         }
         else if(relation == Relation.MOTHER){
             source.getFamilyTree().addMother(member,target.getPerson());
             System.out.println("ça rentre dans la fonction mother");
             if(isTreeEquivalant){
-                target.getFamilyTree().addChild(target.getPerson(),source.getPerson());
+                target.getFamilyTree().addChild(target.getPerson(),member);
             }
         }
         else if(relation == Relation.PARTNER){
@@ -68,7 +72,7 @@ public class Notif {
 
 
             if(isTreeEquivalant){
-                target.getFamilyTree().addPartner(target.getPerson(),source.getPerson());
+                target.getFamilyTree().addPartner(target.getPerson(),member);
             }
         }
         else if(relation == Relation.CHILD){
@@ -76,10 +80,10 @@ public class Notif {
             System.out.println("ça rentre dans la fonction child");
             if(isTreeEquivalant){
                 if(source.getPerson().getGender() == Gender.MALE){
-                    target.getFamilyTree().addFather(target.getPerson(),source.getPerson());
+                    target.getFamilyTree().addFather(target.getPerson(),member);
                 }
                 else{
-                    target.getFamilyTree().addMother(target.getPerson(),source.getPerson());
+                    target.getFamilyTree().addMother(target.getPerson(),member);
                 }
             }
         }
@@ -89,7 +93,11 @@ public class Notif {
 
     public void declineDemand(){
         source.addNotif(new Notif(target,member,source,NotifType.ALERT_DEMANDDECLINED,relation));
-        target.removeNotif(this);
+        for(Notif n : target.getNotifs()){
+            if(n.getId().equals(this.getId())){
+                target.removeNotif(n);
+            }
+        }
     }
 
     public Account getSource() {

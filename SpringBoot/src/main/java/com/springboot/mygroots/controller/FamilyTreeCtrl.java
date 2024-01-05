@@ -23,6 +23,7 @@ import com.springboot.mygroots.dto.FamilyTreeDTO;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -192,6 +193,8 @@ public class FamilyTreeCtrl {
 
         Person dp = dst.getPerson();
 
+        owner.getNotifs().removeIf(Objects::isNull);
+        dst.getNotifs().removeIf(Objects::isNull);
 
         ft.addAccountToTree(owner, src, dst,relation);
 
