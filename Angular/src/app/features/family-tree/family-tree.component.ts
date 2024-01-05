@@ -125,7 +125,7 @@ export class FamilyTreeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log(result);
       /* Send request to add node by name */
-      const type = result.type;
+      const type = result?.type;
       if (type == "name") {
         this._familytreeService.addNodeByName(result.formData).subscribe({
           next: (response) => {
@@ -190,6 +190,7 @@ export class FamilyTreeComponent implements OnInit {
           next: (response) => {
             console.log(response);
             this._snackbarService.openSnackbar(response.message);
+            this.ngOnInit();
           },
           error: (err) => {
             console.log(err);
