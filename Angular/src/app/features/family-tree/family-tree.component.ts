@@ -124,20 +124,39 @@ export class FamilyTreeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log(result);
-      /* Send request to add node */
-      this._familytreeService.addNodeByName(result).subscribe({
-        next: (response) => {
-          console.log(response);
-          this._snackbarService.openSnackbar(response.message);
-          this.toggleSidePanel();
-          this.ngOnInit();
-        },
-        error: (err) => { 
-          console.log(err);
-          this._snackbarService.openSnackbar(err.error.message);
-          this.toggleSidePanel();
-        }
-      });
+      /* Send request to add node by name */
+      const type = result.type;
+      if (type == "name") {
+        this._familytreeService.addNodeByName(result.data).subscribe({
+          next: (response) => {
+            console.log(response);
+            this._snackbarService.openSnackbar(response.message);
+            this.toggleSidePanel();
+            this.ngOnInit();
+          },
+          error: (err) => { 
+            console.log(err);
+            this._snackbarService.openSnackbar(err.error.message);
+            this.toggleSidePanel();
+          }
+        });
+      }
+      /* Send request to add node by id */
+      if (type == "id") {
+        this._familytreeService.addNodeById(result.data).subscribe({
+          next: (response) => {
+            console.log(response);
+            this._snackbarService.openSnackbar(response.message);
+            this.toggleSidePanel();
+            this.ngOnInit();
+          },
+          error: (err) => {
+            console.log(err);
+            this._snackbarService.openSnackbar(err.error.message);
+            this.toggleSidePanel();
+          }
+        });
+      }
     });
   }
 
