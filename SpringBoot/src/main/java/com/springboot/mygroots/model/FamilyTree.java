@@ -461,6 +461,9 @@ public class FamilyTree {
         if ( getChildren(members.get(getPersonID(person))).isEmpty()  && node.getPartnerID() == -1) {
             System.out.println("remove");
             int removedID = getPersonID(person);
+            nodes.remove(node);
+            members.remove(person);
+
             for (TreeNode extNode : this.getNodes()) {
                 if (extNode.getID() > removedID) {
                     extNode.setID(extNode.ID - 1);
@@ -475,7 +478,7 @@ public class FamilyTree {
                     extNode.setPartnerIDs(extNode.partnerID - 1);
                 }
             }
-            members.remove(person);
+
         }
         else{
             members.set(getPersonID(person), unknown);
