@@ -60,7 +60,18 @@ export class TreeAddNodeDialogComponent {
   }
 
   public onSubmitAddById(): void {
-    console.log(this.formAddById.value)
+    /* Validate form */
+    this.formAddByName.markAllAsTouched();
+    if (!this.formAddByName.valid) {
+      return;
+    }
+    /* Get form data */
+    const formData = {
+      ownerId: this.data.ownerId, // accountID of owner of the tree
+      srcId: this.data.members[this.data.selectedNodeId].id,   // personID of node selected to add a node to
+      accountId: this.formAddById.value.accountId,
+    }
+    this.dialogRef.close(formData);
   }
 
 

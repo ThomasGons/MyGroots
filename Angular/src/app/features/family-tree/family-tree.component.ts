@@ -124,15 +124,18 @@ export class FamilyTreeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log(result);
-      /* Send request */
+      /* Send request to add node */
       this._familytreeService.addNodeByName(result).subscribe({
         next: (response) => {
           console.log(response);
           this._snackbarService.openSnackbar(response.message);
+          this.toggleSidePanel();
+          this.ngOnInit();
         },
         error: (err) => { 
           console.log(err);
           this._snackbarService.openSnackbar(err.error.message);
+          this.toggleSidePanel();
         }
       });
     });
@@ -157,6 +160,10 @@ export class FamilyTreeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       console.log(confirmed);
+      if (confirmed) {
+        /* Send request to remove node */
+
+      }
     });
   }
 

@@ -40,7 +40,7 @@ export class FamilyTreeService {
    * @param data Add by names form data
    */
   public addNodeByName(data: any): Observable<any> {
-    return this._httpClient.put(this.url + "/node/name", data, this.httpOptions);
+    return this._httpClient.put(this.url + "/node/add/name", data, this.httpOptions);
   }
 
   /**
@@ -48,9 +48,11 @@ export class FamilyTreeService {
    * @param data Add by id form data
    */
   public addNodeById(data: any): Observable<any> {
-    return this._httpClient.put(this.url + "/node/id", data, this.httpOptions);
+    return this._httpClient.put(this.url + "/node/add/id", data, this.httpOptions);
   }
 
-  // public 
+  public deleteNode(data: any): Observable<any> {
+    return this._httpClient.post(this.url + "/node/delete", data, this.httpOptions);
+  }
 
 }
