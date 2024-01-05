@@ -83,9 +83,9 @@ public class SearchCtrl {
 
     @PostMapping(value="/common-members")
     public ExtResponseEntity<Map<String, List<AccountDTO>>> getCommonMembers(@RequestBody Map<String, String> data) {
-        String owner_acc_id = data.get("src_acc_id");
+        String src_acc_id = data.get("src_acc_id");
         String target_id = data.get("target_id");
-        Account acc = accountService.getAccountById(owner_acc_id);
+        Account acc = accountService.getAccountById(src_acc_id);
         Map<String, List<Person>> commons = familyTreeService.getSimilarNodes(acc.getPerson(), target_id);
 
         if (commons.isEmpty()) {
