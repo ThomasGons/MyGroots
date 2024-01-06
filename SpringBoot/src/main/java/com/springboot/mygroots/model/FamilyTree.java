@@ -291,54 +291,31 @@ public class FamilyTree {
     }
 
     public Person getFather(Person member){
-        if(this.getMembers().contains(member)){
-            if(this.getNode(member).getFatherID() != -1){
-                return this.getMembers().get(this.getNode(member).getFatherID());
-            }
-        }
-        return null;
+        return this.getMembers().get(this.getNode(member).getFatherID());
     }
 
     public Person getMother(Person member){
-        if(this.getMembers().contains(member)){
-            if(this.getNode(member).getMotherID() != -1){
-                return this.getMembers().get(this.getNode(member).getMotherID());
-            }
-        }
-        return null;
+        return this.getMembers().get(this.getNode(member).getMotherID());
     }
 
     public Person getPartner(Person member){
-        if(this.getMembers().contains(member)){
-            if(this.getNode(member).getPartnerID() != -1){
-                return this.getMembers().get(this.getNode(member).getPartnerID());
-            }
-        }
-        return null;
+        return this.getMembers().get(this.getNode(member).getPartnerID());
     }
 
     public List<Person> getParents(Person member){
         List<Person> parents = new ArrayList<>();
-        if(this.getMembers().contains(member)){
-            if(this.getNode(member).getFatherID() != -1){
-                parents.add(this.getMembers().get(this.getNode(member).getFatherID()));
-            }
-            if(this.getNode(member).getMotherID() != -1){
-                parents.add(this.getMembers().get(this.getNode(member).getMotherID()));
-            }
-        }
+        parents.add(this.getFather(member));
+        parents.add(this.getMother(member));
         return parents;
     }
 
     public List<Person> getChildren(Person member){
         List<Person> children = new ArrayList<>();
-        if(this.getMembers().contains(member)){
-            List<TreeNode> childrenNodes = this.getChildrenNodes(member);
-            if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                childrenNodes.forEach(node -> {
-                    children.add(this.getMembers().get(node.getID()));
-                });
-            }
+        List<TreeNode> childrenNodes = this.getChildrenNodes(member);
+        if(childrenNodes != null && !childrenNodes.isEmpty()) {
+            childrenNodes.forEach(node -> {
+                children.add(this.getMembers().get(node.getID()));
+            });
         }
         return children;
     }
@@ -346,22 +323,20 @@ public class FamilyTree {
 
     public List<Person> getGrandParents(Person member){
         List<Person> grandParents = new ArrayList<>();
-        if(this.getMembers().contains(member)){
-            if(this.getNode(member).getFatherID() != -1){
-                if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID() != -1){
-                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID()));
-                }
-                if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID() != -1){
-                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID()));
-                }
+        if(this.getNode(member).getFatherID() != -1){
+            if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID() != -1){
+                grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getFatherID()));
             }
-            if(this.getNode(member).getMotherID() != -1){
-                if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID() != -1){
-                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID()));
-                }
-                if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID() != -1){
-                    grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID()));
-                }
+            if(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID() != -1){
+                grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getFatherID())).getMotherID()));
+            }
+        }
+        if(this.getNode(member).getMotherID() != -1){
+            if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID() != -1){
+                grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getFatherID()));
+            }
+            if(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID() != -1){
+                grandParents.add(this.getMembers().get(this.getNode(this.getMembers().get(this.getNode(member).getMotherID())).getMotherID()));
             }
         }
         return grandParents;
@@ -369,18 +344,16 @@ public class FamilyTree {
 
     public List<Person> getGrandChildren(Person member){
         List<Person> grandChildren = new ArrayList<>();
-        if(this.getMembers().contains(member)){
-            List<TreeNode> childrenNodes = this.getChildrenNodes(member);
-            if(childrenNodes != null && !childrenNodes.isEmpty()) {
-                childrenNodes.forEach(node -> {
-                    List<TreeNode> grandChildrenNodes = this.getChildrenNodes(this.getMembers().get(node.getID()));
-                    if(grandChildrenNodes != null && !grandChildrenNodes.isEmpty()) {
-                        grandChildrenNodes.forEach(grandChildNode -> {
-                            grandChildren.add(this.getMembers().get(grandChildNode.getID()));
-                        });
-                    }
-                });
-            }
+        List<TreeNode> childrenNodes = this.getChildrenNodes(member);
+        if(childrenNodes != null && !childrenNodes.isEmpty()) {
+            childrenNodes.forEach(node -> {
+                List<TreeNode> grandChildrenNodes = this.getChildrenNodes(this.getMembers().get(node.getID()));
+                if(grandChildrenNodes != null && !grandChildrenNodes.isEmpty()) {
+                    grandChildrenNodes.forEach(grandChildNode -> {
+                        grandChildren.add(this.getMembers().get(grandChildNode.getID()));
+                    });
+                }
+            });
         }
         return grandChildren;
     }
@@ -389,7 +362,11 @@ public class FamilyTree {
         List<Person> siblings = new ArrayList<>();
         for(Person person : this.getParents(member)){
             siblings.addAll(this.getChildren(person));
-            siblings.remove(member);
+            for(Person sibling : siblings){
+                if(sibling.getId().equals(member.getId())){
+                    siblings.remove(sibling);
+                }
+            }
             break;
         }
         return siblings;
