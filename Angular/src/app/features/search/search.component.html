@@ -95,7 +95,7 @@
       </div>
       <!-- Liste des personnes -->
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result" [sourceAccount]=""></app-search-result>
+        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result" [sourceAccount]="this.user"></app-search-result>
       </mat-accordion>
     </div>
     <div class="my-4">

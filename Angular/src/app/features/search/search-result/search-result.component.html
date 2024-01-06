@@ -68,7 +68,7 @@
         </span>
       </div>
       <div class="d-flex align-self-end" *ngIf="this.targetAccount.treeVisibility == 'PUBLIC' || this.targetAccount.treeVisibility == 'PROTECTED'">
-        <button mat-raised-button class="bg-gray-light m-3 py-2" [routerLink]="['/family-tree/view/other', this.sourceAccount.accountId, this.targetAccount.id]" type="button">
+        <button mat-raised-button class="bg-gray-light m-3 py-2" [routerLink]="['/family-tree/view/other/'+this.sourceAccount?.id+'/'+this.targetAccount?.accountId]" type="button">
           Voir l'arbre
         </button>
       </div>

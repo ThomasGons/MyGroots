@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from '@app/core/models';
+import { StorageService } from '@app/core/services';
 import { SearchService } from '@app/core/services/search.service';
 
 
@@ -21,10 +22,14 @@ export class SearchComponent {
   });
   showResults: boolean = false;
   searchResults: any[] = [];
+  user!: User;
 
   constructor(
+    private _storageService: StorageService,
     private _searchService: SearchService,
-  ) {}
+  ) {
+    this.user = this._storageService.getUser();
+  }
 
   public onSubmitByName(): void {
     /* Get form data */
