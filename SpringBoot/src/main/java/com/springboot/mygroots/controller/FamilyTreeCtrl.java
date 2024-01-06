@@ -80,21 +80,22 @@ public class FamilyTreeCtrl {
 
     @PostMapping(value= "/view/other")
     public ExtResponseEntity<FamilyTreeDTO> getOtherTree(@RequestBody Map<String, String> data) {
-        Account acc = accountService.getAccountById(data.get("accountId"));
-        if ( acc != null) {
-            FamilyTree ft = acc.getFamilyTree();
+        Account watcher = accountService.getAccountById(data.get("watcherId"));
+        Account watched = accountService.getAccountById(data.get("watchedId"));
+        if ( watched != null) {
+            FamilyTree ft = watched.getFamilyTree();
             if (ft == null) {
                 return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
             }
             switch (ft.getVisibility()) {
                 case PRIVATE -> {
-                	if (acc.getPerson().getId().equals(ft.getOwner().getId())) {
+                	if (watched.getId().equals(watcher.getId())) {
                         return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
                     }
                 }
                 case PROTECTED -> {
                 	for (Person p : ft.getMembers()) {
-                		if (p.getId().equals(acc.getPerson().getId())) {
+                		if (p.getId().equals(watcher.getPerson().getId())) {
                 			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
                 		}
                 	}
