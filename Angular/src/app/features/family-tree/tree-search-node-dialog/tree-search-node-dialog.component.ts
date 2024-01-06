@@ -11,7 +11,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   templateUrl: './tree-search-node-dialog.component.html',
 })
 export class TreeSearchNodeDialogComponent {
-  
+
   formSearchByRelation = new FormGroup({
     relation: new FormControl("", {nonNullable: true, validators: [Validators.required]}),
   });
@@ -29,7 +29,7 @@ export class TreeSearchNodeDialogComponent {
     { value: "grandparents", viewValue: "Grands-Parents" },
     { value: "grandchildren", viewValue: "Petits Enfants" },
     { value: "cousins", viewValue: "Cousins" },
-    { value: "uncles_ants", viewValue: "Oncles et Tantes" },
+    { value: "uncles_aunts", viewValue: "Oncles et Tantes" },
     { value: "nephews_nieces", viewValue: "Neveux et Nièces" },
   ];
 

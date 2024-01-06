@@ -291,14 +291,23 @@ public class FamilyTree {
     }
 
     public Person getFather(Person member){
+        if(this.getNode(member).getFatherID() == -1){
+            return null;
+        }
         return this.getMembers().get(this.getNode(member).getFatherID());
     }
 
     public Person getMother(Person member){
+        if(this.getNode(member).getMotherID() == -1){
+            return null;
+        }
         return this.getMembers().get(this.getNode(member).getMotherID());
     }
 
     public Person getPartner(Person member){
+        if(this.getNode(member).getPartnerID() == -1){
+            return null;
+        }
         return this.getMembers().get(this.getNode(member).getPartnerID());
     }
 
@@ -374,9 +383,12 @@ public class FamilyTree {
 
     public List<Person> getUnclesAndAunts(Person member){
         List<Person> unclesAndAunts = new ArrayList<>();
-        for(Person person : this.getParents(member)){
-            unclesAndAunts.addAll(this.getSiblings(person));
+        for(Person person : this.getGrandParents(member)){
+            unclesAndAunts.addAll(this.getChildren(person));
         }
+        unclesAndAunts.removeAll(this.getParents(member));
+        //remove duplicates
+        unclesAndAunts = new ArrayList<>(new HashSet<>(unclesAndAunts));
         return unclesAndAunts;
     }
 
