@@ -26,7 +26,7 @@ export class FamilyTreeService {
   public getFamilyTreeById(token: string, accountId: string): Observable<any> {
     return this._httpClient.post(this.url + "/", {token: token, accountId: accountId}, this.httpOptions);
   }
-  
+
   /**
    * Send request to server to get the tree of the person.
    * @param accountId Id of the account
@@ -53,10 +53,14 @@ export class FamilyTreeService {
 
   /**
    * Send request to server to delete a node
-   * @param data 
+   * @param data
    */
   public deleteNode(data: any): Observable<any> {
     return this._httpClient.post(this.url + "/node/delete", data, this.httpOptions);
+  }
+
+  public searchNode(src_id: string, relation: string, owner_id: string): Observable<any> {
+    return this._httpClient.post(this.url + "/node/search", {src_id: String, relation: String, owner_id: String}, this.httpOptions);
   }
 
 }

@@ -49,10 +49,11 @@
       </div>
     </mat-sidenav>
   </mat-sidenav-container>
+  <div class="button-group">
+    <button mat-button color="primary" (click)="this.openSearch()">
+      <mat-icon>search</mat-icon>
+      <span class="text-center">Rechercher dans l'abre !</span>
+    </button>
+  </div>
 </div>
-<div class="button-group">
-  <button mat-button color="primary" (click)="this.openSearch()">
-    <mat-icon>search</mat-icon>
-    <span class="text-center">Rechercher dans l'abre !</span>
-  </button>
-</div>
+

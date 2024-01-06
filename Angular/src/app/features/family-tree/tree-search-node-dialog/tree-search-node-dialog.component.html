@@ -1,22 +1,17 @@
-<div class="flex-grow-1" style="margin-bottom: 20px">
-  <mat-card class="">
+<div class="flex-grow-1">
+  <mat-card>
     <!-- Tabs -->
-    <mat-tab-group color="primary" animationDuration="500ms" (selectedTabChange)="this.submit()">
+    <mat-tab-group color="primary" animationDuration="500ms">
       <!-- search by Name -->
       <mat-tab label="RECHERCHE PAR NOM">
         <mat-card-content class="px-4 py-4">
           <!-- formByName -->
-          <form  (ngSubmit)="this.submit()" class="d-flex flex-column">
+          <form  (ngSubmit)="this.searchOnSubmit()" class="d-flex flex-column">
             <div class="d-flex flex-md-row flex-column">
-              <!-- firstName -->
+              <!-- id -->
               <mat-form-field appearance="outline" class="flex-grow-1 py-2 pe-md-2">
-                <mat-label>Prénom</mat-label>
-                <input matInput formControlName="firstName" type="text">
-              </mat-form-field>
-              <!-- lastName -->
-              <mat-form-field appearance="outline" class="flex-grow-1 py-2 ps-md-2">
-                <mat-label>Nom</mat-label>
-                <input matInput formControlName="lastName" type="text">
+                <mat-label>Id de la personne</mat-label>
+                <input matInput formControlName="src_id" type="text">
               </mat-form-field>
             </div>
             <!-- Relation -->
@@ -24,7 +19,7 @@
               <mat-label>Relation</mat-label>
               <!-- <input matInput formControlName="nationality" type="text" required> -->
               <mat-select matNativeControl formControlName="relation" required>
-                <mat-option *ngFor="let relation of this.relations" [value]="relation">{{ relation }}</mat-option>
+                <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
               </mat-select>
               <mat-icon matPrefix>public</mat-icon>
               <mat-error *ngIf="this.formSearch.controls.relation.touched && this.formSearch.controls.relation.invalid">
@@ -33,7 +28,7 @@
             </mat-form-field>
             <!-- Submit -->
             <div class="d-flex flex-row-reverse">
-              <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1"  type="submit">
+              <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" type="submit">
                 <mat-icon class="text-white">search</mat-icon>
                 <span class="text-white">Recherche</span>
               </button>
