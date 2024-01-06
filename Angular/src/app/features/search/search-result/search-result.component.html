@@ -67,7 +67,7 @@
           {{ this.account.treeVisibility.toLowerCase() }}
         </span>
       </div>
-      <div class="d-flex align-self-end" *ngIf="this.account.treeVisibility == 'PUBLIC'">
+      <div class="d-flex align-self-end" *ngIf="this.account.treeVisibility == 'PUBLIC' || this.account.treeVisibility == 'PROTECTED'">
         <button mat-raised-button class="bg-gray-light m-3 py-2" [routerLink]="['/family-tree/other/', this.account.accountId]" type="button">
           Voir l'arbre
         </button>
