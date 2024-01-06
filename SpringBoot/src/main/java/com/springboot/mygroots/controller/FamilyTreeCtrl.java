@@ -58,7 +58,7 @@ public class FamilyTreeCtrl {
             }
             switch (ft.getVisibility()) {
                 case PRIVATE -> {
-                    if (acc.getPerson().getId().equals(ft.getOwner().getId())) {
+                    if (!acc.getPerson().getId().equals(ft.getOwner().getId())) {
                         return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
                     }
                 }
@@ -82,6 +82,8 @@ public class FamilyTreeCtrl {
     public ExtResponseEntity<FamilyTreeDTO> getOtherTree(@RequestBody Map<String, String> data) {
         Account watcher = accountService.getAccountById(data.get("watcherId"));
         Account watched = accountService.getAccountById(data.get("watchedId"));
+        System.out.println("watcher : " + watcher.getPerson().getFirstName());
+        System.out.println("watched : " + watched.getPerson().getFirstName());
         if ( watched != null) {
             FamilyTree ft = watched.getFamilyTree();
             if (ft == null) {
@@ -89,7 +91,7 @@ public class FamilyTreeCtrl {
             }
             switch (ft.getVisibility()) {
                 case PRIVATE -> {
-                	if (watched.getId().equals(watcher.getId())) {
+                	if (!watched.getId().equals(watcher.getId())) {
                         return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
                     }
                 }
