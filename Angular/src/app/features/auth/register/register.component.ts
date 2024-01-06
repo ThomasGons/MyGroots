@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, SnackbarService } from '@app/core/services';
 import { Gender } from '@app/core/models';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -229,17 +230,19 @@ export class RegisterComponent {
   ];
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _authService: AuthService,
     private _snackbarService: SnackbarService,
     private _router: Router,
   ) {}
 
-  public onSubmit(): void {
+  protected onSubmit(): void {
     /* Validate the form */
     this.form.markAllAsTouched();
     if (!this.form.valid) {
       return;
     }
+    this._ngxService.start();
     /* Get form data */
     const registerData = {
       email: this.form.value.email,
@@ -254,17 +257,19 @@ export class RegisterComponent {
     this._authService.register(registerData).subscribe({
       next: (response) => {
         console.log(response);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(response.message);
         this._router.navigate(["/auth/login"]);
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
       },
     });
   }
 
-  public onToggleForeigner(): void {
+  protected onToggleForeigner(): void {
     /* Change form field SocialSecurityNumber behavior */
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {

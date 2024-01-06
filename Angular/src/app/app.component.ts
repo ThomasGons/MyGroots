@@ -15,9 +15,9 @@ export class AppComponent{
         { name: "Recherche", link: "/search" },
       ],
       user: [
-        {name: "Profil", link: "/user/profile"},
-        {name: "Notifications", link: "/user/notifications"},
-        {name: "Deconnexion", link: "/auth/logout"},
+        {name: "Profil", link: "/user/profile", icon: "face"},
+        {name: "Notifications", link: "/user/notifications", icon: "inbox"},
+        {name: "Deconnexion", link: "/auth/logout", icon: "exit_to_app"},
       ]
   }
 }

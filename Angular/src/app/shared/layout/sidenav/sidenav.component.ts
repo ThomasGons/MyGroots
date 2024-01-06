@@ -21,7 +21,7 @@ export class SidenavComponent {
     private _storageService: StorageService,
   ) {}
 
-  public isLoggedIn(): boolean {
+  protected isLoggedIn(): boolean {
     const authenticated: boolean = this._storageService.isAuthenticated();
     if (authenticated) {
       this.username = String(this._storageService.getUser()?.firstName);
@@ -34,7 +34,7 @@ export class SidenavComponent {
     this.sidenav.toggle();
   }
   
-  public onActivateRoute(): void {
+  protected onActivateRoute(): void {
     this.sidenav.close();
     window.scroll({ 
             top: 0, 

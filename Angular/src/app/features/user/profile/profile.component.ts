@@ -2,24 +2,26 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '@app/core/services/user.service';
 import { SnackbarService, StorageService } from '@app/core/services';
 import { Gender, User } from '@app/core/models';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
 
-  user: User = {};
+  authUser: User = {};
+  user!: User;
   treeVisibility: string = "";
 
   readonly genders: any = [
-    { value: "MALE", viewValue: "Homme" },
-    { value: "FEMALE", viewValue: "Femme" },
+    { value: Gender.MALE, viewValue: "Homme" },
+    { value: Gender.FEMALE, viewValue: "Femme" },
   ]
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _snackbarService: SnackbarService,
     private _userService: UserService,
     private _storageService : StorageService,
@@ -27,13 +29,14 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     /* Get data */
-    this.user = this._storageService.getUser();
+    this._ngxService.start();
+    this.authUser = this._storageService.getUser();
     /* Send request */
-    this._userService.profile(String(this.user.token), String(this.user.id)).subscribe({
+    this._userService.profile(String(this.authUser.token), String(this.authUser.id)).subscribe({
       next: (response) => {
         console.log(response);
         this.user = {
-          id: this.user.id,
+          id: response.body.person.id,
           email: response.body.email,
           firstName: response.body.person.firstName,
           lastName: response.body.person.lastName,
@@ -43,9 +46,11 @@ export class ProfileComponent implements OnInit {
           socialSecurityNumber: response.body.person.socialSecurityNumber,
         };
         this.treeVisibility = response.body.treeVisibility;
+        this._ngxService.stop();
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
       }
     });

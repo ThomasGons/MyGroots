@@ -1,10 +1,12 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute } from '@angular/router';
-import { Gender, User } from '@app/core/models';
-import { FamilyTreeService, SnackbarService, StorageService } from '@app/core/services';
+import { Gender } from '@app/core/models';
+import { FamilyTreeService, SnackbarService } from '@app/core/services';
 import FamilyTree from '@balkangraph/familytree.js';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -21,9 +23,7 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
   family!: FamilyTree;
   selectedNodeId!: number;
   selectedNodePersonData!: any;
-  
   showSidePanel: boolean = false;
-  
   watcherId!: string;
   watchedId!: string;
 
@@ -33,26 +33,31 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
   ];
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _familytreeService: FamilyTreeService,
-    private _storageService : StorageService,
     private _snackbarService: SnackbarService,
     private _activatedRoute: ActivatedRoute,
+    private _location: Location,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
     this.watcherId = String(this._activatedRoute.snapshot.paramMap.get("watcherId"));
     this.watchedId = String(this._activatedRoute.snapshot.paramMap.get("watchedId"));
+    this._ngxService.start();
     /* Send request to get user family tree */
     this._familytreeService.getOtherFamilyTreeById(this.watcherId, this.watchedId).subscribe({
       next: (response) => {
         console.log(response);
         this.treeData = response.body;
         this.initTree(this.treeData);
+        this._ngxService.stop();
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
+        this._location.back();
       }
     });
   }
@@ -65,6 +70,7 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
       this.family = new FamilyTree(tree, {
         nodeBinding: treeData.nodeBindings,
         nodeMouseClick: FamilyTree.action.none,
+        mouseScrool: FamilyTree.action.none,
       });
       this.family.onInit(() => {
         let root = this.getRootOf(this.family.getNode(this.treeData.nodes.length - 1));
@@ -118,4 +124,8 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
     return "";
   }
 
+  protected centerFamilyTree() {
+    this.family.center(0);
+  }
+  
 }

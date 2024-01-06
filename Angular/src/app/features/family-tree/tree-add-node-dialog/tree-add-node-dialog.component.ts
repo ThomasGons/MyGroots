@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Gender, Relation } from '@app/core/models';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -236,6 +237,7 @@ export class TreeAddNodeDialogComponent {
   ];
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     public dialogRef: MatDialogRef<TreeAddNodeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {ownerId: string, selectedNodeId: any, selectedNodeData: any, nodes: any[], members: any[]},
   ) {
@@ -253,7 +255,7 @@ export class TreeAddNodeDialogComponent {
     this.availableRelations.push({value: "CHILD", viewValue: "Enfant"});
   }
 
-  public onSubmitAddByName(): void {
+  protected onSubmitAddByName(): void {
     /* Validate form */
     this.formAddByName.markAllAsTouched();
     if (!this.formAddByName.valid) {
@@ -275,11 +277,10 @@ export class TreeAddNodeDialogComponent {
       type: "name",
       formData: formData,
     }
-    console.log(result);
     this.dialogRef.close(result);
   }
 
-  public onSubmitAddById(): void {
+  protected onSubmitAddById(): void {
     /* Validate form */
     this.formAddById.markAllAsTouched();
     if (!this.formAddById.valid) {
@@ -300,7 +301,6 @@ export class TreeAddNodeDialogComponent {
     console.log(result);
     this.dialogRef.close(result);
   }
-
 
   protected matchingRelationAndGender(): void {
     const relation = this.formAddByName.value.relation;

@@ -60,7 +60,7 @@
                 <form [formGroup]="this.formById" (ngSubmit)="this.onSubmitById()" class="d-flex flex-column">
                   <!-- accountId -->
                   <mat-form-field appearance="outline" class="flex-grow-1 py-2">
-                    <mat-label>Numéro d'identification</mat-label>
+                    <mat-label>Numéro d'identification (compte)</mat-label>
                     <input matInput formControlName="accountId" type="text">
                     <mat-hint>Le numéro d'identification d'un compte est unique.</mat-hint>
                   </mat-form-field>
@@ -80,9 +80,9 @@
                 <form [formGroup]="this.formByCommunId" (ngSubmit)="this.onSearchCommom()" class="d-flex flex-column">
                   <!-- accountId -->
                   <mat-form-field appearance="outline" class="flex-grow-1 py-2">
-                    <mat-label>Numéro d'identification</mat-label>
+                    <mat-label>Numéro d'identification (noeud)</mat-label>
                     <input matInput formControlName="target_id" type="text">
-                    <mat-hint>Le numéro d'identification d'une personne est unique.</mat-hint>
+                    <mat-hint>Le numéro d'identification d'un noeud est unique.</mat-hint>
                   </mat-form-field>
                   <!-- Submit -->
                   <div class="d-flex flex-row-reverse">
@@ -117,17 +117,17 @@
       </div>
       <!-- Liste des personnes -->
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result" [sourceAccount]="this.user"></app-search-result>
       </mat-accordion>
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchSame" [targetAccount]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchSame" [targetAccount]="result" [sourceAccount]="this.user"></app-search-result>
       </mat-accordion>
       <!-- Liste des personnes probablement communes -->
       <span class="h4 pt-4 pb-2" *ngIf="this.searchProbablySame.length > 0">
           Résultats ({{ this.searchProbablySame.length }}) probablement commun
         </span>
       <mat-accordion *ngIf="this.searchProbablySame.length > 0">
-        <app-search-result *ngFor="let result of this.searchProbablySame" [targetAccount]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchProbablySame" [targetAccount]="result" [sourceAccount]="this.user"></app-search-result>
       </mat-accordion>
     </div>
     <div class="my-4">

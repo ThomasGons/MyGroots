@@ -1,32 +1,32 @@
 <div class="container-fluid h-100 py-5 d-flex justify-content-center" style="background-image: url(https://edge.fscdn.org/assets/static/media/background.d90d09caeeaa982055d5633bb48611db.svg); background-size: cover;">
   <mat-card class="d-flex flex-grow-1 mx-4">
-    <mat-card-header class="pb-2">
+    <mat-card-header class="pb-3">
       <div class="d-flex flex-column align-items-start">
         <div class="d-flex flex-row flex-grow-1 pe-5">
-          <button mat-icon-button class="mt-1">
+          <button mat-icon-button class="">
             <mat-icon style="transform: scale(2);">account_circle</mat-icon>
           </button>
-          <div class="d-flex flex-column">
+          <div class="d-flex">
             <span class="h3 px-4 m-0 text-black align-self-center">{{ this.user.firstName }} {{ this.user.lastName }}</span>
-            <span class="py-2 px-4 fg-gray-dark">{{ this.user.id }}</span>
           </div>
         </div>
       </div>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content class="d-flex flex-column py-3">
-      <!-- Family tree visibility -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- Family tree visibility -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
-              <mat-icon>call_split</mat-icon>
+              <mat-icon>device_hub</mat-icon>
             </button>
             <span class="h5 m-0 p-2">Arbre familial</span>
           </div>
           <div class="d-flex align-items-center">
-            <mat-icon>{{ this.treeVisibility == "PUBLIC" ? "lock_open" : "lock" }}</mat-icon>
-            <span [classList]="this.treeVisibility == 'PUBLIC' ?
+            <mat-icon>{{ (this.treeVisibility == "PUBLIC" || this.treeVisibility == "PROTECTED") ? "lock_open" : "lock" }}</mat-icon>
+            <span [classList]="(this.treeVisibility == 'PUBLIC' || this.treeVisibility == 'PROTECTED') ?
                 'fg-green-dark flex-fill align-self-center h5 m-0 p-2' :
                 'fg-brown flex-fill align-self-center h5 m-0 p-2'">
               {{ this.treeVisibility.toLowerCase() }}
@@ -38,9 +38,30 @@
             </button>
           </div>
         </div>
+        <!-- accountId -->
+        <div class="d-flex flex-row justify-content-evenly p-2">
+          <div class="w-50 d-flex align-items-center">
+            <button mat-icon-button>
+              <mat-icon>fingerprint</mat-icon>
+            </button>
+            <span class="h5 m-0 p-2">Identifiant (Compte)</span>
+          </div>
+          <span class="flex-fill align-self-center fg-gray-dark h5 m-0 p-2">{{ this.authUser.id }}</span>
+        </div>
+        <!-- personId -->
+        <div class="d-flex flex-row justify-content-evenly p-2">
+          <div class="w-50 d-flex align-items-center">
+            <button mat-icon-button>
+              <mat-icon>fingerprint</mat-icon>
+            </button>
+            <span class="h5 m-0 p-2">Identifiant (Noeud)</span>
+          </div>
+          <span class="flex-fill align-self-center fg-gray-dark h5 m-0 p-2">{{ this.user.id }}</span>
+        </div>
       </div>
-      <!-- firstName and lastName -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- firstName -->
         <div class="d-flex flex-row justify-content-evenly p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -50,6 +71,7 @@
           </div>
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.firstName }}</span>
         </div>
+        <!-- lastName -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -60,8 +82,9 @@
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.lastName }}</span>
         </div>
       </div>
-      <!-- birthDate -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- birthDate -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -72,8 +95,9 @@
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.birthDate }}</span>
         </div>
       </div>
-      <!-- gender and nationality -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- gender -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -83,6 +107,7 @@
           </div>
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2" >{{ this.getGender() }}</span>
         </div>
+        <!-- nationality -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -93,8 +118,9 @@
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.nationality }}</span>
         </div>
       </div>
-      <!-- email -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- email -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -105,8 +131,9 @@
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.email }}</span>
         </div>
       </div>
-      <!-- socialSecurityNumber -->
+
       <div class="d-flex flex-column border rounded-2 mb-3">
+        <!-- socialSecurityNumber -->
         <div class="d-flex p-2">
           <div class="w-50 d-flex align-items-center">
             <button mat-icon-button>
@@ -117,6 +144,8 @@
           <span class="flex-fill align-self-center fg-green-dark h5 m-0 p-2">{{ this.user.socialSecurityNumber }}</span>
         </div>
       </div>
+
+      <!-- Change profile -->
       <div class="d-flex justify-content-center">
         <button mat-raised-button class="bg-green-light my-4 py-4" [routerLink]="['/user/profile-modify']" type="button">
           <mat-icon>edit</mat-icon>

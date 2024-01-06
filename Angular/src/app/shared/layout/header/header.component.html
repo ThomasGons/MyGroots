@@ -51,7 +51,10 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <mat-menu #menu="matMenu" class="px-2">
-            <button mat-menu-item *ngFor="let item of this.navItems.user" [routerLink]="item.link">{{ item.name }}</button>
+            <button mat-menu-item *ngFor="let item of this.navItems.user" [routerLink]="item.link">
+              <mat-icon matPrefix class="pe-2">{{ item.icon }}</mat-icon>
+              <span>{{ item.name }}</span>
+            </button>
           </mat-menu>
         </div>
       </div>

@@ -3,6 +3,14 @@
 		<mat-sidenav-content>
 			<!-- Arbre -->
 			<div class="flex-grow-1 bg-gray-light" id="tree"></div>
+			<!-- Toolbar -->
+			<mat-divider></mat-divider>
+			<div class="d-flex flex-row-reverse justify-content-between p-2">
+			  <button mat-icon-button class="bg-green-light rounded-5" (click)="this.centerFamilyTree()">
+				<mat-icon>gps_fixed</mat-icon>
+			  </button>
+			</div>
+			<mat-divider></mat-divider>
 		</mat-sidenav-content>
 		<!-- Sidepanel -->
 		<mat-sidenav #sidepanel mode="side" position="end">

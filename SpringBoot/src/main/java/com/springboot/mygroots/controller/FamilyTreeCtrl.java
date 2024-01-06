@@ -69,12 +69,6 @@ public class FamilyTreeCtrl {
                 		}
                 	}
                 	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
-                	for (Person p : ft.getMembers()) {
-                		if (p.getId().equals(acc.getPerson().getId())) {
-                			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
-                		}
-                	}
-                	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
                 }
                 case PUBLIC -> {}
             }
@@ -98,17 +92,10 @@ public class FamilyTreeCtrl {
             switch (ft.getVisibility()) {
                 case PRIVATE -> {
                 	if (!watched.getId().equals(watcher.getId())) {
-                	if (!watched.getId().equals(watcher.getId())) {
                         return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
                     }
                 }
                 case PROTECTED -> {
-                	for (Person p : ft.getMembers()) {
-                		if (p.getId().equals(watcher.getPerson().getId())) {
-                			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
-                		}
-                	}
-                	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
                 	for (Person p : ft.getMembers()) {
                 		if (p.getId().equals(watcher.getPerson().getId())) {
                 			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);

@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER } from 'ngx-ui-loader';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent, FooterComponent, SidenavComponent } from './shared/layout';
@@ -12,9 +13,20 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent, RegisterComponent, LogoutComponent, ForgotPasswordComponent, ChangePasswordComponent, ActivateAccountComponent } from './features/auth';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { NotificationsComponent, ProfileComponent, ProfileModifyComponent } from './features/user';
-import { FamilyTreeComponent, TreeAddNodeDialogComponent, TreeRemoveNodeDialogComponent, ViewOtherFamilyTreeComponent } from './features/family-tree';
+import { FamilyTreeComponent, TreeAddNodeDialogComponent, TreeRemoveNodeDialogComponent, TreeSearchNodeDialogComponent, ViewOtherFamilyTreeComponent } from './features/family-tree';
 import { SearchComponent, SearchResultComponent } from './features/search';
-import { TreeSearchNodeDialogComponent } from './features/family-tree/tree-search-node-dialog/tree-search-node-dialog.component';
+
+
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  text: "Chargement...",
+  textColor: "#FFFFFF",
+  textPosition: "center-center",
+  bgsColor: "#3C8632",
+  fgsColor: "#3C8632",
+  fgsType: SPINNER.squareJellyBox,
+  fgsSize: 100,
+  hasProgressBar: false,
+};
 
 
 @NgModule({
@@ -50,6 +62,7 @@ import { TreeSearchNodeDialogComponent } from './features/family-tree/tree-searc
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

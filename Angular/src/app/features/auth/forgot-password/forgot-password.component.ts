@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, SnackbarService } from '@app/core/services';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -15,28 +16,32 @@ export class ForgotPasswordComponent {
   });
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _authService: AuthService,
     private _snackbarService: SnackbarService,
   ) {}
 
-  public onSubmit(): void {
+  protected onSubmit(): void {
     /* Validate the form */
     this.form.markAllAsTouched();
     if (!this.form.valid) {
       return;
     }
+    this._ngxService.start();
     /* Get form data */
     const email = String(this.form.value.email);
     /* Submit form */
     this._authService.forgotPassword(email).subscribe({
       next: (response) => {
         console.log(response);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(response.message);
       },
       error: (err) => {
         console.log(err);
-        this._snackbarService.openSnackbar(err.error.message);
         this.form.controls.email.setValue("");
+        this._ngxService.stop();
+        this._snackbarService.openSnackbar(err.error.message);
       }
     })
   }

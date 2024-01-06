@@ -14,14 +14,17 @@ export class SearchResultComponent {
   @Input()
   sourceAccount!: any;
 
+  @Input()
+  targetPerson!: any;
+
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
     { value: Gender.FEMALE, viewValue: "Femme" },
   ];
 
-  public getGender(): string {
+  protected getGender(): string {
     for (let gender of this.genders) {
-      if (gender.value == this.targetAccount.person.gender) {
+      if (gender.value == this.targetAccount?.person?.gender || gender.value == this.targetPerson?.gender) {
         return gender.viewValue;
       }
     }

@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Gender, Person, User } from '@app/core/models';
+import { Gender, User } from '@app/core/models';
 import { StorageService, FamilyTreeService, SnackbarService } from '@app/core/services';
 import FamilyTree from "@balkangraph/familytree.js";
-import { TreeAddNodeDialogComponent } from './tree-add-node-dialog/tree-add-node-dialog.component';
-import { TreeRemoveNodeDialogComponent } from './tree-remove-node-dialog/tree-remove-node-dialog.component';
-import { TreeSearchNodeDialogComponent } from './tree-search-node-dialog/tree-search-node-dialog.component';
+import { TreeAddNodeDialogComponent, TreeRemoveNodeDialogComponent, TreeSearchNodeDialogComponent } from '.';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+
 
 @Component({
   selector: 'app-family-tree',
@@ -51,23 +51,27 @@ export class FamilyTreeComponent implements OnInit {
   showSidePanel: boolean = false;
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _familytreeService: FamilyTreeService,
     private _storageService : StorageService,
     private _snackbarService: SnackbarService,
     public dialog: MatDialog,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = this._storageService.getUser();
+    this._ngxService.start();
     /* Send request to get user family tree */
     this._familytreeService.getFamilyTreeById(String(this.user.token), String(this.user.id)).subscribe({
       next: (response) => {
         console.log(response);
+        this._ngxService.stop();
         this.treeData = response.body;
         this.initTree(this.treeData);
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
       }
     });
@@ -84,6 +88,7 @@ export class FamilyTreeComponent implements OnInit {
       this.family = new FamilyTree(tree, {
         nodeBinding: treeData.nodeBindings,
         nodeMouseClick: FamilyTree.action.none,
+        mouseScrool: FamilyTree.action.none,
       });
       this.family.onInit(() => {
         let root = this.getRootOf(this.family.getNode(this.treeData.nodes.length - 1));
@@ -197,6 +202,7 @@ export class FamilyTreeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      this._ngxService.start();
       if (confirmed) {
         /* Get data */
         const deleteData = {
@@ -208,11 +214,13 @@ export class FamilyTreeComponent implements OnInit {
         this._familytreeService.deleteNode(deleteData).subscribe({
           next: (response) => {
             console.log(response);
+            this._ngxService.stop();
             this._snackbarService.openSnackbar(response.message);
             this.ngOnInit();
           },
           error: (err) => {
             console.log(err);
+            this._ngxService.stop();
             this._snackbarService.openSnackbar(err.error.message);
           }
         });

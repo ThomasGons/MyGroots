@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService, StorageService } from '@app/core/services';
 import { User, Gender, Visibility } from '@app/core/models';
 import { Router } from "@angular/router";
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -237,6 +238,7 @@ export class ProfileModifyComponent implements OnInit {
   ];
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _snackbarService: SnackbarService,
     private _router: Router,
     private _userService: UserService,
@@ -246,6 +248,7 @@ export class ProfileModifyComponent implements OnInit {
   ngOnInit(): void {
     /* Get data */
     this.user = this._storageService.getUser();
+    this._ngxService.start();
     /* Send request */
     this._userService.profile(String(this.user.token), String(this.user.id)).subscribe({
       next: (response) => {
@@ -276,19 +279,22 @@ export class ProfileModifyComponent implements OnInit {
           this.isForeigner = true;
           this.form.controls.socialSecurityNumber.disable();
         };
+        this._ngxService.stop();
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
       }
     });
   }
 
-  public onSubmit(): void {
+  protected onSubmit(): void {
     /* Validate the form */
     this.form.markAllAsTouched();
     if (!this.form.valid) {
       return;
     }
+    this._ngxService.start();
     /* Get form data */
     const modifyData = {
       id: this.user.id,
@@ -309,17 +315,19 @@ export class ProfileModifyComponent implements OnInit {
         let authUserInStorage = this._storageService.getUser();
         authUserInStorage.firstName = this.user.firstName;
         this._storageService.saveUser(authUserInStorage);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(response.message);
         this._router.navigate(["/user/profile"]);
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
       },
     });
   }
 
-  public onToggleForeigner(): void {
+  protected onToggleForeigner(): void {
     this.isForeigner = !this.isForeigner;
     if (this.isForeigner) {
       if (this.form.value.socialSecurityNumber) {

@@ -1,4 +1,4 @@
-<mat-expansion-panel class="rounded-0">
+<mat-expansion-panel class="rounded-0" *ngIf="this.targetAccount && !this.targetPerson">
   <mat-expansion-panel-header>
     <mat-panel-title>
       <mat-icon [className]="this.targetAccount.person.gender == 'MALE' ? 'fg-blue-pale' : 'fg-pink'">account_circle</mat-icon>
@@ -17,7 +17,7 @@
         <button mat-icon-button>
           <mat-icon>fingerprint</mat-icon>
         </button>
-        <span class="m-0">Identifiant</span>
+        <span class="m-0">Identifiant (compte)</span>
       </div>
       <span class="flex-fill align-self-center m-0">{{ this.targetAccount.accountId }}</span>
     </div>
@@ -55,7 +55,7 @@
     <div class="d-flex" *ngIf="this.targetAccount.treeVisibility">
       <div class="w-50 d-flex align-items-center">
         <button mat-icon-button>
-          <mat-icon>call_split</mat-icon>
+          <mat-icon>device_hub</mat-icon>
         </button>
         <span class="m-0">Arbre familial</span>
       </div>
@@ -76,3 +76,56 @@
   </div>
 </mat-expansion-panel>
 
+
+<mat-expansion-panel class="rounded-0" *ngIf="this.targetPerson && !this.targetAccount">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon [className]="this.targetPerson.gender == 'MALE' ? 'fg-blue-pale' : 'fg-pink'">account_circle</mat-icon>
+      <span class="pt-1 ps-2">{{ this.targetPerson.firstName }} {{ this.targetPerson.lastName }}</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-divider></mat-divider>
+  <!-- Hidden section when collapsed -->
+  <div class="d-flex flex-column">
+    <!-- personId -->
+    <div class="d-flex justify-content-evenly">
+      <div class="w-50 d-flex align-items-center">
+        <button mat-icon-button>
+          <mat-icon>fingerprint</mat-icon>
+        </button>
+        <span class="m-0">Identifiant (Noeud)</span>
+      </div>
+      <span class="flex-fill align-self-center m-0">{{ this.targetPerson.id }}</span>
+    </div>
+    <!-- birthDate -->
+    <div class="d-flex justify-content-evenly">
+      <div class="w-50 d-flex align-items-center">
+        <button mat-icon-button>
+          <mat-icon>cake</mat-icon>
+        </button>
+        <span class="m-0">Date de naissance</span>
+      </div>
+      <span class="flex-fill align-self-center m-0">{{ this.targetPerson.birthDate }}</span>
+    </div>
+    <!-- gender -->
+    <div class="d-flex justify-content-evenly">
+      <div class="w-50 d-flex align-items-center">
+        <button mat-icon-button>
+          <mat-icon>face</mat-icon>
+        </button>
+        <span class="m-0">Genre</span>
+      </div>
+      <span class="flex-fill align-self-center m-0">{{ this.getGender() }}</span>
+    </div>
+    <!-- nationality -->
+    <div class="d-flex justify-content-evenly">
+      <div class="w-50 d-flex align-items-center">
+        <button mat-icon-button>
+          <mat-icon>public</mat-icon>
+        </button>
+        <span class="m-0">Nationalité</span>
+      </div>
+      <span class="flex-fill align-self-center m-0">{{ this.targetPerson.nationality }}</span>
+    </div>
+  </div>
+</mat-expansion-panel>

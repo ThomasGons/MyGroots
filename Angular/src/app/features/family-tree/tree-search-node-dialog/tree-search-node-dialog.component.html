@@ -41,14 +41,13 @@
       </form>
     </div>
     <!-- Div de resultats -->
-    <div class="d-flex flex-column flex-grow-1 bg-white rounded-2 mx-5 mt-3 px-4 pb-4" *ngIf="this.showResults">
-      <div class="d-flex flex-column py-4">
-        <span class="h4" *ngIf="this.searchResults.length > 0">
-          Résultats ({{ this.searchResults.length }})
-        </span>
-      </div>
+    <mat-divider></mat-divider>
+    <div class="d-flex flex-column p-4" *ngIf="this.showResults">
+      <span class="h4 py-4" *ngIf="this.searchResults.length > 0">
+        Résultats ({{ this.searchResults.length }})
+      </span>
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchResults" [targetPerson]="result" ></app-search-result>
       </mat-accordion>
     </div>
   </mat-card>

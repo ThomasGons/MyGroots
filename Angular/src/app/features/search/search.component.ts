@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { User } from '@app/core/models';
 import { SnackbarService, StorageService } from '@app/core/services';
 import { SearchService } from '@app/core/services/search.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -28,9 +29,10 @@ export class SearchComponent {
   searchSame: any[] = [];
   searchProbablySame: any[] = [];
   user: User = {};
-  src_acc_id: string = '';
+  src_acc_id: string = "";
 
   constructor(
+    private _ngxService: NgxUiLoaderService,
     private _snackbarService: SnackbarService,
     private _storageService: StorageService,
     private _searchService: SearchService,
@@ -38,7 +40,8 @@ export class SearchComponent {
     this.user = this._storageService.getUser();
   }
 
-  public onSubmitByName(): void {
+  protected onSubmitByName(): void {
+    this._ngxService.start();
     /* Get form data */
     const firstName = !this.formByName.value.firstName ? "" : this.formByName.value.firstName;
     const lastName = !this.formByName.value.lastName ? "" : this.formByName.value.lastName;
@@ -46,11 +49,11 @@ export class SearchComponent {
     if (!firstName && !lastName && !birthDate ) {
       return;
     }
-    console.log(firstName, lastName, birthDate);
     /* Send form */
     this._searchService.searchByName(firstName, lastName, birthDate).subscribe({
       next: (response) => {
         console.log(response);
+        this._ngxService.stop();
         this.searchResults = response.body;
         if (!this.showResults) {
           this.toggleResultsDisplay();
@@ -58,22 +61,24 @@ export class SearchComponent {
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this.searchResults = [];
       }
     });
   }
 
-  public onSubmitById(): void {
+  protected onSubmitById(): void {
     /* Get form data */
     const accountId = !this.formById.value.accountId ? "" : this.formById.value.accountId;
     if (!accountId) {
       return;
     }
-    console.log(accountId);
+    this._ngxService.start();
     /* Send form */
     this._searchService.searchById(accountId).subscribe({
       next: (response) => {
         console.log(response);
+        this._ngxService.stop();
         this.searchResults = [response.body];
         if (!this.showResults) {
           this.toggleResultsDisplay();
@@ -81,17 +86,18 @@ export class SearchComponent {
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this.searchResults = []
         this._snackbarService.openSnackbar(err.error.message);
       }
     });
   }
 
-  public toggleResultsDisplay(): void {
+  protected toggleResultsDisplay(): void {
     this.showResults = !this.showResults;
   }
 
-  public cancelForm(type: string): void {
+  protected cancelForm(type: string): void {
     if (type == "name") {
       this.formByName.reset();
     }
@@ -101,35 +107,36 @@ export class SearchComponent {
     this.clearResults();
   }
 
-  public clearResults(): void  {
+  protected clearResults(): void  {
     this.showResults = false;
     this.searchResults = [];
     this.searchProbablySame = [];
     this.searchSame = [];
   }
 
-  public onSearchCommom():void{
+  protected onSearchCommom():void{
     /* Get form data */
     const target_id = !this.formByCommunId.value.target_id ? "" : this.formByCommunId.value.target_id;
     if (!target_id) {
       return;
     }
-    console.log(target_id);
-
+    this._ngxService.start();
     this.user = this._storageService.getUser();
     this.src_acc_id = String(this.user.id);
-    this._searchService.searchCommun(String(this.src_acc_id), String(target_id)).subscribe({
+    this._searchService.searchCommon(String(this.src_acc_id), String(target_id)).subscribe({
       next: (response) => {
         console.log(response);
         this.searchSame = response.body.same;
         this.searchProbablySame = response.body.probably_same;
         console.log(this.searchResults);
+        this._ngxService.stop();
         if (!this.showResults) {
           this.toggleResultsDisplay();
         }
       },
       error: (err) => {
         console.log(err);
+        this._ngxService.stop();
         this._snackbarService.openSnackbar(err.error.message);
       }
     });
