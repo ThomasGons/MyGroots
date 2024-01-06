@@ -13,7 +13,7 @@
     </mat-card-header>
     <mat-divider></mat-divider>
     <!-- Div de recherche -->
-    <div class="p-4">
+    <div class="p-4" *ngIf="!this.showResults">
       <form [formGroup]="this.formSearchByRelation" (ngSubmit)="this.onSubmit()" class="d-flex flex-column">
         <div class="d-flex flex-row">
           <!-- relation -->
@@ -46,9 +46,18 @@
       <span class="h4 py-4" *ngIf="this.searchResults.length > 0">
         Résultats ({{ this.searchResults.length }})
       </span>
+      <span class="h4 py-4" *ngIf="this.searchResults.length <= 0">
+        Aucun resultat (0)
+      </span>
       <mat-accordion>
         <app-search-result *ngFor="let result of this.searchResults" [targetPerson]="result" ></app-search-result>
       </mat-accordion>
+      <div class="d-flex flex-row-reverse pt-4 pb-2">
+        <button mat-button (click)="this.toggleResultsDisplay()" class="bg-green-light rounded-2 py-2 mx-2" type="button">
+          <mat-icon>done</mat-icon>
+          <span>OK</span>
+        </button>
+      </div>
     </div>
   </mat-card>
 </div>

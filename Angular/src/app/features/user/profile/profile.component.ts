@@ -11,8 +11,8 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class ProfileComponent implements OnInit {
 
-  authUser: User = {};
-  user!: User;
+  authUser: User;
+  user: User;
   treeVisibility: string = "";
 
   readonly genders: any = [
@@ -25,12 +25,14 @@ export class ProfileComponent implements OnInit {
     private _snackbarService: SnackbarService,
     private _userService: UserService,
     private _storageService : StorageService,
-  ) { }
+  ) {
+    this.authUser = this._storageService.getUser();
+    this.user = this.authUser;
+  }
 
   ngOnInit(): void {
     /* Get data */
     this._ngxService.start();
-    this.authUser = this._storageService.getUser();
     /* Send request */
     this._userService.profile(String(this.authUser.token), String(this.authUser.id)).subscribe({
       next: (response) => {

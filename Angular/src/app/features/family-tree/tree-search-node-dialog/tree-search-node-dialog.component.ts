@@ -64,7 +64,7 @@ export class TreeSearchNodeDialogComponent {
       error: (err) => {
         console.log(err);
         this._ngxService.stop();
-        this._snackbarService.openSnackbar(err.error.message);
+        this.searchResults = []
       }
     });
   }
