@@ -33,7 +33,6 @@
               <!-- gender -->
               <mat-form-field appearance="outline" class="flex-grow-1 ps-1 pb-1">
                 <mat-label>Genre</mat-label>
-                <!-- TODO: set -->
                 <mat-select matNativeControl formControlName="gender" required>
                   <mat-option *ngFor="let gender of this.genders" [value]="gender.value">{{ gender.viewValue }}</mat-option>
                 </mat-select>
@@ -60,16 +59,28 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <!-- birthDate -->
-            <mat-form-field appearance="outline">
-              <mat-label>Date de naissance</mat-label>
-              <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="MM/DD/YYYY">
-              <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
-              <mat-datepicker #birthDate></mat-datepicker>
-              <mat-error *ngIf="this.formAddByName.controls.birthDate.touched && this.formAddByName.controls.birthDate.invalid">
-                <span *ngIf="this.formAddByName.controls.birthDate.hasError('required')">Veuillez saisir une date de naissance.</span>
-              </mat-error>
-            </mat-form-field>
+            <div class="d-flex flex-row flex-grow-1">
+              <!-- birthDate -->
+              <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
+                <mat-label>Date de naissance</mat-label>
+                <input matInput [matDatepicker]="birthDate" formControlName="birthDate" placeholder="MM/DD/YYYY">
+                <mat-datepicker-toggle matIconSuffix [for]="birthDate" matTooltip="Ouvrir le calendrier"></mat-datepicker-toggle>
+                <mat-datepicker #birthDate></mat-datepicker>
+                <mat-error *ngIf="this.formAddByName.controls.birthDate.touched && this.formAddByName.controls.birthDate.invalid">
+                  <span *ngIf="this.formAddByName.controls.birthDate.hasError('required')">Veuillez saisir une date de naissance.</span>
+                </mat-error>
+              </mat-form-field>
+              <!-- nationality -->
+              <mat-form-field appearance="outline" class="flex-grow-1 ps-1 pb-1">
+                <mat-label>Nationalité</mat-label>
+                <mat-select matNativeControl formControlName="nationality" required>
+                  <mat-option *ngFor="let nationality of this.nationalities" [value]="nationality">{{ nationality }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.formAddByName.controls.nationality.touched && this.formAddByName.controls.nationality.invalid">
+                  <span *ngIf="this.formAddByName.controls.nationality.hasError('required')">Veuillez saisir un genre.</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
             <!-- submit -->
             <div class="d-flex flex-row-reverse">
               <button mat-raised-button class="rounded-2 bg-green-light py-2" [disabled]="!this.formAddByName.valid" type="submit">

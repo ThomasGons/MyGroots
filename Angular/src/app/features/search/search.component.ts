@@ -39,7 +39,7 @@ export class SearchComponent {
     this._searchService.searchByName(firstName, lastName, birthDate).subscribe({
       next: (response) => {
         console.log(response);
-        this.searchResults = response.body.reverse();
+        this.searchResults = response.body;
         if (!this.showResults) {
           this.toggleResultsDisplay();
         }
@@ -78,7 +78,17 @@ export class SearchComponent {
     this.showResults = !this.showResults;
   }
 
-  public clearResults() {
+  public cancelForm(type: string): void {
+    if (type == "name") {
+      this.formByName.reset();
+    }
+    if (type == "id") {
+      this.formById.reset();
+    }
+    this.clearResults();
+  }
+
+  public clearResults(): void  {
     this.showResults = false;
     this.searchResults = [];
   }

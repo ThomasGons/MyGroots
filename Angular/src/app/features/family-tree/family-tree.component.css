@@ -1,7 +1,7 @@
 @import "src/styles.css";
 
 #tree {
-  height: 90vh;
+  height: 80vh;
 }
 
 :host ::ng-deep .node.male>rect {
@@ -10,21 +10,4 @@
 
 :host ::ng-deep .node.female>rect {
   fill: var(--color-pink);
-}
-
-/* 
-:host ::ng-deep .bft-edit-form-header .bft-edit-form.node.male,
-:host ::ng-deep .bft-edit-form.node.male .bft-img-button{
-  background-color: #FFCA28;
-}
-
-:host ::ng-deep .bft-edit-form-header .bft-edit-form.node.female,
-:host ::ng-deep .bft-edit-form.node.female .bft-img-button{
-  background-color: #FFCA28;
-} */
-
-:host ::ng-deep .field_0 {
-  font-family: Impact;
-  text-transform: uppercase;
-  fill: black;
 }

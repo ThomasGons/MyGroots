@@ -65,7 +65,7 @@ const routes: Routes = [
         component: FamilyTreeComponent,
       },
       {
-        path: "view-other",
+        path: "other/:id",
         component: ViewOtherFamilyTreeComponent,
       }
     ]

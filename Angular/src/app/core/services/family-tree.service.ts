@@ -59,4 +59,11 @@ export class FamilyTreeService {
     return this._httpClient.post(this.url + "/node/delete", data, this.httpOptions);
   }
 
+  /**
+   * 
+   * @param data 
+   */
+  public searchInFamilyTree(data: any): Observable<any> {
+    return this._httpClient.post(this.url + "/node/search", data, this.httpOptions);
+  }
 }

@@ -1,4 +1,3 @@
-<script src='assets/balkanapp/familytree.js'></script>
 <div class="container-fluid h-100 m-0 p-0">
   <mat-sidenav-container hasBackdrop="true">
     <mat-sidenav-content>
@@ -20,18 +19,25 @@
           </div>
         </mat-card-header>
         <mat-divider></mat-divider>
-        <mat-card-content class="d-flex flex-md-row flex-column pt-3">
-          <div class="d-flex flex-column flex-grow-1 rounded p-2 mb-1">
-            <span class="pb-1"><b>Genre</b></span>
-            <span>{{ this.getSelectedNodeGender() }}</span>
+        <mat-card-content class="d-flex flex-column pt-3">
+          <div class="d-flex flex-column flex-grow-1 p-2 mb-1">
+            <span class="pb-1"><b>Lié a un compte</b></span>
+            <span [classList]="this.treeData?.nodes[this.selectedNodeId]?.hasAccount == 'true' ? 'fg-green-dark' : 'fg-brown'">
+              {{ this.treeData?.nodes[this.selectedNodeId]?.hasAccount == 'true' ? "Oui" : "Non" }}</span>
           </div>
-          <div class="d-flex flex-column flex-grow-1 rounded p-2 mb-1">
-            <span class="pb-1"><b>Date de naissance</b></span>
-            <span>{{ this.selectedNodePersonData?.birthDate }}</span>
-          </div>
-          <div class="d-flex flex-column flex-grow-1 rounded p-2">
-            <span class="pb-1"><b>Nationalité</b></span>
-            <span>{{ this.selectedNodePersonData?.nationality }}</span>
+          <div class="d-flex flex-row">
+            <div class="d-flex flex-column flex-grow-1 p-2 mb-1">
+              <span class="pb-1"><b>Genre</b></span>
+              <span>{{ this.getSelectedNodeGender() }}</span>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 p-2 mb-1">
+              <span class="pb-1"><b>Date de naissance</b></span>
+              <span>{{ this.selectedNodePersonData?.birthDate }}</span>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 p-2">
+              <span class="pb-1"><b>Nationalité</b></span>
+              <span>{{ this.selectedNodePersonData?.nationality }}</span>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>

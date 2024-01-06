@@ -45,6 +45,10 @@
                       <mat-icon class="text-white">search</mat-icon>
                       <span class="text-white">Recherche</span>
                     </button>
+                    <button mat-button (click)="this.cancelForm('name')" class="mt-2 rounded-2 py-4 mx-2" type="button">
+                      <mat-icon>clear</mat-icon>
+                      <span>Annuler</span>
+                    </button>
                   </div>
                 </form>
               </mat-card-content>
@@ -63,8 +67,12 @@
                   <!-- Submit -->
                   <div class="d-flex flex-row-reverse">
                     <button mat-raised-button class="bg-green-dark mt-2 py-4 rounded-1" [disabled]="!this.formById.valid" type="submit">
-                    <mat-icon class="text-white">search</mat-icon>
-                    <span class="text-white">Recherche</span>
+                      <mat-icon class="text-white">search</mat-icon>
+                      <span class="text-white">Recherche</span>
+                    </button>
+                    <button mat-button (click)="this.cancelForm('id')" class="mt-2 rounded-2 py-4 mx-2" type="button">
+                      <mat-icon>clear</mat-icon>
+                      <span>Annuler</span>
                     </button>
                   </div>
                 </form>

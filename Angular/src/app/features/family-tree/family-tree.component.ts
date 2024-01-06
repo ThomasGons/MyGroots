@@ -119,8 +119,6 @@ export class FamilyTreeComponent implements OnInit {
       if(this.family.getNode(node.mid)) {
         node = this.family.getNode(node.mid);
       }
-
-
     }
     return node;
   }

@@ -12,7 +12,7 @@ public class Person {
     @Id
     private String id;
 
-    private Boolean hasAccount = false;
+    private boolean hasAccount = false;
     private String firstName;
     private String lastName; 
     private LocalDate birthDate;
@@ -91,8 +91,8 @@ public class Person {
     public void setAccount() {
     	this.hasAccount = true;
     }
-    public Boolean hasAccount(){
-        return this.hasAccount;
+    public boolean hasAccount(){
+        return hasAccount;
     }
 
 }

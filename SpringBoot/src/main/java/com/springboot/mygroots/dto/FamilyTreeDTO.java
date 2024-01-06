@@ -46,7 +46,7 @@ public class FamilyTreeDTO {
         private String gender;
         private String nationality;
         
-        private boolean hasAccount;
+        private String hasAccount;
 
         public TreeNodeFront(Person person, FamilyTree.TreeNode node) {
             this.id = node.getID();
@@ -58,7 +58,7 @@ public class FamilyTreeDTO {
             this.birthDate = person.getBirthDate();
             this.gender = person.getGender().toString().toLowerCase();
             this.nationality = person.getNationality();
-            this.hasAccount = person.hasAccount();
+            this.hasAccount = String.valueOf(person.hasAccount());
         }
 
         public int getId() {
@@ -97,7 +97,7 @@ public class FamilyTreeDTO {
             return nationality;
         }
         
-        public boolean getHasAccount() {
+        public String getHasAccount() {
         	return hasAccount;
         }
         

@@ -1,14 +1,12 @@
 package com.springboot.mygroots.controller;
 
+import com.springboot.mygroots.dto.AccountDTO;
 import com.springboot.mygroots.service.AccountService;
 import com.springboot.mygroots.service.FamilyTreeService;
 import com.springboot.mygroots.service.PersonService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import com.springboot.mygroots.utils.ExtResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +31,10 @@ public class SearchCtrl {
 
     @Autowired
     PersonService personService;
-    
+   
     @Autowired
     AccountService accountService;
-    
+   
     @Autowired
     FamilyTreeService familyTreeService;
 
@@ -46,12 +44,12 @@ public class SearchCtrl {
      * @return the person
      */
     @PostMapping(value= "/id")
-    public ExtResponseEntity<Account> searchById(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<AccountDTO> searchById(@RequestBody Map<String, String> data) {
         Account acc = accountService.getAccountById(data.get("accountId"));
         if (acc == null) {
             return new ExtResponseEntity<>("Aucun compte correspondant pour cet id !", HttpStatus.BAD_REQUEST);
         }
-        return new ExtResponseEntity<>(acc, HttpStatus.OK);
+        return new ExtResponseEntity<>(new AccountDTO(acc), HttpStatus.OK);
     }
 
     /**
@@ -60,7 +58,7 @@ public class SearchCtrl {
      * @return list of accounts corresponding to the search
      */
     @PostMapping(value= "/name")
-    public ExtResponseEntity<List<Account>> searchByPersonalData(@RequestBody Map<String, String> data) {
+    public ExtResponseEntity<List<AccountDTO>> searchByPersonalData(@RequestBody Map<String, String> data) {
         String firstName = Objects.equals(data.get("firstName"), "") ? null : data.get("firstName");
         String lastName = Objects.equals(data.get("lastName"), "") ? null : data.get("lastName");
         LocalDate birthDate = Objects.equals(data.get("birthDate"), "") ? null : LocalDate.parse(data.get("birthDate"));
@@ -71,33 +69,36 @@ public class SearchCtrl {
             return new ExtResponseEntity<>("Aucune resultat !", HttpStatus.BAD_REQUEST);
         }
         persResults.removeIf(person ->
-        	person.getFirstName().equals("unknown") || person.getLastName().equals("unknown") 
+        person.getFirstName().equals("unknown") || person.getLastName().equals("unknown")
         );
-        List<Account> results = new ArrayList<>();
+        List<AccountDTO> results = new ArrayList<>();
         for (Person p: persResults) {
-        	Account a = accountService.getAccountByPerson(p);
-        	if (a != null) {
-        		results.add(a);        		
-        	}
+        Account a = accountService.getAccountByPerson(p);
+        if (a != null) {
+        results.add(new AccountDTO(a));
+        }
         }
         return new ExtResponseEntity<>(results, HttpStatus.OK);
     }
 
     @PostMapping(value="/common-members")
-    public ExtResponseEntity<Map<String, List<Person>>> getCommonMembers(@RequestBody Map<String, String> data) {
-        String owner_acc_id = data.get("owner_acc_id");
+    public ExtResponseEntity<List<AccountDTO>> getCommonMembers(@RequestBody Map<String, String> data) {
+        String owner_acc_id = data.get("src_acc_id");
+        String target_id = data.get("target_id");
         Account acc = accountService.getAccountById(owner_acc_id);
-        Map<String, List<Person>> commons = familyTreeService.getSimilarFamilyTreeByAllNodes(acc.getPerson());
+        Map<String, List<Person>> commons = familyTreeService.getSimilarNodes(acc.getPerson(), target_id);
+
         if (commons.isEmpty()) {
             return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
         }
 
-        return new ExtResponseEntity<>(Map.of(
-                "same", commons.get("same"),
-                "probably_same", commons.get("probably_same")),
-                HttpStatus.OK);
+        List<AccountDTO> accs = new ArrayList<>();
+        for (Person p: commons.get("same")) {
+            Account a = accountService.getAccountByPerson(p);
+            accs.add(new AccountDTO(a));
+        }
+
+        return new ExtResponseEntity<>(accs, HttpStatus.OK);
     }
-
-
 
 }
