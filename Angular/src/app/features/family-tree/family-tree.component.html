@@ -1,9 +1,20 @@
-<!-- <script src="https://balkan.app/js/FamilyTree.js"></script> -->
-<div class="container-fluid h-100 m-0 p-0">
+<div class="container-fluid h-100 m-0 p-0 overflow-hidden">
   <mat-sidenav-container hasBackdrop="true">
-    <mat-sidenav-content>
+    <mat-sidenav-content class="h-100 d-flex flex-column flex-grow-1 overflow-hidden">
       <!-- Arbre -->
       <div class="flex-grow-1 bg-gray-light" id="tree"></div>
+      <!-- Toolbar -->
+      <mat-divider></mat-divider>
+      <div class="d-flex flex-row justify-content-between p-2">
+        <button mat-button color="primary" class="align-self-center border rounded-2 p-2" (click)="this.openDialogSearchByRelation()">
+          <mat-icon>search</mat-icon>
+          <span class="text-center">Recherche par relation</span>
+        </button>
+        <button mat-icon-button (click)="this.centerFamilyTree()">
+          <mat-icon>gps_fixed</mat-icon>
+        </button>
+      </div>
+      <mat-divider></mat-divider>
     </mat-sidenav-content>
     <!-- Sidepanel -->
     <mat-sidenav #sidepanel mode="side" position="end">
@@ -49,11 +60,5 @@
       </div>
     </mat-sidenav>
   </mat-sidenav-container>
-  <div class="button-group">
-    <button mat-button color="primary" (click)="this.openSearch()">
-      <mat-icon>search</mat-icon>
-      <span class="text-center">Rechercher dans l'abre !</span>
-    </button>
-  </div>
 </div>
 

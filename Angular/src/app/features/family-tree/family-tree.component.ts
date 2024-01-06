@@ -198,6 +198,15 @@ export class FamilyTreeComponent implements OnInit {
     });
   }
 
+  protected openDialogSearchByRelation():void{
+    this.dialog.open(TreeSearchNodeDialogComponent, {
+      data: {
+        sourceNodeData: this.treeData.members[0]
+      },
+      width: "600px",
+    });
+  }
+
   protected getSelectedNodeGender(): string {
     for (let gender of this.genders) {
       if (gender.value == this.selectedNodePersonData?.gender) {
@@ -207,10 +216,8 @@ export class FamilyTreeComponent implements OnInit {
     return "";
   }
 
-  public openSearch():void{
-    const dialogRef = this.dialog.open(TreeSearchNodeDialogComponent, {
-      width: "600px",
-    });
+  protected centerFamilyTree() {
+    this.family.center(0);
   }
 
 }

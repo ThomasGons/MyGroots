@@ -1,7 +1,7 @@
 @import "src/styles.css";
 
 #tree {
-  height: 90vh;
+  height: 83vh;
 }
 
 :host ::ng-deep .node.male>rect {

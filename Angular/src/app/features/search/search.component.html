@@ -1,6 +1,6 @@
 <div class="container-fluid h-100 m-0 p-0" style="background: linear-gradient(var(--color-green-dark), var(--color-green-light));">
   <div class="h-100 d-flex flex-column flex-grow-1">
-    <div class="d-flex flex-lg-row flex-column">
+    <div class="d-flex flex-column">
       <!-- Div de texte -->
       <div class="d-flex flex-column justify-content-center align-self-center pt-5 pb-2">
         <p class="h2 mb-4 text-center text-white">
@@ -73,7 +73,7 @@
             <!-- commun search -->
             <mat-tab label="RECHERCHE COMMUNUNE">
               <mat-card-content class="px-4 py-4">
-                <form [formGroup]="this.formByCommunId" (ngSubmit)="this.communSearch()" class="d-flex flex-column">
+                <form [formGroup]="this.formByCommunId" (ngSubmit)="this.onSearchCommom()" class="d-flex flex-column">
                   <!-- accountId -->
                   <mat-form-field appearance="outline" class="flex-grow-1 py-2">
                     <mat-label>Numéro d'identification</mat-label>
@@ -95,8 +95,7 @@
       </div>
     </div>
     <!-- Div de resultat -->
-    <div class="d-flex flex-column flex-grow-1 bg-white rounded-2 mx-5 mt-2 px-4 pb-4" *ngIf="this.showResults">
-      <mat-divider></mat-divider>
+    <div class="d-flex flex-column flex-grow-1 bg-white rounded-2 mx-5 mt-3 px-4 pb-4" *ngIf="this.showResults">
       <div class="d-flex flex-column py-4">
         <span class="h4" *ngIf="this.searchResults.length > 0">
           Résultats ({{ this.searchResults.length }})
@@ -110,17 +109,17 @@
       </div>
       <!-- Liste des personnes -->
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchResults" [account]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result"></app-search-result>
       </mat-accordion>
       <mat-accordion>
-        <app-search-result *ngFor="let result of this.searchSame" [account]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchSame" [targetAccount]="result"></app-search-result>
       </mat-accordion>
       <!-- Liste des personnes probablement communes -->
       <span class="h4 pt-4 pb-2" *ngIf="this.searchProbablySame.length > 0">
           Résultats ({{ this.searchProbablySame.length }}) probablement commun
         </span>
       <mat-accordion *ngIf="this.searchProbablySame.length > 0">
-        <app-search-result *ngFor="let result of this.searchProbablySame" [account]="result"></app-search-result>
+        <app-search-result *ngFor="let result of this.searchProbablySame" [targetAccount]="result"></app-search-result>
       </mat-accordion>
     </div>
     <div class="my-4">

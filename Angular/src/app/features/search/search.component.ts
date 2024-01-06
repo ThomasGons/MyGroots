@@ -81,6 +81,7 @@ export class SearchComponent {
       error: (err) => {
         console.log(err);
         this.searchResults = []
+        this._snackbarService.openSnackbar(err.error.message);
       }
     });
   }
@@ -92,7 +93,7 @@ export class SearchComponent {
     this.searchSame = [];
   }
 
-  public communSearch():void{
+  public onSearchCommom():void{
     /* Get form data */
     const target_id = !this.formByCommunId.value.target_id ? "" : this.formByCommunId.value.target_id;
     if (!target_id) {
@@ -117,13 +118,11 @@ export class SearchComponent {
         this._snackbarService.openSnackbar(err.error.message);
       }
     });
-
   }
 
-  public toggleResultsDisplay(): void {
+  protected toggleResultsDisplay(): void {
     this.showResults = !this.showResults;
   }
-
 
   private formatBirthDate(inputDate: string): string {
     const dateObject = new Date(inputDate);
@@ -133,6 +132,5 @@ export class SearchComponent {
     const formattedDate = year+"-"+month+"-"+day;
     return formattedDate;
   }
-
-  protected readonly length = length;
+  
 }

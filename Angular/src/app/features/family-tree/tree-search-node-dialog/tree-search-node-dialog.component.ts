@@ -1,25 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from '@app/core/models';
-import {FamilyTreeService, SnackbarService, StorageService } from '@app/core/services';
+import { FamilyTreeService, SnackbarService, StorageService } from '@app/core/services';
+
 
 @Component({
   selector: 'app-tree-search-node-dialog',
   templateUrl: './tree-search-node-dialog.component.html',
-  styleUrls: ['./tree-search-node-dialog.component.css']
 })
 export class TreeSearchNodeDialogComponent {
-
-  user: User={};
-
-  formSearch = new FormGroup({
-    src_id: new FormControl("", {nonNullable: true, validators: [Validators.required]}),
+  
+  formSearchByRelation = new FormGroup({
     relation: new FormControl("", {nonNullable: true, validators: [Validators.required]}),
   });
+  user!: User;
+  showResults: boolean = false;
+  searchResults: any[] = [];
 
   readonly relations: any = [
-    { value: "father", viewValue: "Pere" },
-    { value: "mother", viewValue: "Mere" },
+    { value: "father", viewValue: "Père" },
+    { value: "mother", viewValue: "Mère" },
     { value: "partner", viewValue: "Partenaire" },
     { value: "parents", viewValue: "Parents" },
     { value: "children", viewValue: "Enfants" },
@@ -28,32 +29,34 @@ export class TreeSearchNodeDialogComponent {
     { value: "grandchildren", viewValue: "Petits Enfants" },
     { value: "cousins", viewValue: "Cousins" },
     { value: "uncles_ants", viewValue: "Oncles et Tantes" },
-    { value: "nephews_nieces", viewValue: "Neuveux et Nièces" },
-  ]
-
+    { value: "nephews_nieces", viewValue: "Neveux et Nièces" },
+  ];
 
   constructor(
-    private _snackbarService: SnackbarService,
     private _familytreeService: FamilyTreeService,
+    private _snackbarService: SnackbarService,
     private _storageService : StorageService,
-  ) { }
+    public dialogRef: MatDialogRef<TreeSearchNodeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { sourceNodeData: any }
+  ) {}
 
-
-  public searchOnSubmit(): void{
+  protected onSubmit(): void{
     this.user = this._storageService.getUser();
-    const src_id = !this.formSearch.value.src_id ? "" : this.formSearch.value.src_id;
-    if (!src_id) {
-      return;
-    }
-    const relation = !this.formSearch.value.relation ? "" : this.formSearch.value.relation;
-    if (!relation) {
-      return;
-    }
-
-    this._familytreeService.searchNodeRelation(String(src_id), String(relation), String(this.user.id)).subscribe({
+    /* Get form data */
+    const formData = {
+      ownerId: this.user.id,
+      srcId: this.data.sourceNodeData.id,
+      relation: this.formSearchByRelation.value.relation,
+    };
+    /* Send request */
+    this._familytreeService.searchNodeRelation(String(formData.srcId), String(formData.relation), String(formData.ownerId)).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar(response.message);
+        this.searchResults = [response.body];
+        if (!this.showResults) {
+          this.toggleResultsDisplay();
+        }
       },
       error: (err) => {
         console.log(err);
@@ -62,5 +65,8 @@ export class TreeSearchNodeDialogComponent {
     });
   }
 
+  protected toggleResultsDisplay(): void {
+    this.showResults = !this.showResults;
+  }
 
 }

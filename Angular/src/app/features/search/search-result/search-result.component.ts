@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 export class SearchResultComponent {
 
   @Input()
-  account!: any;
+  targetAccount!: any;
 }

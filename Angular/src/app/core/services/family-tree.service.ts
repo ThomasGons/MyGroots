@@ -59,8 +59,14 @@ export class FamilyTreeService {
     return this._httpClient.post(this.url + "/node/delete", data, this.httpOptions);
   }
 
-  public searchNodeRelation(src_id: string, relation: string, owner_id: string): Observable<any> {
-    return this._httpClient.post(this.url + "/node/search", {src_id: String, relation: String, owner_id: String}, this.httpOptions);
+  /**
+   * Search a list of persons by a relation to a person
+   * @param srcId Id of the source person,
+   * @param relation Relation between the source and the destination
+   * @param ownerId Id of the owner whether the source_id is not the owner
+   */
+  public searchNodeRelation(srcId: string, relation: string, ownerId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/node/search", {srcId: srcId, relation: relation, ownerId: ownerId}, this.httpOptions);
   }
 
 }
