@@ -17,8 +17,7 @@ export class TreeSearchNodeDialogComponent {
     relation: new FormControl("", {nonNullable: true, validators: [Validators.required]}),
   });
 
-  // @ts-ignore
-  readonly relations: string = [
+  readonly relations: any = [
     { value: "father", viewValue: "Pere" },
     { value: "mother", viewValue: "Mere" },
     { value: "partner", viewValue: "Partenaire" },
@@ -51,7 +50,7 @@ export class TreeSearchNodeDialogComponent {
       return;
     }
 
-    this._familytreeService.searchNode(String(src_id), String(relation), String(this.user.id)).subscribe({
+    this._familytreeService.searchNodeRelation(String(src_id), String(relation), String(this.user.id)).subscribe({
       next: (response) => {
         console.log(response);
         this._snackbarService.openSnackbar(response.message);
