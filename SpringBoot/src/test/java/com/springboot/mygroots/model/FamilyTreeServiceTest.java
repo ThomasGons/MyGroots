@@ -35,18 +35,18 @@ public class FamilyTreeServiceTest {
 	}
 
 	@Test
-	public void siblings() {
+	public void getParents() {
 		Optional<Person> src_op = personRepository.findById("6598917cd505437b747d97ba");
 		Person p = src_op.orElse(null);
 		Optional<Person> own_op = personRepository.findById("65986a3d02c0c84b953f800b");
 		Person own = own_op.orElse(null);
 		FamilyTree ft = familyTreeRepository.findByOwner(own);
-		List<Person> siblings = ft.getSiblings(p);
-		List <String> siblingsId = siblings.stream().map(Person::getId).toList();
-		List<String> trueSiblingsId = List.of("659891dfd505437b747d97bd", "65989760d505437b747d97c8");
-		assertEquals(trueSiblingsId.size(), siblings.size());
-		assertTrue(siblingsId.containsAll(trueSiblingsId));
-		assertTrue(trueSiblingsId.containsAll(siblingsId));
+		List<Person> parents = ft.getParents(p);
+		List <String> parentsId = parents.stream().map(Person::getId).toList();
+		List<String> trueParentsId = List.of("65989749d505437b747d97c7", "659891bfd505437b747d97bc");
+		assertEquals(trueParentsId.size(), parentsId.size());
+		assertTrue(parentsId.containsAll(trueParentsId));
+		assertTrue(trueParentsId.containsAll(parentsId));
 	}
 
 	@Test
@@ -63,6 +63,21 @@ public class FamilyTreeServiceTest {
 	}
 
 	@Test
+	public void children() {
+		Optional<Person> src_op = personRepository.findById("6598917cd505437b747d97ba");
+		Person p = src_op.orElse(null);
+		Optional<Person> own_op = personRepository.findById("65986a3d02c0c84b953f800b");
+		Person own = own_op.orElse(null);
+		FamilyTree ft = familyTreeRepository.findByOwner(own);
+		List<Person> children = ft.getChildren(p);
+		List <String> childrenId = children.stream().map(Person::getId).toList();
+		List<String> trueChildrenId = List.of("65986a3d02c0c84b953f800b");
+		assertEquals(trueChildrenId.size(), children.size());
+		assertTrue(childrenId.containsAll(trueChildrenId));
+		assertTrue(trueChildrenId.containsAll(childrenId));
+	}
+
+	@Test
 	public void unclesAndAunts() {
 		Optional<Person> op = personRepository.findById("65986a3d02c0c84b953f800b");
 		Person p = op.orElse(null);
@@ -75,3 +90,4 @@ public class FamilyTreeServiceTest {
 		assertTrue(trueUnclesAndAuntsId.containsAll(unclesAndAuntsId));
 	}
 }
+
