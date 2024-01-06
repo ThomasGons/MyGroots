@@ -28,8 +28,8 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
   watchedId!: string;
 
   readonly genders: any = [
-    { value: Gender.MALE, viewValue: "Homme" },
-    { value: Gender.FEMALE, viewValue: "Femme" },
+    { value: Gender.MALE, viewValue: "Masculin" },
+    { value: Gender.FEMALE, viewValue: "Féminin" },
   ];
 
   constructor(

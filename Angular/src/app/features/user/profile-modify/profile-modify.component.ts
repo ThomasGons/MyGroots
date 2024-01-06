@@ -29,8 +29,8 @@ export class ProfileModifyComponent implements OnInit {
   previousSocialSecurityNumber: string = "";
 
   readonly genders: any = [
-    { value: Gender.MALE, viewValue: "Homme" },
-    { value: Gender.FEMALE, viewValue: "Femme" },
+    { value: Gender.MALE, viewValue: "Masculin" },
+    { value: Gender.FEMALE, viewValue: "Féminin" },
   ]
   readonly visibilities: any = [
     { value: Visibility.PUBLIC, viewValue: "public" },

@@ -16,8 +16,8 @@ export class ProfileComponent implements OnInit {
   treeVisibility: string = "";
 
   readonly genders: any = [
-    { value: Gender.MALE, viewValue: "Homme" },
-    { value: Gender.FEMALE, viewValue: "Femme" },
+    { value: Gender.MALE, viewValue: "Masculin" },
+    { value: Gender.FEMALE, viewValue: "Féminin" },
   ]
 
   constructor(
