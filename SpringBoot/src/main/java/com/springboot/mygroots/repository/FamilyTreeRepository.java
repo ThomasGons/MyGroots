@@ -7,4 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FamilyTreeRepository extends MongoRepository<FamilyTree, String>{
 	FamilyTree findFamilyTreeByOwner(Person owner);
+	FamilyTree findByOwner(Person person);
 }

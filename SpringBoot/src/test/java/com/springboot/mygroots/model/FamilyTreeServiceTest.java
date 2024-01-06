@@ -1,110 +1,77 @@
 package com.springboot.mygroots.model;
 
 
-import com.springboot.mygroots.model.FamilyTree;
-import com.springboot.mygroots.model.Person;
 import com.springboot.mygroots.repository.FamilyTreeRepository;
-import com.springboot.mygroots.service.FamilyTreeService;
-import com.springboot.mygroots.service.PersonService;
-import com.springboot.mygroots.utils.Enumerations;
+import com.springboot.mygroots.repository.PersonRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.util.ClassUtils.isPresent;
 
 @DataMongoTest
 public class FamilyTreeServiceTest {
 
-	@InjectMocks
-	private FamilyTreeService familyTreeService;
-
-	@Mock
+	@Autowired
 	private FamilyTreeRepository familyTreeRepository;
 
-	@Mock
-	private PersonService personService;
+
+	@Autowired
+	private PersonRepository personRepository;
 
 	@Test
-	public void testSaveFamilyTree() {
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		FamilyTree familyTree = new FamilyTree("doe",person1);
-		familyTreeService.saveFamilyTree(familyTree);
-
-		Mockito.verify(familyTreeRepository, times(1)).save(familyTree);
+	public void father() {
+		Optional<Person> op = personRepository.findById("65986a3d02c0c84b953f800b");
+		Person p = op.orElse(null);
+		FamilyTree ft = familyTreeRepository.findByOwner(p);
+		Person father = ft.getFather(p);
+		String trueFatherId = "6598917cd505437b747d97ba";
+		assertEquals(trueFatherId, father.getId());
 	}
 
 	@Test
-	public void testDeleteFamilyTree() {
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		FamilyTree familyTree = new FamilyTree("doe",person1);
-		familyTreeService.deleteFamilyTree(familyTree);
-
-		Mockito.verify(familyTreeRepository, times(1)).delete(familyTree);
+	public void siblings() {
+		Optional<Person> src_op = personRepository.findById("6598917cd505437b747d97ba");
+		Person p = src_op.orElse(null);
+		Optional<Person> own_op = personRepository.findById("65986a3d02c0c84b953f800b");
+		Person own = own_op.orElse(null);
+		FamilyTree ft = familyTreeRepository.findByOwner(own);
+		List<Person> siblings = ft.getSiblings(p);
+		List <String> siblingsId = siblings.stream().map(Person::getId).toList();
+		List<String> trueSiblingsId = List.of("659891dfd505437b747d97bd", "65989760d505437b747d97c8");
+		assertEquals(trueSiblingsId.size(), siblings.size());
+		assertTrue(siblingsId.containsAll(trueSiblingsId));
+		assertTrue(trueSiblingsId.containsAll(siblingsId));
 	}
 
 	@Test
-	public void testGetFamilyTreeById() {
-		String familyTreeId = "1";
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		FamilyTree familyTree = new FamilyTree("doe",person1);
-		Mockito.when(familyTreeRepository.findById(familyTreeId)).thenReturn(Optional.of(familyTree));
-
-		FamilyTree result = familyTreeService.getFamilyTreeById(familyTreeId);
-
-		assertEquals(familyTree, result);
+	public void grandParents() {
+		Optional<Person> op = personRepository.findById("65986a3d02c0c84b953f800b");
+		Person p = op.orElse(null);
+		FamilyTree ft = familyTreeRepository.findByOwner(p);
+		List<Person> grandParents = ft.getGrandParents(p);
+		List <String> grandParentsId = grandParents.stream().map(Person::getId).toList();
+		List<String> trueGrandParentsId = List.of("65989749d505437b747d97c7", "659891bfd505437b747d97bc");
+		assertEquals(trueGrandParentsId.size(), grandParents.size());
+		assertTrue(grandParentsId.containsAll(trueGrandParentsId));
+		assertTrue(trueGrandParentsId.containsAll(grandParentsId));
 	}
 
 	@Test
-	public void testGetFamilyTreeByOwner() {
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		FamilyTree familyTree = new FamilyTree("doe",person1);
-		Mockito.when(familyTreeRepository.findFamilyTreeByOwner(person1)).thenReturn(familyTree);
-
-		FamilyTree result = familyTreeService.getFamilyTreeByOwner(person1);
-
-		assertEquals(familyTree, result);
-	}
-
-	@Test
-	public void testUpdateFamilyTree() {
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		Person person2 = new Person("jane", "Doe", Enumerations.Gender.MALE);
-		FamilyTree familyTree = new FamilyTree("doe",person1);
-		familyTree.addChild(person1, person2);
-
-
-		familyTreeService.updateFamilyTree(familyTree);
-
-		Mockito.verify(personService, times(2)).updatePerson(Mockito.any());
-		Mockito.verify(familyTreeRepository, times(1)).save(familyTree);
-	}
-
-	@Test
-	public void testGetAllFamilyTrees() {
-		Person person1 = new Person("John", "Doe", Enumerations.Gender.FEMALE);
-		Person person2 = new Person("jane", "Doe", Enumerations.Gender.MALE);
-		List<FamilyTree> expectedFamilyTrees = Arrays.asList(new FamilyTree("doe",person1), new FamilyTree("dane",person2));
-		Mockito.when(familyTreeRepository.findAll()).thenReturn(expectedFamilyTrees);
-
-		List<FamilyTree> result = familyTreeService.getAllFamilyTrees();
-
-		assertEquals(expectedFamilyTrees, result);
-	}
-
-	@Test
-	public void testRemoveFamilyTree() {
-		Person person2 = new Person("jane", "Doe", Enumerations.Gender.MALE);
-		FamilyTree familyTree = new FamilyTree("doe",person2);
-		familyTreeService.removeFamilyTree(familyTree);
-
-		Mockito.verify(familyTreeRepository, times(1)).delete(familyTree);
+	public void unclesAndAunts() {
+		Optional<Person> op = personRepository.findById("65986a3d02c0c84b953f800b");
+		Person p = op.orElse(null);
+		FamilyTree ft = familyTreeRepository.findByOwner(p);
+		List<Person> unclesAndAunts = ft.getUnclesAndAunts(p);
+		List <String> unclesAndAuntsId = unclesAndAunts.stream().map(Person::getId).toList();
+		List<String> trueUnclesAndAuntsId = List.of("659891dfd505437b747d97bd", "65989760d505437b747d97c8");
+		assertEquals(trueUnclesAndAuntsId.size(), unclesAndAunts.size());
+		assertTrue(unclesAndAuntsId.containsAll(trueUnclesAndAuntsId));
+		assertTrue(trueUnclesAndAuntsId.containsAll(unclesAndAuntsId));
 	}
 }
