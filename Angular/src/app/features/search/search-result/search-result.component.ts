@@ -7,7 +7,7 @@ import { Gender } from '@app/core/models';
   templateUrl: './search-result.component.html',
 })
 export class SearchResultComponent {
-  
+
   @Input()
   targetAccount!: any;
 

@@ -60,46 +60,36 @@ public class FamilyTreeService {
         );
     }
 
-    public Map<String, List<Person>> getSimilarFamilyTreeByAllNodes(Person owner) {
-        FamilyTree ft = getFamilyTreeByOwner(owner);
+    public Map<String, List<Person>> getSimilarNodes(Person src, String target_id) {
+        Person target = personService.getPersonById(target_id);
+        FamilyTree ft_src = getFamilyTreeByOwner(src);
+        FamilyTree ft_target = getFamilyTreeByOwner(target);
 
-        List<FamilyTree> familyTrees = familyTreeRepository.findAll();
         Set<Person> same = new HashSet<>();
         Set<Person> probably_same = new HashSet<>();
-        for (Person p: ft.getMembers()) {
-            getSimilarFamilyTreeByNode(p, owner, familyTrees, same, probably_same);
+
+        List<Person> src_members = ft_src.getMembers();
+        List<Person> target_members = ft_target.getMembers();
+
+        // get all the members that have the same id in the two family trees
+        for (Person p: src_members) {
+            if (Objects.equals(p.getId(), src.getId()) || Objects.equals(p.getId(), target_id)) { continue; }
+            for (Person p2: target_members) {
+                if (p.getId().equals(p2.getId())) {
+                    same.add(p);
+                } else if (p.getFirstName().equals(p2.getFirstName()) &&
+                        p.getLastName().equals(p2.getLastName()) &&
+                        p.getBirthDate().equals(p2.getBirthDate()) &&
+                        !p.hasAccount() || !p2.hasAccount()) {
+                    probably_same.add(p);
+                }
+            }
         }
+
         return Map.of(
                 "same", same.stream().toList(),
                 "probably_same", probably_same.stream().toList()
         );
     }
-
-    private void getSimilarFamilyTreeByNode(Person p, Person owner, List<FamilyTree> familyTrees, Set<Person> same, Set<Person> probably_same) {
-        String p_id = p.getId();
-        String p_firstName = p.getFirstName();
-        String p_lastName = p.getLastName();
-        LocalDate p_birthDate = p.getBirthDate();
-        for (FamilyTree ft: familyTrees) {
-            if (ft.getOwner().getId().equals(owner.getId())) {
-                continue;
-            }
-            for (Person p2: ft.getMembers()) {
-                if (p2.getId().equals(p.getId())) {
-                    same.add(ft.getOwner());
-                    return;
-                }
-                else if (p2.getFirstName().equals(p_firstName) &&
-                        p2.getLastName().equals(p_lastName) &&
-                        p2.getBirthDate().equals(p_birthDate) &&
-                        !p2.hasAccount()) {
-
-                    probably_same.add(ft.getOwner());
-                    return;
-                }
-            }
-        }
-    }
-
 
 }

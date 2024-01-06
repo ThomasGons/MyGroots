@@ -2,12 +2,13 @@ package com.springboot.mygroots.dto;
 
 import com.springboot.mygroots.model.Account;
 import com.springboot.mygroots.model.Person;
-import com.springboot.mygroots.utils.Enumerations;
+import com.springboot.mygroots.utils.Enumerations.Visibility;
+
 
 public class AccountDTO {
     String accountId;
     String email;
-    Enumerations.Visibility treeVisibility;
+    Visibility treeVisibility;
     Person person;
 
     public AccountDTO(Account account) {
@@ -17,6 +18,12 @@ public class AccountDTO {
         this.person = account.getPerson();
     }
 
+    public AccountDTO(String accountId, String email, Visibility treeVisibility, Person person) {
+        this.accountId = accountId;
+        this.email = email;
+        this.treeVisibility = treeVisibility;
+        this.person = person;
+    }
     public String getAccountId() {
         return accountId;
     }
@@ -25,7 +32,7 @@ public class AccountDTO {
         return email;
     }
 
-    public Enumerations.Visibility getTreeVisibility() {
+    public Visibility getTreeVisibility() {
         return treeVisibility;
     }
 
@@ -33,3 +40,6 @@ public class AccountDTO {
         return person;
     }
 }
+
+    
+

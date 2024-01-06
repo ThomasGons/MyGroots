@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from '@app/core/models';
-import { StorageService } from '@app/core/services';
+import { SnackbarService, StorageService } from '@app/core/services';
 import { SearchService } from '@app/core/services/search.service';
 
 
@@ -20,11 +20,18 @@ export class SearchComponent {
   formById = new FormGroup({
     accountId: new FormControl(""),
   });
+  formByCommunId = new FormGroup({
+    target_id: new FormControl(""),
+  });
   showResults: boolean = false;
   searchResults: any[] = [];
-  user!: User;
+  searchSame: any[] = [];
+  searchProbablySame: any[] = [];
+  user: User = {};
+  src_acc_id: string = '';
 
   constructor(
+    private _snackbarService: SnackbarService,
     private _storageService: StorageService,
     private _searchService: SearchService,
   ) {
@@ -61,7 +68,7 @@ export class SearchComponent {
     const accountId = !this.formById.value.accountId ? "" : this.formById.value.accountId;
     if (!accountId) {
       return;
-    } 
+    }
     console.log(accountId);
     /* Send form */
     this._searchService.searchById(accountId).subscribe({
@@ -75,6 +82,7 @@ export class SearchComponent {
       error: (err) => {
         console.log(err);
         this.searchResults = []
+        this._snackbarService.openSnackbar(err.error.message);
       }
     });
   }
@@ -96,6 +104,35 @@ export class SearchComponent {
   public clearResults(): void  {
     this.showResults = false;
     this.searchResults = [];
+    this.searchProbablySame = [];
+    this.searchSame = [];
+  }
+
+  public onSearchCommom():void{
+    /* Get form data */
+    const target_id = !this.formByCommunId.value.target_id ? "" : this.formByCommunId.value.target_id;
+    if (!target_id) {
+      return;
+    }
+    console.log(target_id);
+
+    this.user = this._storageService.getUser();
+    this.src_acc_id = String(this.user.id);
+    this._searchService.searchCommun(String(this.src_acc_id), String(target_id)).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.searchSame = response.body.same;
+        this.searchProbablySame = response.body.probably_same;
+        console.log(this.searchResults);
+        if (!this.showResults) {
+          this.toggleResultsDisplay();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
+      }
+    });
   }
 
   private formatBirthDate(inputDate: string): string {
@@ -106,4 +143,5 @@ export class SearchComponent {
     const formattedDate = year+"-"+month+"-"+day;
     return formattedDate;
   }
+  
 }

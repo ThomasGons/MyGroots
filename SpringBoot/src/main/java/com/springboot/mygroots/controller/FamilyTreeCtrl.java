@@ -69,6 +69,12 @@ public class FamilyTreeCtrl {
                 		}
                 	}
                 	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
+                	for (Person p : ft.getMembers()) {
+                		if (p.getId().equals(acc.getPerson().getId())) {
+                			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
+                		}
+                	}
+                	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
                 }
                 case PUBLIC -> {}
             }
@@ -92,10 +98,17 @@ public class FamilyTreeCtrl {
             switch (ft.getVisibility()) {
                 case PRIVATE -> {
                 	if (!watched.getId().equals(watcher.getId())) {
+                	if (!watched.getId().equals(watcher.getId())) {
                         return new ExtResponseEntity<>("Cet arbre est privé !", HttpStatus.BAD_REQUEST);
                     }
                 }
                 case PROTECTED -> {
+                	for (Person p : ft.getMembers()) {
+                		if (p.getId().equals(watcher.getPerson().getId())) {
+                			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
+                		}
+                	}
+                	return new ExtResponseEntity<>("Cet arbre est protégé !", HttpStatus.BAD_REQUEST);
                 	for (Person p : ft.getMembers()) {
                 		if (p.getId().equals(watcher.getPerson().getId())) {
                 			return new ExtResponseEntity<>(new FamilyTreeDTO(ft), HttpStatus.OK);
@@ -129,18 +142,19 @@ public class FamilyTreeCtrl {
      */
     @PostMapping(value="/node/search")
     public ExtResponseEntity<List<Person>> search(@RequestBody Map<String, String> data) {
-        String src_id = data.get("src_id");
+        String srcId = data.get("srcId");
         String relation = data.get("relation");
-        String owner_id = data.get("owner_id");
-        Person owner = personService.getPersonById(owner_id == null ? src_id : owner_id);
+        String ownerId = data.get("ownerId");
+        
+        Account owner = accountService.getAccountById(ownerId);
         if (owner == null) {
-            return new ExtResponseEntity<>("Aucune personne (propriétaire) correspondante a cet id !", HttpStatus.BAD_REQUEST);
+            return new ExtResponseEntity<>("Aucune compte (propriétaire) correspondant à cet id !", HttpStatus.BAD_REQUEST);
         }
-        FamilyTree ft = familyTreeService.getFamilyTreeByOwner(owner);
+        FamilyTree ft = owner.getFamilyTree();
         if (ft == null) {
             return new ExtResponseEntity<>("Aucun arbre correspondant a cet id !", HttpStatus.BAD_REQUEST);
         }
-        Person sp = personService.getPersonById(src_id);
+        Person sp = personService.getPersonById(srcId);
         if (sp == null) {
             return new ExtResponseEntity<>("Aucune personne (source) correspondante a cet id !", HttpStatus.BAD_REQUEST);
         }
@@ -226,7 +240,7 @@ public class FamilyTreeCtrl {
         LocalDate personBirthDate = LocalDate.parse(data.get("birthDate"));
         Gender personGender = Gender.valueOf(data.get("gender"));
         Relation relation = Relation.valueOf(data.get("relation"));
-        String nationality = data.get("relation");
+        String nationality = data.get("nationality");
 
         Account owner = accountService.getAccountById(owner_id);
         Person src = personService.getPersonById(src_id);

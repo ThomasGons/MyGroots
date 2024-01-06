@@ -7,6 +7,7 @@ import { StorageService, FamilyTreeService, SnackbarService } from '@app/core/se
 import FamilyTree from "@balkangraph/familytree.js";
 import { TreeAddNodeDialogComponent } from './tree-add-node-dialog/tree-add-node-dialog.component';
 import { TreeRemoveNodeDialogComponent } from './tree-remove-node-dialog/tree-remove-node-dialog.component';
+import { TreeSearchNodeDialogComponent } from './tree-search-node-dialog/tree-search-node-dialog.component';
 
 @Component({
   selector: 'app-family-tree',
@@ -219,6 +220,15 @@ export class FamilyTreeComponent implements OnInit {
     });
   }
 
+  protected openDialogSearchByRelation():void{
+    this.dialog.open(TreeSearchNodeDialogComponent, {
+      data: {
+        sourceNodeData: this.treeData.members[0]
+      },
+      width: "600px",
+    });
+  }
+
   protected getSelectedNodeGender(): string {
     for (let gender of this.genders) {
       if (gender.value == this.selectedNodePersonData?.gender) {
@@ -226,6 +236,10 @@ export class FamilyTreeComponent implements OnInit {
       }
     }
     return "";
+  }
+
+  protected centerFamilyTree() {
+    this.family.center(0);
   }
 
 }

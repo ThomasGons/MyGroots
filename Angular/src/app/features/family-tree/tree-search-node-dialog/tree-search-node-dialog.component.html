@@ -1,0 +1,55 @@
+<div class="container-fluid h-100 m-0 p-0 overflow-hidden">
+  <mat-card>
+    <mat-card-header>
+      <div class="w-100 d-flex justify-content-between align-item-center pb-3">
+        <div class="d-flex flex-column">
+          <span class="h4 text-center text-black pt-2 m-0 mt-1">Rechercher par relation</span>
+          <span class="fg-gray-dark pt-2">avec {{ data.sourceNodeData?.firstName }} {{ data.sourceNodeData?.lastName }}</span>
+        </div>
+        <button mat-icon-button class="mt-2" (click)="this.dialogRef.close()" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <!-- Div de recherche -->
+    <div class="p-4">
+      <form [formGroup]="this.formSearchByRelation" (ngSubmit)="this.onSubmit()" class="d-flex flex-column">
+        <div class="d-flex flex-row">
+          <!-- relation -->
+          <mat-form-field appearance="outline" class="flex-grow-1 pe-1 pb-1">
+            <mat-label>Relation</mat-label>
+            <mat-select matNativeControl formControlName="relation" required>
+              <mat-option *ngFor="let relation of this.relations" [value]="relation.value">{{ relation.viewValue }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.formSearchByRelation.controls.relation.touched && this.formSearchByRelation.controls.relation.invalid">
+              <span *ngIf="this.formSearchByRelation.controls.relation.hasError('required')">Veuillez saisir une relation.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- submit -->
+        <div class="d-flex flex-row-reverse">
+          <button mat-raised-button class="rounded-2 bg-green-light py-2" [disabled]="!this.formSearchByRelation.valid" type="submit">
+            <mat-icon>search</mat-icon>
+            <span>Recherche</span>
+          </button>
+          <button mat-button (click)="this.formSearchByRelation.reset()" class="rounded-2 py-2 mx-2" type="button">
+            <mat-icon>clear</mat-icon>
+            <span>Annuler</span>
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- Div de resultats -->
+    <div class="d-flex flex-column flex-grow-1 bg-white rounded-2 mx-5 mt-3 px-4 pb-4" *ngIf="this.showResults">
+      <div class="d-flex flex-column py-4">
+        <span class="h4" *ngIf="this.searchResults.length > 0">
+          Résultats ({{ this.searchResults.length }})
+        </span>
+      </div>
+      <mat-accordion>
+        <app-search-result *ngFor="let result of this.searchResults" [targetAccount]="result"></app-search-result>
+      </mat-accordion>
+    </div>
+  </mat-card>
+</div>
