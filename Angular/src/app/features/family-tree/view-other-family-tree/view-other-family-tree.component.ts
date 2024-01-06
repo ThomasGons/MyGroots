@@ -52,6 +52,7 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+        this._snackbarService.openSnackbar(err.error.message);
       }
     });
   }
