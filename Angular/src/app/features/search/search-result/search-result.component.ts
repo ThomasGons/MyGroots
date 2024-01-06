@@ -9,7 +9,10 @@ import { Gender } from '@app/core/models';
 export class SearchResultComponent {
   
   @Input()
-  account!: any;
+  targetAccount!: any;
+
+  @Input()
+  sourceAccount!: any;
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
@@ -18,7 +21,7 @@ export class SearchResultComponent {
 
   public getGender(): string {
     for (let gender of this.genders) {
-      if (gender.value == this.account.person.gender) {
+      if (gender.value == this.targetAccount.person.gender) {
         return gender.viewValue;
       }
     }

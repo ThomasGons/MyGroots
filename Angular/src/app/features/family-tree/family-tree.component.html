@@ -25,6 +25,10 @@
             <span [classList]="this.treeData?.nodes[this.selectedNodeId]?.hasAccount == 'true' ? 'fg-green-dark' : 'fg-brown'">
               {{ this.treeData?.nodes[this.selectedNodeId]?.hasAccount == 'true' ? "Oui" : "Non" }}</span>
           </div>
+          <div class="d-flex flex-column flex-grow-1 p-2 mb-1">
+            <span class="pb-1"><b>Identifiant de personne</b></span>
+            <span>{{ this.selectedNodePersonData?.id }}</span>
+          </div>
           <div class="d-flex flex-row">
             <div class="d-flex flex-column flex-grow-1 p-2 mb-1">
               <span class="pb-1"><b>Genre</b></span>

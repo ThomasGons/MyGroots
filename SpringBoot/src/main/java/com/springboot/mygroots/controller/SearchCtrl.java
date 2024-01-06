@@ -81,24 +81,24 @@ public class SearchCtrl {
         return new ExtResponseEntity<>(results, HttpStatus.OK);
     }
 
-    @PostMapping(value="/common-members")
-    public ExtResponseEntity<List<AccountDTO>> getCommonMembers(@RequestBody Map<String, String> data) {
-        String owner_acc_id = data.get("src_acc_id");
-        String target_id = data.get("target_id");
-        Account acc = accountService.getAccountById(owner_acc_id);
-        Map<String, List<Person>> commons = familyTreeService.getSimilarNodes(acc.getPerson(), target_id);
-
-        if (commons.isEmpty()) {
-            return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
-        }
-
-        List<AccountDTO> accs = new ArrayList<>();
-        for (Person p: commons.get("same")) {
-            Account a = accountService.getAccountByPerson(p);
-            accs.add(new AccountDTO(a));
-        }
-
-        return new ExtResponseEntity<>(accs, HttpStatus.OK);
-    }
+//    @PostMapping(value="/common-members")
+//    public ExtResponseEntity<List<AccountDTO>> getCommonMembers(@RequestBody Map<String, String> data) {
+//        String owner_acc_id = data.get("src_acc_id");
+//        String target_id = data.get("target_id");
+//        Account acc = accountService.getAccountById(owner_acc_id);
+//        Map<String, List<Person>> commons = familyTreeService.getSimilarNodes(acc.getPerson(), target_id);
+//
+//        if (commons.isEmpty()) {
+//            return new ExtResponseEntity<>("Aucun arbre ne correspond à cet id!", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        List<AccountDTO> accs = new ArrayList<>();
+//        for (Person p: commons.get("same")) {
+//            Account a = accountService.getAccountByPerson(p);
+//            accs.add(new AccountDTO(a));
+//        }
+//
+//        return new ExtResponseEntity<>(accs, HttpStatus.OK);
+//    }
 
 }

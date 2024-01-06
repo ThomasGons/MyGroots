@@ -28,11 +28,12 @@ export class FamilyTreeService {
   }
   
   /**
-   * Send request to server to get the tree of the person.
-   * @param accountId Id of the account
+   * Send request to server to get the tree of the account.
+   * @param watcherId Id of the account that wants to watch the family tree
+   * @param watchedId Id of the owner of the family tree
    */
-  public getOtherFamilyTreeById(accountId: string): Observable<any> {
-    return this._httpClient.post(this.url + "/view/other", {accountId: accountId}, this.httpOptions);
+  public getOtherFamilyTreeById(watcherId: string, watchedId: string): Observable<any> {
+    return this._httpClient.post(this.url + "/view/other", {watcherId: watcherId, watchedId: watchedId}, this.httpOptions);
   }
 
   /**

@@ -19,11 +19,13 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
   
   treeData!: any;
   family!: FamilyTree;
-  otherId!: string;
   selectedNodeId!: number;
   selectedNodePersonData!: any;
-
+  
   showSidePanel: boolean = false;
+  
+  watcherId!: string;
+  watchedId!: string;
 
   readonly genders: any = [
     { value: Gender.MALE, viewValue: "Homme" },
@@ -39,9 +41,10 @@ export class ViewOtherFamilyTreeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.otherId = String(this._activatedRoute.snapshot.paramMap.get("id"));
+    this.watcherId = String(this._activatedRoute.snapshot.paramMap.get("watcherId"));
+    this.watchedId = String(this._activatedRoute.snapshot.paramMap.get("watchedId"));
     /* Send request to get user family tree */
-    this._familytreeService.getOtherFamilyTreeById(this.otherId).subscribe({
+    this._familytreeService.getOtherFamilyTreeById(this.watcherId, this.watchedId).subscribe({
       next: (response) => {
         console.log(response);
         this.treeData = response.body;
